@@ -30,4 +30,4 @@ jobs:
         dotnet-version: 3.1.100
       
     - name: xUnit tests
-      run: dotnet test InTechNet.Api/InTechNet.sln
+      run: dotnet build ./InTechNet.Api/InTechNet.UnitTests/InTechNet.UnitTests.csproj --configuration Release
