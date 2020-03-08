@@ -1,4 +1,6 @@
 using InTechNet.Common.Utils.Configuration.Helper;
+using InTechNet.DataAccessLayer;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Configuration;
@@ -32,6 +34,9 @@ namespace InTechNet.Api
         {
             services.AddControllers();
 
+            services.AddDbContext<InTechNetContext>(options
+                => options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));
+
             // Load project's definition
             Configuration.GetSection("Project").Bind(_metadata);
             Configuration.GetSection("Project:Contact").Bind(_metadata.Contact);
@@ -62,6 +67,8 @@ namespace InTechNet.Api
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);
             });
+
+
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
