@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200308132527_InTechNetMigration")]
-    partial class InTechNetMigration
+    [Migration("20200308153656_InTechNetMigration1")]
+    partial class InTechNetMigration1
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,9 +65,25 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("HubName")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ModerateurIdModerator")
+                        .HasColumnType("integer");
+
                     b.HasKey("IdHub");
 
+                    b.HasIndex("HubName");
+
+                    b.HasIndex("ModerateurIdModerator");
+
                     b.ToTable("hub","public");
+
+                    b.HasData(
+                        new
+                        {
+                            IdHub = 1,
+                            HubCreationDate = new DateTime(2020, 3, 8, 16, 36, 55, 787, DateTimeKind.Local).AddTicks(7193),
+                            HubLink = "hublink1",
+                            HubName = "supername"
+                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Moderator", b =>
@@ -91,35 +107,19 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdModerator");
 
+                    b.HasIndex("ModeratorNickname");
+
                     b.ToTable("moderator","public");
-                });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Organisator", b =>
-                {
-                    b.Property<int>("IdOrganisator")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("HubIdHub")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdHub")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdModerator")
-                        .HasColumnType("integer");
-
-                    b.Property<int?>("ModeratorIdModerator")
-                        .HasColumnType("integer");
-
-                    b.HasKey("IdOrganisator");
-
-                    b.HasIndex("HubIdHub");
-
-                    b.HasIndex("ModeratorIdModerator");
-
-                    b.ToTable("organisator","public");
+                    b.HasData(
+                        new
+                        {
+                            IdModerator = 1,
+                            ModeratorEmail = "test@test.com",
+                            ModeratorNickname = "modeNick",
+                            ModeratorPassword = "mdp123",
+                            ModeratorSalt = "lesaltcestbien"
+                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Pupil", b =>
@@ -143,7 +143,19 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdPupil");
 
+                    b.HasIndex("PupilNickname");
+
                     b.ToTable("pupil","public");
+
+                    b.HasData(
+                        new
+                        {
+                            IdPupil = 1,
+                            PupilEmail = "pupil@pupil.com",
+                            PupilNickname = "pupilNick",
+                            PupilPassword = "mdp456",
+                            PupilSalt = "leselcestdrole"
+                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Attendee", b =>
@@ -157,15 +169,11 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasForeignKey("PupilIdPupil");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Organisator", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Hub", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Hub", "Hub")
-                        .WithMany("Organisators")
-                        .HasForeignKey("HubIdHub");
-
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Moderator", "Moderator")
-                        .WithMany("Organisators")
-                        .HasForeignKey("ModeratorIdModerator");
+                    b.HasOne("InTechNet.DataAccessLayer.Entity.Moderator", "Moderateur")
+                        .WithMany("Hubs")
+                        .HasForeignKey("ModerateurIdModerator");
                 });
 #pragma warning restore 612, 618
         }

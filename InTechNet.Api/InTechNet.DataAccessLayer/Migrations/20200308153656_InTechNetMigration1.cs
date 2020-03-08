@@ -4,28 +4,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
-    public partial class InTechNetMigration : Migration
+    public partial class InTechNetMigration1 : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.EnsureSchema(
                 name: "public");
-
-            migrationBuilder.CreateTable(
-                name: "hub",
-                schema: "public",
-                columns: table => new
-                {
-                    IdHub = table.Column<int>(nullable: false)
-                        .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    HubName = table.Column<string>(nullable: true),
-                    HubLink = table.Column<string>(nullable: true),
-                    HubCreationDate = table.Column<DateTime>(nullable: false)
-                },
-                constraints: table =>
-                {
-                    table.PrimaryKey("PK_hub", x => x.IdHub);
-                });
 
             migrationBuilder.CreateTable(
                 name: "moderator",
@@ -62,30 +46,23 @@ namespace InTechNet.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateTable(
-                name: "organisator",
+                name: "hub",
                 schema: "public",
                 columns: table => new
                 {
-                    IdOrganisator = table.Column<int>(nullable: false)
+                    IdHub = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdModerator = table.Column<int>(nullable: false),
-                    ModeratorIdModerator = table.Column<int>(nullable: true),
-                    IdHub = table.Column<int>(nullable: false),
-                    HubIdHub = table.Column<int>(nullable: true)
+                    HubName = table.Column<string>(nullable: true),
+                    HubLink = table.Column<string>(nullable: true),
+                    HubCreationDate = table.Column<DateTime>(nullable: false),
+                    ModerateurIdModerator = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_organisator", x => x.IdOrganisator);
+                    table.PrimaryKey("PK_hub", x => x.IdHub);
                     table.ForeignKey(
-                        name: "FK_organisator_hub_HubIdHub",
-                        column: x => x.HubIdHub,
-                        principalSchema: "public",
-                        principalTable: "hub",
-                        principalColumn: "IdHub",
-                        onDelete: ReferentialAction.Restrict);
-                    table.ForeignKey(
-                        name: "FK_organisator_moderator_ModeratorIdModerator",
-                        column: x => x.ModeratorIdModerator,
+                        name: "FK_hub_moderator_ModerateurIdModerator",
+                        column: x => x.ModerateurIdModerator,
                         principalSchema: "public",
                         principalTable: "moderator",
                         principalColumn: "IdModerator",
@@ -123,6 +100,24 @@ namespace InTechNet.DataAccessLayer.Migrations
                         onDelete: ReferentialAction.Restrict);
                 });
 
+            migrationBuilder.InsertData(
+                schema: "public",
+                table: "hub",
+                columns: new[] { "IdHub", "HubCreationDate", "HubLink", "HubName", "ModerateurIdModerator" },
+                values: new object[] { 1, new DateTime(2020, 3, 8, 16, 36, 55, 787, DateTimeKind.Local).AddTicks(7193), "hublink1", "supername", null });
+
+            migrationBuilder.InsertData(
+                schema: "public",
+                table: "moderator",
+                columns: new[] { "IdModerator", "ModeratorEmail", "ModeratorNickname", "ModeratorPassword", "ModeratorSalt" },
+                values: new object[] { 1, "test@test.com", "modeNick", "mdp123", "lesaltcestbien" });
+
+            migrationBuilder.InsertData(
+                schema: "public",
+                table: "pupil",
+                columns: new[] { "IdPupil", "PupilEmail", "PupilNickname", "PupilPassword", "PupilSalt" },
+                values: new object[] { 1, "pupil@pupil.com", "pupilNick", "mdp456", "leselcestdrole" });
+
             migrationBuilder.CreateIndex(
                 name: "IX_attendee_HubIdHub",
                 schema: "public",
@@ -136,16 +131,28 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "PupilIdPupil");
 
             migrationBuilder.CreateIndex(
-                name: "IX_organisator_HubIdHub",
+                name: "IX_hub_HubName",
                 schema: "public",
-                table: "organisator",
-                column: "HubIdHub");
+                table: "hub",
+                column: "HubName");
 
             migrationBuilder.CreateIndex(
-                name: "IX_organisator_ModeratorIdModerator",
+                name: "IX_hub_ModerateurIdModerator",
                 schema: "public",
-                table: "organisator",
-                column: "ModeratorIdModerator");
+                table: "hub",
+                column: "ModerateurIdModerator");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_moderator_ModeratorNickname",
+                schema: "public",
+                table: "moderator",
+                column: "ModeratorNickname");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_pupil_PupilNickname",
+                schema: "public",
+                table: "pupil",
+                column: "PupilNickname");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
@@ -155,15 +162,11 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public");
 
             migrationBuilder.DropTable(
-                name: "organisator",
+                name: "hub",
                 schema: "public");
 
             migrationBuilder.DropTable(
                 name: "pupil",
-                schema: "public");
-
-            migrationBuilder.DropTable(
-                name: "hub",
                 schema: "public");
 
             migrationBuilder.DropTable(

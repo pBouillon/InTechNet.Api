@@ -1,23 +1,44 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entity
 {
     [Table("hub", Schema = "public")]
     public class Hub
     {
+        ///<summary>
+        /// Unique ID of the Hub
+        ///</summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdHub { get; set; }
-        public String HubName { get; set; }
-        public String HubLink { get; set; }
+
+        ///<summary>
+        /// Name of the Hub
+        ///</summary>
+        public string HubName { get; set; }
+
+        ///<summary>
+        /// Link of the Hub
+        ///</summary>
+        public string HubLink { get; set; }
+
+        ///<summary>
+        /// Creation date of the Hub
+        ///</summary>
         public DateTime HubCreationDate { get; set; }
 
-        public List<Organisator> Organisators { get; set; }
-        public List<Attendee> Attendees { get; set; }
+        ///<summary>
+        /// Moderator of the Hub
+        ///</summary>
+        public Moderator Moderateur { get; set; }
+
+        ///<summary>
+        /// Attendees of the Hub
+        ///</summary>
+        public IEnumerable<Attendee> Attendees { get; set; }
 
     }
 }

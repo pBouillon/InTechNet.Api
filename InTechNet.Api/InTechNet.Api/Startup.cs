@@ -34,7 +34,8 @@ namespace InTechNet.Api
         {
             services.AddControllers();
 
-            services.AddDbContext<InTechNetContext>(options => options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));
+            services.AddDbContext<InTechNetContext>(options
+                => options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));
 
             // Load project's definition
             Configuration.GetSection("Project").Bind(_metadata);
