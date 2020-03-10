@@ -9,7 +9,6 @@ namespace InTechNet.Api.Controllers
     [ApiController]
     public class HelloWorldController : ControllerBase
     {
-
         /// <summary>
         /// Dummy "Hello World" endpoint
         /// </summary>
