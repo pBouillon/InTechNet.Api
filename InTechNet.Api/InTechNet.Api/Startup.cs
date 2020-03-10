@@ -68,11 +68,22 @@ namespace InTechNet.Api
                 _.IncludeXmlComments(xmlPath);
             });
 
+            //Start Identity Setup
+            services.AddDbContext<AuthDbContext>(options =>
+            options.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase")));
 
+            services.AddIdentityServer()
+                    .AddDeveloperSigningCredential()
+                    .AddConfigurationStore(option =>
+                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
+                           options.MigrationsAssembly("InTechNet.DataAccessLayer")))
+                    .AddOperationalStore(option =>
+                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
+                           options.MigrationsAssembly("InTechNet.DataAccessLayer")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AuthDbContext context)
         {
             if (env.IsDevelopment())
             {
@@ -103,6 +114,11 @@ namespace InTechNet.Api
                     $"/swagger/{_metadata.Version}/swagger.json", 
                     _metadata.Title);
             });
+
+
+            //Start Identity Setup
+            DatabaseInitializer.Initialize(app, context);
+            app.UseIdentityServer();
         }
     }
 }
