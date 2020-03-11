@@ -16,6 +16,10 @@ namespace InTechNet.DataAccessLayer
             InitializeTokenServerConfigurationDatabase(app);
 
             context.SaveChanges();
+
+            using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
+
+            scope.ServiceProvider.GetRequiredService<InTechNetContext>().Database.Migrate();
         }
 
         private static void InitializeTokenServerConfigurationDatabase(IApplicationBuilder app)

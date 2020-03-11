@@ -10,6 +10,12 @@ using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
+using InTechNet.Service.Authentication.Models.User;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
+using Microsoft.IdentityModel.Tokens;
+using System.Text;
+using Microsoft.AspNetCore.Identity;
+using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
 
 namespace InTechNet.Api
 {
@@ -33,10 +39,76 @@ namespace InTechNet.Api
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
+            services.AddCors();
 
-            services.AddDbContext<InTechNetContext>(options
-                => options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));
+            // Bind API's meta data to the Swagger UI
+            ConfigureSwagger(services);
 
+            services.AddDbContext<InTechNetContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));           
+
+            // Start Identity Setup
+            services.AddDbContext<AuthDbContext>(options =>
+                options.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase")));
+
+            services.AddIdentity<User, Role>()
+                .AddEntityFrameworkStores<AuthDbContext>()
+                .AddDefaultTokenProviders();
+
+            services.AddIdentityServer()
+                    .AddDeveloperSigningCredential()
+                    .AddInMemoryPersistedGrants()
+                    .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                    .AddInMemoryApiResources(Config.GetApiResources())
+                    .AddInMemoryClients(Config.GetClients())
+                    .AddAspNetIdentity<User>();
+
+            services.AddAuthentication(options =>
+            {
+                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+            })
+            .AddJwtBearer(options =>
+            {
+                // TODO: create helper (in InTechNet.Common.Utils.Configuration) for config fields
+                options.TokenValidationParameters = new TokenValidationParameters
+                {
+                    ValidateIssuer = true,
+                    ValidateAudience = true,
+                    ValidateLifetime = true,
+                    ValidateIssuerSigningKey = true,
+                    ValidIssuer = Configuration["JwtToken:Issuer"],
+                    ValidAudience = Configuration["JwtToken:Issuer"],
+                    IssuerSigningKey = new SymmetricSecurityKey(
+                        Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
+                };
+            });
+
+            /*
+            .AddConfigurationStore(option =>
+                   option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
+                   options.MigrationsAssembly("InTechNet.DataAccessLayer")))
+            .AddOperationalStore(option =>
+                   option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
+                   options.MigrationsAssembly("InTechNet.DataAccessLayer")));*/
+
+            /*services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
+                .AddIdentityServerAuthentication(
+                    options =>
+                        {
+                            // auth server base endpoint (will use to search for disco doc)
+                            options.Authority = "http://localhost:5000";
+                            options.ApiName = "apiModerator"; // required audience of access tokens
+                            options.RequireHttpsMetadata = false; // dev only!
+                        });*/
+        }
+
+        /// <summary>
+        /// Loads the API's meta data from the appsettings file
+        /// and bind it to the Swagger UI
+        /// </summary>
+        private void ConfigureSwagger(IServiceCollection services)
+        {
             // Load project's definition
             Configuration.GetSection("Project").Bind(_metadata);
             Configuration.GetSection("Project:Contact").Bind(_metadata.Contact);
@@ -50,13 +122,13 @@ namespace InTechNet.Api
                     Version = _metadata.Version,
                     Title = _metadata.Title,
                     Description = _metadata.Description,
-                    Contact = new OpenApiContact()
+                    Contact = new OpenApiContact
                     {
                         Name = _metadata.Contact.Name,
                         Email = _metadata.Contact.Email,
                         Url = new Uri(_metadata.Contact.Url)
                     },
-                    License = new OpenApiLicense()
+                    License = new OpenApiLicense
                     {
                         Name = _metadata.License.Name,
                         Url = new Uri(_metadata.License.Url)
@@ -67,19 +139,6 @@ namespace InTechNet.Api
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);
             });
-
-            //Start Identity Setup
-            services.AddDbContext<AuthDbContext>(options =>
-            options.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase")));
-
-            services.AddIdentityServer()
-                    .AddDeveloperSigningCredential()
-                    .AddConfigurationStore(option =>
-                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
-                           options.MigrationsAssembly("InTechNet.DataAccessLayer")))
-                    .AddOperationalStore(option =>
-                           option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
-                           options.MigrationsAssembly("InTechNet.DataAccessLayer")));
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -94,9 +153,19 @@ namespace InTechNet.Api
                 app.UseHsts();
             }
 
+            //Start Identity Setup
+            //DatabaseInitializer.Initialize(app, context);
+
             app.UseHttpsRedirection();
 
             app.UseRouting();
+
+            app.UseCors(option => option
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
+            app.UseAuthentication();
 
             app.UseAuthorization();
 
@@ -114,11 +183,6 @@ namespace InTechNet.Api
                     $"/swagger/{_metadata.Version}/swagger.json", 
                     _metadata.Title);
             });
-
-
-            //Start Identity Setup
-            DatabaseInitializer.Initialize(app, context);
-            app.UseIdentityServer();
         }
     }
 }

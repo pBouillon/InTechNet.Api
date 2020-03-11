@@ -6,14 +6,12 @@ using static IdentityServer4.IdentityServerConstants;
 
 namespace InTechNet.DataAccessLayer
 {
-    class Config
+    public class Config
     {
         public static IEnumerable<IdentityResource> GetIdentityResources()
         {
             return new List<IdentityResource>
             {
-                new IdentityResources.OpenId(),
-                new IdentityResources.Profile(),
                 new IdentityResources.Email()
             };
         }
@@ -23,7 +21,7 @@ namespace InTechNet.DataAccessLayer
         {
             return new List<ApiResource>
             {
-                new ApiResource("yourcustomapi", "Your Custom API")
+                new ApiResource("apiModerator", "InTechNetModeratorAPI")
             };
         }
 
@@ -36,14 +34,14 @@ namespace InTechNet.DataAccessLayer
                 // resource owner password grant client
                 new Client
                 {
-                    ClientId = "YourCustomAPI",
+                    ClientId = "InTechNetModeratorAPI",
                     AllowedGrantTypes = GrantTypes.ClientCredentials,
                     AllowOfflineAccess = true,
                     ClientSecrets =
                     {
-                        new Secret("secret".Sha256())
+                        new Secret("secretModerator".Sha256())
                     },
-                    AllowedScopes = { "yourcustomapi", StandardScopes.OfflineAccess },
+                    AllowedScopes = { "apiModerator", StandardScopes.OfflineAccess },
                 }
             };
         }

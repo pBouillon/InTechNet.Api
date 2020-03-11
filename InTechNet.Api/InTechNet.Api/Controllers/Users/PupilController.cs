@@ -17,7 +17,7 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         /// <param name="loginDto">The login parameters as <see cref="LoginDto"/></param>
         /// <returns>A valid JWT on success</returns>
-        [HttpPost("login")]
+        [HttpPost]
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(400, "Invalid credentials")]
         [SwaggerOperation(
