@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Utils.Api;
+using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Authentication.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -12,6 +13,13 @@ namespace InTechNet.Api.Controllers.Users
     [ApiController]
     public class PupilController : ControllerBase
     {
+        private readonly IAuthenticationService _authenticationService;
+
+        public PupilController(IAuthenticationService authenticationService)
+        {
+            _authenticationService = authenticationService;
+        }
+
         /// <summary>
         /// Login end point for a pupil
         /// </summary>

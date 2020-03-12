@@ -1,26 +1,28 @@
+using InTechNet.Api.Helpers;
 using InTechNet.Common.Utils.Configuration.Helper;
 using InTechNet.DataAccessLayer;
-using Microsoft.EntityFrameworkCore;
+using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
 using System.IO;
 using System.Reflection;
-using InTechNet.Service.Authentication.Models.User;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
-using Microsoft.IdentityModel.Tokens;
 using System.Text;
-using Microsoft.AspNetCore.Identity;
-using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
 
 namespace InTechNet.Api
 {
     public class Startup
     {
+        public IConfiguration Configuration { get; }
+
         /// <summary>
         /// InTechNet metadata
         /// </summary>
@@ -33,24 +35,71 @@ namespace InTechNet.Api
             _metadata = new ProjectDto();
         }
 
-        public IConfiguration Configuration { get; }
-
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers();
             services.AddCors();
 
+            // Fill the DI container
+            DependencyInjectionHelper.InitializeContainer(Configuration, services);
+
             // Bind API's meta data to the Swagger UI
             ConfigureSwagger(services);
 
-            services.AddDbContext<InTechNetContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("InTechNetDatabase")));           
+            // Configure InTechNet IdentityServer
+            ConfigureIdentityServer(services);
+        }
 
-            // Start Identity Setup
-            services.AddDbContext<AuthDbContext>(options =>
-                options.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase")));
+        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AuthDbContext context)
+        {
+            if (env.IsDevelopment())
+            {
+                app.UseDeveloperExceptionPage();
+            }
+            else
+            {
+                app.UseHsts();
+            }
 
+            //Start Identity Setup
+            //DatabaseInitializer.Initialize(app, context);
+
+            app.UseHttpsRedirection();
+
+            app.UseRouting();
+
+            app.UseCors(option => option
+               .AllowAnyOrigin()
+               .AllowAnyMethod()
+               .AllowAnyHeader());
+
+            app.UseAuthentication();
+
+            app.UseAuthorization();
+
+            app.UseEndpoints(endpoints =>
+            {
+                endpoints.MapControllers();
+            });
+
+            // Enable swagger middleware
+            app.UseSwagger();
+
+            app.UseSwaggerUI(_ =>
+            {
+                _.SwaggerEndpoint(
+                    $"/swagger/{_metadata.Version}/swagger.json", 
+                    _metadata.Title);
+            });
+        }
+
+        /// <summary>
+        /// Configure InTechNet IdentityServer parameters
+        /// </summary>
+        private void ConfigureIdentityServer(IServiceCollection services)
+        {
             services.AddIdentity<User, Role>()
                 .AddEntityFrameworkStores<AuthDbContext>()
                 .AddDefaultTokenProviders();
@@ -138,50 +187,6 @@ namespace InTechNet.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);
-            });
-        }
-
-        // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AuthDbContext context)
-        {
-            if (env.IsDevelopment())
-            {
-                app.UseDeveloperExceptionPage();
-            }
-            else
-            {
-                app.UseHsts();
-            }
-
-            //Start Identity Setup
-            //DatabaseInitializer.Initialize(app, context);
-
-            app.UseHttpsRedirection();
-
-            app.UseRouting();
-
-            app.UseCors(option => option
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
-
-            app.UseAuthentication();
-
-            app.UseAuthorization();
-
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
-
-            // Enable swagger middleware
-            app.UseSwagger();
-
-            app.UseSwaggerUI(_ =>
-            {
-                _.SwaggerEndpoint(
-                    $"/swagger/{_metadata.Version}/swagger.json", 
-                    _metadata.Title);
             });
         }
     }

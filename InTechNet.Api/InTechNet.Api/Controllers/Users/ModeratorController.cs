@@ -8,6 +8,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.IdentityModel.Tokens.Jwt;
 using System.Text;
+using InTechNet.Service.Authentication.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -18,9 +19,11 @@ namespace InTechNet.Api.Controllers.Users
     [ApiController]
     public class ModeratorController : ControllerBase
     {
+        private readonly IAuthenticationService _authenticationService;
+
         private readonly IConfiguration _config;
 
-        public ModeratorController(IConfiguration config)
+        public ModeratorController(IAuthenticationService authenticationService, IConfiguration config)
         {
             _config = config;
         }
