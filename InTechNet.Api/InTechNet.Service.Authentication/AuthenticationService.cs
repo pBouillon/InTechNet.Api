@@ -1,5 +1,4 @@
 ﻿using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Authentication.Jwt;
 
 namespace InTechNet.Service.Authentication
 {
@@ -10,6 +9,11 @@ namespace InTechNet.Service.Authentication
         public AuthenticationService(IJwtService jwtService)
         {
             _jwtService = jwtService;
+        }
+
+        public void EnsureTokenValidity(string token)
+        {
+            _jwtService.EnsureTokenValidity(token);
         }
 
         public string GetToken()

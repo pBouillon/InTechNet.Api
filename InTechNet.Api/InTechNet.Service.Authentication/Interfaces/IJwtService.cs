@@ -1,4 +1,4 @@
-﻿namespace InTechNet.Service.Authentication.Jwt
+﻿namespace InTechNet.Service.Authentication.Interfaces
 {
     public interface IJwtService
     {

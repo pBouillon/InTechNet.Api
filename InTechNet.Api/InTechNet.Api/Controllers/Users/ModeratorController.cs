@@ -1,14 +1,10 @@
 ﻿using InTechNet.Common.Utils.Api;
+using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Authentication.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Microsoft.IdentityModel.Tokens;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
-using System.IdentityModel.Tokens.Jwt;
-using System.Text;
-using InTechNet.Service.Authentication.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -21,12 +17,9 @@ namespace InTechNet.Api.Controllers.Users
     {
         private readonly IAuthenticationService _authenticationService;
 
-        private readonly IConfiguration _config;
-
-        public ModeratorController(IAuthenticationService authenticationService, IConfiguration config)
+        public ModeratorController(IAuthenticationService authenticationService)
         {
             _authenticationService = authenticationService;
-            _config = config;
         }
 
         /// <summary>
@@ -56,26 +49,14 @@ namespace InTechNet.Api.Controllers.Users
         {
             try
             {
-                var key = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_config["JwtToken:SecretKey"]));
-
-                var tokenHandler = new JwtSecurityTokenHandler();
-                tokenHandler.ValidateToken(token, new TokenValidationParameters
-                {
-                    ValidateIssuerSigningKey = true,
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidIssuer = _config["JwtToken:Issuer"],
-                    ValidAudience = _config["JwtToken:Audience"],
-                    IssuerSigningKey = key
-                }, out _);
+                _authenticationService.EnsureTokenValidity(token);
             }
             catch(Exception e)
             {
-                return BadRequest("Token KC " + e.GetType().ToString() + "  " + e.Message);
+                return Unauthorized("Token KO " + e.GetType() + "  " + e.Message);
             }
 
-            return Ok();
+            return Ok("Token OK");
         }
     }
 }

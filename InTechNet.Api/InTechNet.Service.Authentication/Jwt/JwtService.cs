@@ -1,8 +1,8 @@
-﻿using System;
-using System.Text;
-using InTechNet.Common.Utils.Authentication.Jwt.Models;
-using System.IdentityModel.Tokens.Jwt;
+﻿using InTechNet.Common.Utils.Authentication.Jwt.Models;
+using InTechNet.Service.Authentication.Interfaces;
 using Microsoft.IdentityModel.Tokens;
+using System.IdentityModel.Tokens.Jwt;
+using System.Text;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -17,7 +17,19 @@ namespace InTechNet.Service.Authentication.Jwt
 
         public void EnsureTokenValidity(string token)
         {
-            throw new System.NotImplementedException();
+            var key = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(_jwtResource.SecretKey));
+
+            var tokenHandler = new JwtSecurityTokenHandler();
+            tokenHandler.ValidateToken(token, new TokenValidationParameters
+            {
+                ValidateIssuerSigningKey = true,
+                ValidateIssuer = true,
+                ValidateAudience = true,
+                ValidIssuer = _jwtResource.Issuer,
+                ValidAudience = _jwtResource.Audience,
+                IssuerSigningKey = key
+            }, out _);
         }
 
         public string GetToken()
