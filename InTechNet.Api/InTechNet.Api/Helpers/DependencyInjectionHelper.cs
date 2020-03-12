@@ -1,6 +1,8 @@
-﻿using InTechNet.DataAccessLayer;
+﻿using InTechNet.Common.Utils.Authentication.Jwt.Models;
+using InTechNet.DataAccessLayer;
 using InTechNet.Service.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
+using InTechNet.Service.Authentication.Jwt;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -24,6 +26,8 @@ namespace InTechNet.Api.Helpers
             _configuration = configuration;
             _services = services;
 
+            RegisterModels();
+
             RegisterDatabaseContexts();
 
             RegisterServices();
@@ -32,9 +36,21 @@ namespace InTechNet.Api.Helpers
         /// <summary>
         /// Register InTechNet custom services
         /// </summary>
+        private static void RegisterModels()
+        {
+            var jwtResourcesDto = new JwtResourcesDto();
+            _configuration.GetSection("JwtToken").Bind(jwtResourcesDto);
+            _services.AddSingleton(jwtResourcesDto);
+        }
+
+        /// <summary>
+        /// Register InTechNet custom services
+        /// </summary>
         private static void RegisterServices()
         {
             _services.AddTransient<IAuthenticationService, AuthenticationService>();
+
+            _services.AddTransient<IJwtService, JwtService>();
         }
 
         /// <summary>

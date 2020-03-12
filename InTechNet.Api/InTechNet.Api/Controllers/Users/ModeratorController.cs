@@ -25,6 +25,7 @@ namespace InTechNet.Api.Controllers.Users
 
         public ModeratorController(IAuthenticationService authenticationService, IConfiguration config)
         {
+            _authenticationService = authenticationService;
             _config = config;
         }
 
@@ -47,22 +48,7 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<string> Login([FromBody] LoginDto loginDto)
         {
-            string GetToken() {
-                var key = new SymmetricSecurityKey(
-                    Encoding.UTF8.GetBytes(_config["JwtToken:SecretKey"]));
-
-                var creds = new SigningCredentials(key, SecurityAlgorithms.HmacSha256);
-
-                var token = new JwtSecurityToken(
-                    issuer: _config["JwtToken:Issuer"],
-                    audience: _config["JwtToken:Audience"],
-                    expires: DateTime.Now.AddMinutes(1),
-                    signingCredentials: creds);
-
-                return new JwtSecurityTokenHandler().WriteToken(token);
-            }
-
-            return Ok(new { Token = GetToken() });
+            return Ok(new { Token = _authenticationService.GetToken() });
         }
 
         [HttpPost("Test")]
