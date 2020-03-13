@@ -12,6 +12,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text;
@@ -162,9 +163,10 @@ namespace InTechNet.Api
             Configuration.GetSection("Project:Contact").Bind(_metadata.Contact);
             Configuration.GetSection("Project:License").Bind(_metadata.License);
 
-            // Populate swagger UI
+            // Populate Swagger UI
             services.AddSwaggerGen(_ =>
             {
+                // Swagger UI overall documentation
                 _.SwaggerDoc(_metadata.Version, new OpenApiInfo
                 {
                     Version = _metadata.Version,
@@ -183,6 +185,18 @@ namespace InTechNet.Api
                     }
                 });
 
+                // Security definition
+                _.AddSecurityDefinition("Bearer", new OpenApiSecurityScheme
+                {
+                    Description = "JWT Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                    Name = "Authorization",
+                    In = ParameterLocation.Header,
+                    Type = SecuritySchemeType.ApiKey
+                });
+
+                // Swagger UI security feature
+
+                // Endpoint documentation
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);

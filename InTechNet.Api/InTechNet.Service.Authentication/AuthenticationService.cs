@@ -18,7 +18,7 @@ namespace InTechNet.Service.Authentication
 
         public string GetToken()
         {
-            return _jwtService.GetToken();
+            return "Bearer " + _jwtService.GetToken();
         }
     }
 }
