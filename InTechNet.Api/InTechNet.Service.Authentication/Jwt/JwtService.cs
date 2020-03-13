@@ -19,14 +19,13 @@ namespace InTechNet.Service.Authentication.Jwt
         /// <inheritdoc cref="IJwtService.GetModeratorToken"/>
         public string GetModeratorToken()
         {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtResource.SecretKey));
-
             var token = new JwtSecurityToken(
                 issuer: _jwtResource.Issuer,
                 audience: _jwtResource.Audience,
                 expires: _jwtResource.ValidUntil,
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
+                    _jwtResource.SigningAlgorithm));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
@@ -34,14 +33,13 @@ namespace InTechNet.Service.Authentication.Jwt
         /// <inheritdoc cref="IJwtService.GetPupilToken"/>
         public string GetPupilToken()
         {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtResource.SecretKey));
-
             var token = new JwtSecurityToken(
                 issuer: _jwtResource.Issuer,
                 audience: _jwtResource.Audience,
                 expires: _jwtResource.ValidUntil,
-                signingCredentials: new SigningCredentials(key, SecurityAlgorithms.HmacSha256));
+                signingCredentials: new SigningCredentials(
+                    new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
+                    _jwtResource.SigningAlgorithm));
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
