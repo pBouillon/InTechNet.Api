@@ -127,7 +127,7 @@ namespace InTechNet.Api
                     ValidateLifetime = true,
                     ValidateIssuerSigningKey = true,
                     ValidIssuer = Configuration["JwtToken:Issuer"],
-                    ValidAudience = Configuration["JwtToken:Issuer"],
+                    ValidAudience = Configuration["JwtToken:Audience"],
                     IssuerSigningKey = new SymmetricSecurityKey(
                         Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
                 };
