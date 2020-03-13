@@ -132,24 +132,6 @@ namespace InTechNet.Api
                         Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
                 };
             });
-
-            /*
-            .AddConfigurationStore(option =>
-                   option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
-                   options.MigrationsAssembly("InTechNet.DataAccessLayer")))
-            .AddOperationalStore(option =>
-                   option.ConfigureDbContext = builder => builder.UseNpgsql(Configuration.GetConnectionString("InTechNetAuthenticationDatabase"), options =>
-                   options.MigrationsAssembly("InTechNet.DataAccessLayer")));*/
-
-            /*services.AddAuthentication(IdentityServerAuthenticationDefaults.AuthenticationScheme)
-                .AddIdentityServerAuthentication(
-                    options =>
-                        {
-                            // auth server base endpoint (will use to search for disco doc)
-                            options.Authority = "http://localhost:5000";
-                            options.ApiName = "apiModerator"; // required audience of access tokens
-                            options.RequireHttpsMetadata = false; // dev only!
-                        });*/
         }
 
         /// <summary>

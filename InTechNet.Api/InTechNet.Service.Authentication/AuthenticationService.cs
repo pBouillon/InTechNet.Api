@@ -19,12 +19,6 @@ namespace InTechNet.Service.Authentication
             _jwtService = jwtService;
         }
 
-        /// <inheritdoc cref="IAuthenticationService.EnsureTokenValidity"/>
-        public void EnsureTokenValidity(string token)
-        {
-            _jwtService.EnsureTokenValidity(token);
-        }
-
         /// <inheritdoc cref="IAuthenticationService.GetModeratorToken"/>
         public string GetModeratorToken()
         {

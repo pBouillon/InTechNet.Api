@@ -38,8 +38,13 @@ namespace InTechNet.Api.Helpers
         /// </summary>
         private static void RegisterModels()
         {
-            var jwtResourcesDto = new JwtResourcesDto();
-            _configuration.GetSection("JwtToken").Bind(jwtResourcesDto);
+            // JWT resource generation and registration
+            var jwtResourcesDto = new JwtResourceHelper();
+
+            _configuration
+                .GetSection(JwtResourceHelper.AppSettingsSectionName)
+                .Bind(jwtResourcesDto);
+
             _services.AddSingleton(jwtResourcesDto);
         }
 

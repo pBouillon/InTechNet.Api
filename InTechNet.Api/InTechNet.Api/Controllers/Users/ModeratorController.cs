@@ -44,19 +44,10 @@ namespace InTechNet.Api.Controllers.Users
             return Ok(new { Token = _authenticationService.GetModeratorToken() });
         }
 
+        [Authorize]
         [HttpPost("Test")]
-        public IActionResult Test([FromBody] string token)
-        {
-            try
-            {
-                _authenticationService.EnsureTokenValidity(token);
-            }
-            catch(Exception e)
-            {
-                return Unauthorized("Token KO " + e.GetType() + "  " + e.Message);
-            }
-
-            return Ok("Token OK");
+        public IActionResult Test([FromHeader] string token) {
+            return Ok();
         }
     }
 }

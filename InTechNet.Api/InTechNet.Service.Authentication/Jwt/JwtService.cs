@@ -9,29 +9,11 @@ namespace InTechNet.Service.Authentication.Jwt
     /// <inheritdoc cref="IJwtService"/>
     public class JwtService : IJwtService
     {
-        private readonly JwtResourcesDto _jwtResource;
+        private readonly JwtResourceHelper _jwtResource;
 
-        public JwtService(JwtResourcesDto jwtResource)
+        public JwtService(JwtResourceHelper jwtResource)
         {
             _jwtResource = jwtResource;
-        }
-
-        /// <inheritdoc cref="IJwtService.EnsureTokenValidity"/>
-        public void EnsureTokenValidity(string token)
-        {
-            var key = new SymmetricSecurityKey(
-                Encoding.UTF8.GetBytes(_jwtResource.SecretKey));
-
-            var tokenHandler = new JwtSecurityTokenHandler();
-            tokenHandler.ValidateToken(token, new TokenValidationParameters
-            {
-                ValidateIssuerSigningKey = true,
-                ValidateIssuer = true,
-                ValidateAudience = true,
-                ValidIssuer = _jwtResource.Issuer,
-                ValidAudience = _jwtResource.Audience,
-                IssuerSigningKey = key
-            }, out _);
         }
 
         /// <inheritdoc cref="IJwtService.GetModeratorToken"/>
