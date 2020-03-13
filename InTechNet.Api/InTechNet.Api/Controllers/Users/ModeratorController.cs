@@ -41,7 +41,7 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<string> Login([FromBody] LoginDto loginDto)
         {
-            return Ok(new { Token = _authenticationService.GetToken() });
+            return Ok(new { Token = _authenticationService.GetModeratorToken() });
         }
 
         [HttpPost("Test")]

@@ -1,5 +1,8 @@
 ﻿namespace InTechNet.Service.Authentication.Interfaces
 {
+    /// <summary>
+    /// Contract for JWT usage and generation
+    /// </summary>
     public interface IJwtService
     {
         /// <summary>
@@ -9,9 +12,15 @@
         void EnsureTokenValidity(string token);
 
         /// <summary>
-        /// Generate a valid JWT
+        /// Generate a valid JWT for the moderator
         /// </summary>
-        /// <returns></returns>
-        string GetToken();
+        /// <returns>The valid JWT for the moderator</returns>
+        string GetModeratorToken();
+
+        /// <summary>
+        /// Generate a valid JWT for the pupil
+        /// </summary>
+        /// <returns>The valid JWT for the pupil</returns>
+        string GetPupilToken();
     }
 }
