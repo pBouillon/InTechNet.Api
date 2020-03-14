@@ -48,6 +48,7 @@ namespace InTechNet.Api.Controllers.Users
             return Ok(new { Token = token });
         }
 
+        [Authorize]
         [HttpPost("Test")]
         public IActionResult Test() {
             var current = HttpContext.User;

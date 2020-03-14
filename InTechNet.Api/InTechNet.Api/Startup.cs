@@ -185,6 +185,11 @@ namespace InTechNet.Api
                 // Swagger UI security feature
                 var bearerSecurityScheme = new OpenApiSecurityScheme
                 {
+                    Reference = new OpenApiReference
+                    {
+                        Type = ReferenceType.SecurityScheme,
+                        Id = "Bearer"
+                    },
                     Scheme = "Bearer"
                 };
 
