@@ -36,7 +36,7 @@ namespace InTechNet.Service.User
             var moderator = _context.Moderators
                 .FirstOrDefault(_ =>
                     _.ModeratorEmail == login 
-                    || _.ModeratorPassword == login);
+                    || _.ModeratorEmail == login);
 
             if (moderator == null)
             {
