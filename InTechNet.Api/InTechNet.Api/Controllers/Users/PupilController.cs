@@ -1,6 +1,6 @@
 ﻿using InTechNet.Common.Utils.Api;
+using InTechNet.Common.Utils.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Authentication.Models.Dto;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 

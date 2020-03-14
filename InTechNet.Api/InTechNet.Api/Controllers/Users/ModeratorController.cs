@@ -1,12 +1,12 @@
 ﻿using InTechNet.Common.Utils.Api;
 using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Authentication.Models.Dto;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Api.Controllers.Users
 {

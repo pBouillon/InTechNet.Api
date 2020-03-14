@@ -1,4 +1,4 @@
-﻿namespace InTechNet.Service.Authentication.Models.Dto
+﻿namespace InTechNet.Common.Utils.Authentication
 {
     public class AuthenticationDto
     {

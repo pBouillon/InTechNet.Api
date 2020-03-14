@@ -1,4 +1,4 @@
-﻿using InTechNet.Service.Authentication.Models.Dto;
+﻿using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.Authentication.Interfaces
 {
