@@ -13,58 +13,11 @@ namespace InTechNet.DataAccessLayer
         {
             context.Database.EnsureCreated();
 
-            //InitializeTokenServerConfigurationDatabase(app);
-
             context.SaveChanges();
 
             using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
 
             scope.ServiceProvider.GetRequiredService<InTechNetContext>().Database.Migrate();
         }
-
-        /*private static void InitializeTokenServerConfigurationDatabase(IApplicationBuilder app)
-        {
-            using var scope = app.ApplicationServices
-                .GetService<IServiceScopeFactory>()
-                .CreateScope();
-
-            scope.ServiceProvider
-                .GetRequiredService<PersistedGrantDbContext>()
-                .Database.Migrate();
-
-            var context = scope.ServiceProvider
-                .GetRequiredService<ConfigurationDbContext>();
-
-            context.Database.Migrate();
-
-            if (!context.Clients.Any())
-            {
-                foreach (var client in Config.GetClients())
-                {
-                    context.Clients.Add(client.ToEntity());
-                }
-                context.SaveChanges();
-            }
-
-            if (!context.IdentityResources.Any())
-            {
-                foreach (var resource in Config.GetIdentityResources())
-                {
-                    context.IdentityResources.Add(resource.ToEntity());
-                }
-                context.SaveChanges();
-            }
-
-            if (context.ApiResources.Any())
-            {
-                return;
-            }
-
-            foreach (var resource in Config.GetApiResources())
-            {
-                context.ApiResources.Add(resource.ToEntity());
-            }
-            context.SaveChanges();
-        }*/
     }
 }
