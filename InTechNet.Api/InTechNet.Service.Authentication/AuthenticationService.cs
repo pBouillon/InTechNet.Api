@@ -21,6 +21,7 @@ namespace InTechNet.Service.Authentication
         /// <summary>
         /// Default AuthenticationService constructor
         /// </summary>
+        /// <param name="userService">The <see cref="IUserService"/> to be used for authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService"/> to be used for the generation</param>
         public AuthenticationService(IUserService userService, IJwtService jwtService)
         {
