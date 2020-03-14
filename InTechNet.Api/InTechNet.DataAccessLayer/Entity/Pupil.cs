@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
@@ -19,7 +18,6 @@ namespace InTechNet.DataAccessLayer.Entity
         /// Nickname of the Pupil
         ///</summary>
         public string PupilNickname { get; set; }
-
 
         ///<summary>
         /// Email of the Pupil

@@ -7,6 +7,6 @@ namespace InTechNet.Service.User.Interfaces
     {
         ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
 
-        // PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
+        PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
     }
 }

@@ -1,8 +1,8 @@
-﻿using Microsoft.IdentityModel.Tokens;
-using System;
+﻿using System;
 using System.Text;
+using Microsoft.IdentityModel.Tokens;
 
-namespace InTechNet.Common.Utils.Authentication.Jwt.Models
+namespace InTechNet.Common.Utils.Authentication.Jwt
 {
     public class JwtResourceHelper
     {

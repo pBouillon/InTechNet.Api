@@ -1,4 +1,4 @@
-﻿using InTechNet.Common.Utils.Authentication.Jwt.Models;
+﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.DataAccessLayer;
 using InTechNet.Service.Authentication;
 using InTechNet.Service.Authentication.Interfaces;

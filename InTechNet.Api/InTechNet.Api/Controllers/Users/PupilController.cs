@@ -1,5 +1,7 @@
-﻿using InTechNet.Common.Utils.Api;
+﻿using System.Linq;
+using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
+using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -38,8 +40,23 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<string> Login([FromBody] AuthenticationDto authenticationDto)
         {
-            // Todo
-            return Ok();
+            try
+            {
+                var token = _authenticationService.GetPupilToken(authenticationDto);
+                return Ok(new { Token = token });
+            }
+            catch (BaseException)
+            {
+                return Unauthorized();
+            }
+        }
+
+        [HttpPost("Test")]
+        public IActionResult Test()
+        {
+            var current = HttpContext.User;
+
+            return Ok(current.Claims.Count());
         }
     }
 }

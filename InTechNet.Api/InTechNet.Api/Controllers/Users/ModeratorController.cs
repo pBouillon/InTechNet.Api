@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Security.Claims;
 using InTechNet.Common.Utils.Authentication;
+using InTechNet.Exception;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -43,9 +44,15 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<string> Login([FromBody] AuthenticationDto authenticationDto)
         {
-            var token = _authenticationService.GetModeratorToken(authenticationDto);
-
-            return Ok(new { Token = token });
+            try
+            {
+                var token = _authenticationService.GetModeratorToken(authenticationDto);
+                return Ok(new { Token = token });
+            }
+            catch (BaseException)
+            {
+                return Unauthorized();
+            }
         }
 
         [HttpPost("Test")]

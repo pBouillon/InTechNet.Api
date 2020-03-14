@@ -47,7 +47,7 @@ namespace InTechNet.Service.User
             var hashedPassword = password.HashedWith(moderator.ModeratorSalt);
 
             // Assert that the provided password matches the stored one
-            if (moderator.ModeratorPassword != hashedPassword)
+            if (hashedPassword != moderator.ModeratorPassword)
             {
                 throw new InvalidCredentialsException();
             }

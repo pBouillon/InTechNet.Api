@@ -1,11 +1,10 @@
-﻿using System.Collections.Generic;
-using InTechNet.Common.Utils.Authentication.Jwt.Models;
+﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.Service.Authentication.Interfaces;
+using InTechNet.Service.User.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using System.Text;
-using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -25,7 +24,7 @@ namespace InTechNet.Service.Authentication.Jwt
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, "Moderator"),
-                new Claim(ClaimTypes.UserData, moderator.StringifiedId)
+                new Claim(ClaimTypes.UserData, moderator.IdModerator.ToString())
             };
 
             var token = new JwtSecurityToken(
