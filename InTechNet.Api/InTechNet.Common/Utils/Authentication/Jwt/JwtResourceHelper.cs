@@ -20,11 +20,11 @@ namespace InTechNet.Common.Utils.Authentication.Jwt
         public string SecretKey { get; set; }
 
         public string SigningAlgorithm 
-            => SecurityAlgorithms.Aes256CbcHmacSha512;
+            => SecurityAlgorithms.HmacSha512;
 
         public int ValidityTimespanInHours { get; set; }
 
         public DateTime ValidUntil
-            => DateTime.Now.AddDays(ValidityTimespanInHours);
+            => DateTime.Now.AddHours(ValidityTimespanInHours);
     }
 }
