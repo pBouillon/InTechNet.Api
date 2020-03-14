@@ -35,7 +35,7 @@ namespace InTechNet.Service.User
             // Retrieve the user associated with this login
             var moderator = _context.Moderators
                 .FirstOrDefault(_ =>
-                    _.ModeratorEmail == login 
+                    _.ModeratorNickname == login 
                     || _.ModeratorEmail == login);
 
             if (moderator == null)
