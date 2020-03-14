@@ -5,6 +5,7 @@ using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -23,7 +24,7 @@ namespace InTechNet.Service.Authentication.Jwt
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, "Moderator"),
+                new Claim(ClaimTypes.Role, InTechNetRoles.Moderator),
                 new Claim(ClaimTypes.UserData, moderator.IdModerator.ToString())
             };
 
@@ -43,11 +44,11 @@ namespace InTechNet.Service.Authentication.Jwt
         }
 
         /// <inheritdoc cref="IJwtService.GetPupilToken"/>
-        public string GetPupilToken()
+        public string GetPupilToken(AuthenticationDto authenticationDto)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, "Pupil")
+                new Claim(ClaimTypes.Role, InTechNetRoles.Pupil)
             };
 
             var token = new JwtSecurityToken(

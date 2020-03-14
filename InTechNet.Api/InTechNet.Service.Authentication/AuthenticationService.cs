@@ -40,9 +40,9 @@ namespace InTechNet.Service.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetPupilToken"/>
         public string GetPupilToken(AuthenticationDto authenticationDto)
         {
-            // var pupil = _userService.AuthenticatePupil(authenticationDto);
+            var pupil = _userService.AuthenticatePupil(authenticationDto);
 
-            return _jwtService.GetPupilToken();
+            return _jwtService.GetPupilToken(authenticationDto);
         }
     }
 }

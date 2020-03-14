@@ -1,8 +1,10 @@
 ﻿using System.Linq;
+using InTechNet.Api.Attributes;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 
@@ -51,6 +53,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [Authorize]
+        [PupilClaimRequired]
         [HttpPost("Test")]
         public IActionResult Test()
         {

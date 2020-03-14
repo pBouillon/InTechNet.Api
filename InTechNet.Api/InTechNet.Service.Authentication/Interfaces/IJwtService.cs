@@ -1,4 +1,5 @@
-﻿using InTechNet.Service.User.Models;
+﻿using InTechNet.Common.Utils.Authentication;
+using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.Authentication.Interfaces
 {
@@ -17,7 +18,8 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// <summary>
         /// Generate a valid JWT for the pupil
         /// </summary>
+        /// <param name="authenticationDto"></param>
         /// <returns>The valid JWT for the pupil</returns>
-        string GetPupilToken();
+        string GetPupilToken(AuthenticationDto authenticationDto);
     }
 }

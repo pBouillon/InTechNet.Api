@@ -6,6 +6,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Linq;
 using System.Security.Claims;
+using InTechNet.Api.Attributes;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 
@@ -56,6 +57,7 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [Authorize]
+        [ModeratorClaimRequired]
         [HttpPost("Test")]
         public IActionResult Test() {
             var current = HttpContext.User;
