@@ -119,7 +119,6 @@ namespace InTechNet.Api
             })
             .AddJwtBearer(options =>
             {
-                // TODO: create helper (in InTechNet.Common.Utils.Configuration) for config fields
                 options.TokenValidationParameters = new TokenValidationParameters
                 {
                     ValidateIssuer = true,
@@ -177,6 +176,17 @@ namespace InTechNet.Api
                 });
 
                 // Swagger UI security feature
+                var bearerSecurityScheme = new OpenApiSecurityScheme
+                {
+                    Scheme = "Bearer"
+                };
+
+                _.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
+                    {
+                        bearerSecurityScheme, new List<string>()
+                    }
+                });
 
                 // Endpoint documentation
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";

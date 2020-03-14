@@ -1,6 +1,6 @@
 ﻿namespace InTechNet.Service.Authentication.Models.Dto
 {
-    public class LoginDto
+    public class AuthenticationDto
     {
         public string Login { get; set; }
 

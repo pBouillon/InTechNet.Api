@@ -11,16 +11,20 @@ namespace InTechNet.Common.Utils.Authentication.Jwt.Models
         public string Audience { get; set; }
 
         public byte[] EncodedSecretKey
-            => Encoding.UTF8.GetBytes(SecretKey);
+            => SecretKey != null ?
+                Encoding.UTF8.GetBytes(SecretKey)
+                : new byte[0];
 
         public string Issuer { get; set; }
         
         public string SecretKey { get; set; }
 
-        public string SigningAlgorithm
-            => SecurityAlgorithms.HmacSha256;
+        public string SigningAlgorithm 
+            => SecurityAlgorithms.Aes256CbcHmacSha512;
+
+        public int ValidityTimespanInHours { get; set; }
 
         public DateTime ValidUntil
-            => DateTime.Now.AddDays(1);
+            => DateTime.Now.AddDays(ValidityTimespanInHours);
     }
 }

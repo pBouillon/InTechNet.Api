@@ -5,6 +5,8 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System;
+using System.Linq;
+using System.Security.Claims;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -25,7 +27,7 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// Login end point for a moderator
         /// </summary>
-        /// <param name="loginDto">The login parameters as <see cref="LoginDto"/></param>
+        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto"/></param>
         /// <returns>A valid JWT on success</returns>
         [AllowAnonymous]
         [HttpPost]
@@ -39,15 +41,18 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<string> Login([FromBody] LoginDto loginDto)
+        public ActionResult<string> Login([FromBody] AuthenticationDto authenticationDto)
         {
-            return Ok(new { Token = _authenticationService.GetModeratorToken() });
+            var token = _authenticationService.GetModeratorToken(authenticationDto);
+
+            return Ok(new { Token = token });
         }
 
-        [Authorize]
         [HttpPost("Test")]
-        public IActionResult Test([FromHeader] string token) {
-            return Ok();
+        public IActionResult Test() {
+            var current = HttpContext.User;
+
+            return Ok(current.Claims.Count());
         }
     }
 }

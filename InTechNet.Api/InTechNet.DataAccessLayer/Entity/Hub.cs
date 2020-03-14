@@ -33,7 +33,7 @@ namespace InTechNet.DataAccessLayer.Entity
         ///<summary>
         /// Moderator of the Hub
         ///</summary>
-        public Moderator Moderateur { get; set; }
+        public Moderator Moderator { get; set; }
 
         ///<summary>
         /// Attendees of the Hub

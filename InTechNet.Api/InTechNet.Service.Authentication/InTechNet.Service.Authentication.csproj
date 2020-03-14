@@ -12,6 +12,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\InTechNet.Common\InTechNet.Common.csproj" />
+    <ProjectReference Include="..\InTechNet.Service.User\InTechNet.Service.User.csproj" />
   </ItemGroup>
 
 </Project>

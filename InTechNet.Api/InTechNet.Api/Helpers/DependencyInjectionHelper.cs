@@ -3,6 +3,8 @@ using InTechNet.DataAccessLayer;
 using InTechNet.Service.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Authentication.Jwt;
+using InTechNet.Service.User;
+using InTechNet.Service.User.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -53,9 +55,17 @@ namespace InTechNet.Api.Helpers
         /// </summary>
         private static void RegisterServices()
         {
+            // Authentication services
             _services.AddTransient<IAuthenticationService, AuthenticationService>();
 
             _services.AddTransient<IJwtService, JwtService>();
+
+            // User handling services
+            _services.AddTransient<IModeratorService, ModeratorService>();
+
+            _services.AddTransient<IPupilService, PupilService>();
+
+            _services.AddTransient<IUserService, UserService>();
         }
 
         /// <summary>

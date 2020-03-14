@@ -24,42 +24,47 @@ namespace InTechNet.DataAccessLayer
 
         private static void InitializeTokenServerConfigurationDatabase(IApplicationBuilder app)
         {
-            using (var scope = app.ApplicationServices.GetService<IServiceScopeFactory>()
-                   .CreateScope())
+            using var scope = app.ApplicationServices
+                .GetService<IServiceScopeFactory>()
+                .CreateScope();
+
+            scope.ServiceProvider
+                .GetRequiredService<PersistedGrantDbContext>()
+                .Database.Migrate();
+
+            var context = scope.ServiceProvider
+                .GetRequiredService<ConfigurationDbContext>();
+
+            context.Database.Migrate();
+
+            if (!context.Clients.Any())
             {
-                scope.ServiceProvider.GetRequiredService<PersistedGrantDbContext>()
-                    .Database.Migrate();
-
-                var context = scope.ServiceProvider
-                    .GetRequiredService<ConfigurationDbContext>();
-                context.Database.Migrate();
-                if (!context.Clients.Any())
+                foreach (var client in Config.GetClients())
                 {
-                    foreach (var client in Config.GetClients())
-                    {
-                        context.Clients.Add(client.ToEntity());
-                    }
-                    context.SaveChanges();
+                    context.Clients.Add(client.ToEntity());
                 }
-
-                if (!context.IdentityResources.Any())
-                {
-                    foreach (var resource in Config.GetIdentityResources())
-                    {
-                        context.IdentityResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
-
-                if (!context.ApiResources.Any())
-                {
-                    foreach (var resource in Config.GetApiResources())
-                    {
-                        context.ApiResources.Add(resource.ToEntity());
-                    }
-                    context.SaveChanges();
-                }
+                context.SaveChanges();
             }
+
+            if (!context.IdentityResources.Any())
+            {
+                foreach (var resource in Config.GetIdentityResources())
+                {
+                    context.IdentityResources.Add(resource.ToEntity());
+                }
+                context.SaveChanges();
+            }
+
+            if (context.ApiResources.Any())
+            {
+                return;
+            }
+
+            foreach (var resource in Config.GetApiResources())
+            {
+                context.ApiResources.Add(resource.ToEntity());
+            }
+            context.SaveChanges();
         }
     }
 }

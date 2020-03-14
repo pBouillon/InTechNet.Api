@@ -1,4 +1,6 @@
-﻿namespace InTechNet.Service.Authentication.Interfaces
+﻿using InTechNet.Service.User.Models;
+
+namespace InTechNet.Service.Authentication.Interfaces
 {
     /// <summary>
     /// Contract for JWT usage and generation
@@ -8,8 +10,9 @@
         /// <summary>
         /// Generate a valid JWT for the moderator
         /// </summary>
+        /// <param name="moderator">The moderator for which generate the token</param>
         /// <returns>The valid JWT for the moderator</returns>
-        string GetModeratorToken();
+        string GetModeratorToken(ModeratorDto moderator);
 
         /// <summary>
         /// Generate a valid JWT for the pupil

@@ -28,6 +28,7 @@
     <ProjectReference Include="..\InTechNet.Common\InTechNet.Common.csproj" />
     <ProjectReference Include="..\InTechNet.DataAccessLayer\InTechNet.DataAccessLayer.csproj" />
     <ProjectReference Include="..\InTechNet.Service.Authentication\InTechNet.Service.Authentication.csproj" />
+    <ProjectReference Include="..\InTechNet.Service.User\InTechNet.Service.User.csproj" />
   </ItemGroup>
 
   <PropertyGroup>

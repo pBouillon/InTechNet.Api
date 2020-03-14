@@ -1,8 +1,11 @@
-﻿using InTechNet.Common.Utils.Authentication.Jwt.Models;
+﻿using System.Collections.Generic;
+using InTechNet.Common.Utils.Authentication.Jwt.Models;
 using InTechNet.Service.Authentication.Interfaces;
 using Microsoft.IdentityModel.Tokens;
 using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 using System.Text;
+using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -17,15 +20,25 @@ namespace InTechNet.Service.Authentication.Jwt
         }
 
         /// <inheritdoc cref="IJwtService.GetModeratorToken"/>
-        public string GetModeratorToken()
+        public string GetModeratorToken(ModeratorDto moderator)
         {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Role, "Moderator"),
+                new Claim(ClaimTypes.UserData, moderator.StringifiedId)
+            };
+
             var token = new JwtSecurityToken(
                 issuer: _jwtResource.Issuer,
                 audience: _jwtResource.Audience,
                 expires: _jwtResource.ValidUntil,
-                signingCredentials: new SigningCredentials(
+                signingCredentials: new SigningCredentials
+                (
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm));
+                    _jwtResource.SigningAlgorithm
+                ),
+                claims: claims
+                );
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }
@@ -33,13 +46,20 @@ namespace InTechNet.Service.Authentication.Jwt
         /// <inheritdoc cref="IJwtService.GetPupilToken"/>
         public string GetPupilToken()
         {
+            var claims = new List<Claim>
+            {
+                new Claim(ClaimTypes.Role, "Pupil")
+            };
+
             var token = new JwtSecurityToken(
                 issuer: _jwtResource.Issuer,
                 audience: _jwtResource.Audience,
                 expires: _jwtResource.ValidUntil,
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm));
+                    _jwtResource.SigningAlgorithm
+                ),
+                claims: claims);
 
             return new JwtSecurityTokenHandler().WriteToken(token);
         }

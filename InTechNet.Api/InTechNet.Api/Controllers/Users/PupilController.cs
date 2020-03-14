@@ -23,7 +23,7 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// Login end point for a pupil
         /// </summary>
-        /// <param name="loginDto">The login parameters as <see cref="LoginDto"/></param>
+        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto"/></param>
         /// <returns>A valid JWT on success</returns>
         [HttpPost]
         [SwaggerResponse(200, "Successful authentication")]
@@ -36,7 +36,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Pupil
             }
         )]
-        public ActionResult<string> Login([FromBody] LoginDto loginDto)
+        public ActionResult<string> Login([FromBody] AuthenticationDto authenticationDto)
         {
             // Todo
             return Ok();
