@@ -13,7 +13,7 @@ namespace InTechNet.DataAccessLayer
         {
             context.Database.EnsureCreated();
 
-            InitializeTokenServerConfigurationDatabase(app);
+            //InitializeTokenServerConfigurationDatabase(app);
 
             context.SaveChanges();
 
@@ -22,7 +22,7 @@ namespace InTechNet.DataAccessLayer
             scope.ServiceProvider.GetRequiredService<InTechNetContext>().Database.Migrate();
         }
 
-        private static void InitializeTokenServerConfigurationDatabase(IApplicationBuilder app)
+        /*private static void InitializeTokenServerConfigurationDatabase(IApplicationBuilder app)
         {
             using var scope = app.ApplicationServices
                 .GetService<IServiceScopeFactory>()
@@ -65,6 +65,6 @@ namespace InTechNet.DataAccessLayer
                 context.ApiResources.Add(resource.ToEntity());
             }
             context.SaveChanges();
-        }
+        }*/
     }
 }

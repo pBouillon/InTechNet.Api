@@ -64,7 +64,7 @@ namespace InTechNet.Api
             }
 
             //Start Identity Setup
-            //DatabaseInitializer.Initialize(app, context);
+            DatabaseInitializer.Initialize(app, context);
 
             app.UseHttpsRedirection();
 
