@@ -28,7 +28,7 @@ namespace InTechNet.DataAccessLayer
 
 
         ///<summary>
-        /// Basic constructor for IntechNetContext
+        /// Basic constructor for InTechNetContext
         ///</summary>
         public InTechNetContext(DbContextOptions<InTechNetContext> options)
             : base(options) { }
@@ -48,8 +48,7 @@ namespace InTechNet.DataAccessLayer
                 .HasIndex(b => b.HubName);
 
             modelBuilder.Entity<Moderator>()
-                .HasData(
-                new Moderator
+                .HasData(new Moderator
                 {
                     IdModerator = 1,
                     ModeratorEmail = "test@test.com",
@@ -57,11 +56,10 @@ namespace InTechNet.DataAccessLayer
                     // From raw: "mdp123"
                     ModeratorPassword = "CC3827BF052E6B257CE6FBE896077A132448552CA6746CD538A11039950636ABD7440927318E5D9EBBD151C6A93364B8F5AD761A871403227395F4D99D01E34A",
                     ModeratorSalt = "lesaltcestbien"
-                }
-            );
+                });
 
-            modelBuilder.Entity<Pupil>().HasData(
-                new Pupil
+            modelBuilder.Entity<Pupil>()
+                .HasData(new Pupil
                 {
                     IdPupil = 1,
                     PupilEmail = "pupil@pupil.com",
@@ -69,18 +67,16 @@ namespace InTechNet.DataAccessLayer
                     // From raw: "mdp456"
                     PupilPassword = "4230B63D16DCEF8861AA9BE6F93B46F2E2ED20EC6C3E7E6001CDEC44DE1186BA015D98F19D3D5C43D38F84CBD00FDC977058066791A2AF7ACFE8863F92C71F8B",
                     PupilSalt = "leselcestdrole"
-                }
-            );
+                });
 
-            modelBuilder.Entity<Hub>().HasData(
-                new Hub
+            modelBuilder.Entity<Hub>()
+                .HasData(new Hub
                 {
                     IdHub = 1,
                     HubLink = "hublink1",
                     HubCreationDate = DateTime.Now,
                     HubName = "supername"
-                }
-            );
+                });
         }
 
     }

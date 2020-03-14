@@ -1,8 +1,11 @@
-﻿namespace InTechNet.Exception
+﻿using System;
+
+namespace InTechNet.Exception
 {
-    public abstract class ExceptionBase : System.Exception
+    [Serializable]
+    public abstract class BaseException : System.Exception
     {
-        protected ExceptionBase(string exceptionMessage, System.Exception innerException = null)
+        protected BaseException(string exceptionMessage, System.Exception innerException = null)
             : base (exceptionMessage, innerException) { }
     }
 }
