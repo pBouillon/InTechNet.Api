@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
-    public partial class migration_intechnet : Migration
+    public partial class InitialDataScheme : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -99,24 +99,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                         principalColumn: "IdPupil",
                         onDelete: ReferentialAction.Restrict);
                 });
-
-            migrationBuilder.InsertData(
-                schema: "public",
-                table: "hub",
-                columns: new[] { "IdHub", "HubCreationDate", "HubLink", "HubName", "ModeratorIdModerator" },
-                values: new object[] { 1, new DateTime(2020, 3, 14, 16, 27, 9, 357, DateTimeKind.Local).AddTicks(3960), "hublink1", "supername", null });
-
-            migrationBuilder.InsertData(
-                schema: "public",
-                table: "moderator",
-                columns: new[] { "IdModerator", "ModeratorEmail", "ModeratorNickname", "ModeratorPassword", "ModeratorSalt" },
-                values: new object[] { 1, "test@test.com", "modeNick", "CC3827BF052E6B257CE6FBE896077A132448552CA6746CD538A11039950636ABD7440927318E5D9EBBD151C6A93364B8F5AD761A871403227395F4D99D01E34A", "lesaltcestbien" });
-
-            migrationBuilder.InsertData(
-                schema: "public",
-                table: "pupil",
-                columns: new[] { "IdPupil", "PupilEmail", "PupilNickname", "PupilPassword", "PupilSalt" },
-                values: new object[] { 1, "pupil@pupil.com", "pupilNick", "4230B63D16DCEF8861AA9BE6F93B46F2E2ED20EC6C3E7E6001CDEC44DE1186BA015D98F19D3D5C43D38F84CBD00FDC977058066791A2AF7ACFE8863F92C71F8B", "leselcestdrole" });
 
             migrationBuilder.CreateIndex(
                 name: "IX_attendee_HubIdHub",

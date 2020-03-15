@@ -73,15 +73,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("ModeratorIdModerator");
 
                     b.ToTable("hub","public");
-
-                    b.HasData(
-                        new
-                        {
-                            IdHub = 1,
-                            HubCreationDate = new DateTime(2020, 3, 15, 1, 37, 41, 171, DateTimeKind.Local).AddTicks(5448),
-                            HubLink = "hub-link",
-                            HubName = "hub-name"
-                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Moderator", b =>
@@ -108,16 +99,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("ModeratorNickname");
 
                     b.ToTable("moderator","public");
-
-                    b.HasData(
-                        new
-                        {
-                            IdModerator = 1,
-                            ModeratorEmail = "moderator@intechnet.io",
-                            ModeratorNickname = "moderator",
-                            ModeratorPassword = "720E39C10B81B3652B149FA74B3757AD1453F10FD4445F2A1AB4196BF2D23CE5D64A8DCD6DE157194853F35CC160F8A851155261B82B271BB81AD0B700AF9992",
-                            ModeratorSalt = "moderator-salt"
-                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Pupil", b =>
@@ -144,16 +125,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("PupilNickname");
 
                     b.ToTable("pupil","public");
-
-                    b.HasData(
-                        new
-                        {
-                            IdPupil = 1,
-                            PupilEmail = "pupil@intechnet.io",
-                            PupilNickname = "pupil",
-                            PupilPassword = "CF28AF1039C0348CE7715232444454F47E085D6859913BFE531008D1BEF4992D27D7A3301E9CC70004F0F42513676FC01B941C848160351D389BBC3A264DC0E2",
-                            PupilSalt = "pupil-salt"
-                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Attendee", b =>
