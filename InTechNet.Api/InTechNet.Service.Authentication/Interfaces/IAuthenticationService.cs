@@ -15,6 +15,12 @@ namespace InTechNet.Service.Authentication.Interfaces
         ModeratorDto GetCurrentModerator();
 
         /// <summary>
+        /// Get the current pupil's data based on the JWT information
+        /// </summary>
+        /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
+        PupilDto GetCurrentPupil();
+
+        /// <summary>
         /// Generate a valid JWT for the moderator
         /// </summary>
         /// <returns>The valid JWT for the moderator</returns>

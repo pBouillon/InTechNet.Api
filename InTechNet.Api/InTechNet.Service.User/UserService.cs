@@ -46,6 +46,12 @@ namespace InTechNet.Service.User
             return _moderatorService.GetModerator(moderatorId);
         }
 
+        /// <inheritdoc cref="IUserService.GetPupil" />
+        public PupilDto GetPupil(int pupilId)
+        {
+            return _pupilService.GetPupil(pupilId);
+        }
+
         /// <inheritdoc cref="IUserService.RegisterModerator" />
         public void RegisterModerator(ModeratorDto newModeratorData)
         {

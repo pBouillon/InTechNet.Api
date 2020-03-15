@@ -30,6 +30,13 @@ namespace InTechNet.Service.User.Interfaces
         ModeratorDto GetModerator(int moderatorId);
 
         /// <summary>
+        /// Get the pupil's data based on its identifier
+        /// </summary>
+        /// <param name="pupilId">The pupil's identifier</param>
+        /// <returns>A <see cref="PupilDto" /> containing the pupil's data</returns>
+        PupilDto GetPupil(int pupilId);
+
+        /// <summary>
         /// Create a new moderator in the database
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>

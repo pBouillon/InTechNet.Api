@@ -16,6 +16,13 @@ namespace InTechNet.Service.User.Interfaces
         PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
 
         /// <summary>
+        /// Get the pupil's data based on its identifier
+        /// </summary>
+        /// <param name="pupilId">The pupil's identifier</param>
+        /// <returns>A <see cref="PupilDto" /> containing the pupil's data</returns>
+        PupilDto GetPupil(int pupilId);
+
+        /// <summary>
         /// Create a new pupil in the database
         /// </summary>
         /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>

@@ -60,6 +60,22 @@ namespace InTechNet.Service.User
             };
         }
 
+        /// <inheritdoc cref="IPupilService.GetPupil" />
+        public PupilDto GetPupil(int pupilId)
+        {
+            var pupil = _context.Pupils
+                                .FirstOrDefault(_ => _.IdPupil == pupilId)
+                            ?? throw new UnknownUserException();
+
+            return new PupilDto
+            {
+                Password = string.Empty,
+                Nickname = pupil.PupilNickname,
+                Email = pupil.PupilEmail,
+                Id = pupilId
+            };
+        }
+
         /// <inheritdoc cref="IPupilService.RegisterPupil" />
         public void RegisterPupil(PupilDto newPupilData)
         {

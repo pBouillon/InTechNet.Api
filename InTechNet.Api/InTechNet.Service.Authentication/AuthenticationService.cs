@@ -58,6 +58,23 @@ namespace InTechNet.Service.Authentication
             return _userService.GetModerator(Convert.ToInt32(moderatorId));
         }
 
+        /// <inheritdoc cref="IAuthenticationService.GetCurrentPupil" />
+        public PupilDto GetCurrentPupil()
+        {
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
+                _.Type == ClaimTypes.Role
+                && _.Value != InTechNetRoles.Pupil))
+            {
+                throw new IllegalRoleException();
+            }
+
+            var moderatorId = _httpContextAccessor.HttpContext.User
+                                  .FindFirstValue(ClaimTypes.NameIdentifier)
+                              ?? throw new UnknownUserException();
+
+            return _userService.GetPupil(Convert.ToInt32(moderatorId));
+        }
+
         /// <inheritdoc cref="IAuthenticationService.GetModeratorToken" />
         public string GetModeratorToken(AuthenticationDto authenticationDto)
         {
