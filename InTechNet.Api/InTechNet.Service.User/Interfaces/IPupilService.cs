@@ -11,8 +11,8 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Authenticate the pupil from its associated information
         /// </summary>
-        /// <param name="authenticationData">The <see cref="AuthenticationDto"/> containing its authentication data</param>
-        /// <returns>A <see cref="PupilDto"/> of the associated pupil</returns>
+        /// <param name="authenticationData">The <see cref="AuthenticationDto" /> containing its authentication data</param>
+        /// <returns>A <see cref="PupilDto" /> of the associated pupil</returns>
         PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
     }
 }

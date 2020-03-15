@@ -1,41 +1,43 @@
-﻿using InTechNet.DataAccessLayer.Entity;
+﻿using System;
+using InTechNet.DataAccessLayer.Entity;
 using Microsoft.EntityFrameworkCore;
-using System;
 
 namespace InTechNet.DataAccessLayer
 {
     public class InTechNetContext : DbContext
     {
-        ///<summary>
+        /// <summary>
+        /// Basic constructor for InTechNetContext
+        /// </summary>
+        // ReSharper disable once SuggestBaseTypeForParameter
+        public InTechNetContext(DbContextOptions<InTechNetContext> options)
+            : base(options)
+        {
+        }
+
+        /// <summary>
         /// DbSet for the Moderator Entity
-        ///</summary>
+        /// </summary>
         public DbSet<Moderator> Moderators { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// DbSet for the Pupil Entity
-        ///</summary>
+        /// </summary>
         public DbSet<Pupil> Pupils { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// DbSet for the Hub Entity
-        ///</summary>
+        /// </summary>
         public DbSet<Hub> Hubs { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// DbSet for the Attendee Entity
-        ///</summary>
+        /// </summary>
         public DbSet<Attendee> Attendees { get; set; }
 
-
-        ///<summary>
-        /// Basic constructor for InTechNetContext
-        ///</summary>
-        public InTechNetContext(DbContextOptions<InTechNetContext> options)
-            : base(options) { }
-
-        ///<summary>
-        /// Initialize initial data 
-        ///</summary>
+        /// <summary>
+        /// Initialize initial data
+        /// </summary>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Moderator>()
@@ -51,33 +53,34 @@ namespace InTechNet.DataAccessLayer
                 .HasData(new Moderator
                 {
                     IdModerator = 1,
-                    ModeratorEmail = "test@test.com",
-                    ModeratorNickname = "modeNick",
-                    // From raw: "mdp123"
-                    ModeratorPassword = "CC3827BF052E6B257CE6FBE896077A132448552CA6746CD538A11039950636ABD7440927318E5D9EBBD151C6A93364B8F5AD761A871403227395F4D99D01E34A",
-                    ModeratorSalt = "lesaltcestbien"
+                    ModeratorEmail = "moderator@intechnet.io",
+                    ModeratorNickname = "moderator",
+                    // From raw: "moderator"
+                    ModeratorPassword =
+                        "720E39C10B81B3652B149FA74B3757AD1453F10FD4445F2A1AB4196BF2D23CE5D64A8DCD6DE157194853F35CC160F8A851155261B82B271BB81AD0B700AF9992",
+                    ModeratorSalt = "moderator-salt"
                 });
 
             modelBuilder.Entity<Pupil>()
                 .HasData(new Pupil
                 {
                     IdPupil = 1,
-                    PupilEmail = "pupil@pupil.com",
-                    PupilNickname = "pupilNick",
-                    // From raw: "mdp456"
-                    PupilPassword = "4230B63D16DCEF8861AA9BE6F93B46F2E2ED20EC6C3E7E6001CDEC44DE1186BA015D98F19D3D5C43D38F84CBD00FDC977058066791A2AF7ACFE8863F92C71F8B",
-                    PupilSalt = "leselcestdrole"
+                    PupilEmail = "pupil@intechnet.io",
+                    PupilNickname = "pupil",
+                    // From raw: "pupil"
+                    PupilPassword =
+                        "CF28AF1039C0348CE7715232444454F47E085D6859913BFE531008D1BEF4992D27D7A3301E9CC70004F0F42513676FC01B941C848160351D389BBC3A264DC0E2",
+                    PupilSalt = "pupil-salt"
                 });
 
             modelBuilder.Entity<Hub>()
                 .HasData(new Hub
                 {
                     IdHub = 1,
-                    HubLink = "hublink1",
+                    HubLink = "hub-link",
                     HubCreationDate = DateTime.Now,
-                    HubName = "supername"
+                    HubName = "hub-name"
                 });
         }
-
     }
 }

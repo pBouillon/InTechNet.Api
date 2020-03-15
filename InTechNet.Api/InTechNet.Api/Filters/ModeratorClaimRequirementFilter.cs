@@ -1,23 +1,28 @@
-﻿using InTechNet.Common.Utils.Authentication.Jwt;
+﻿using System.Linq;
+using System.Security.Claims;
+using InTechNet.Common.Utils.Authentication.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
-using System.Linq;
-using System.Security.Claims;
 
 namespace InTechNet.Api.Filters
 {
+    /// <summary>
+    /// Provide a filter to block non-moderator users
+    /// <remarks>
+    /// To access a resource, the user must have a claim of type <see cref="ClaimTypes.Role" />
+    /// with the value <see cref="InTechNetRoles.Moderator" />
+    /// </remarks>
+    /// </summary>
     public class ModeratorClaimRequiredFilter : IAuthorizationFilter
     {
+        /// <inheritdoc cref="IAuthorizationFilter.OnAuthorization" />
         public void OnAuthorization(AuthorizationFilterContext context)
         {
             var hasClaim = context.HttpContext.User.Claims
                 .Any(_ => _.Type == ClaimTypes.Role
                           && _.Value == InTechNetRoles.Moderator);
 
-            if (!hasClaim)
-            {
-                context.Result = new ForbidResult();
-            }
+            if (!hasClaim) context.Result = new ForbidResult();
         }
     }
 }

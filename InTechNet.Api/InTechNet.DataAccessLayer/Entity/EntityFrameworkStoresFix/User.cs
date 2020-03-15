@@ -2,7 +2,5 @@
 
 namespace InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix
 {
-    public class User : IdentityUser<int>
-    {
-    }
+    public class User : IdentityUser<int> { }
 }

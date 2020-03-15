@@ -1,5 +1,4 @@
-﻿using System;
-using System.Linq;
+﻿using System.Linq;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Authentication;
@@ -9,7 +8,7 @@ using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.User
 {
-    /// <inheritdoc cref="IModeratorService"/>
+    /// <inheritdoc cref="IModeratorService" />
     public class ModeratorService : IModeratorService
     {
         /// <summary>
@@ -26,7 +25,7 @@ namespace InTechNet.Service.User
             _context = context;
         }
 
-        /// <inheritdoc cref="IModeratorService.AuthenticateModerator"/>
+        /// <inheritdoc cref="IModeratorService.AuthenticateModerator" />
         public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData)
         {
             // Unwrap the provided connection data
@@ -35,29 +34,23 @@ namespace InTechNet.Service.User
             // Retrieve the user associated with this login
             var moderator = _context.Moderators
                 .FirstOrDefault(_ =>
-                    _.ModeratorNickname == login 
+                    _.ModeratorNickname == login
                     || _.ModeratorEmail == login);
 
-            if (moderator == null)
-            {
-                throw new UnknownUserException();
-            }
+            if (moderator == null) throw new UnknownUserException();
 
             // Hash the provided raw password with the associated salt
             var hashedPassword = password.HashedWith(moderator.ModeratorSalt);
 
             // Assert that the provided password matches the stored one
-            if (hashedPassword != moderator.ModeratorPassword)
-            {
-                throw new InvalidCredentialsException();
-            }
+            if (hashedPassword != moderator.ModeratorPassword) throw new InvalidCredentialsException();
 
             // Return the DTO associated to the moderator
             return new ModeratorDto
             {
                 IdModerator = moderator.IdModerator,
                 ModeratorEmail = moderator.ModeratorEmail,
-                ModeratorNickname = moderator.ModeratorNickname,
+                ModeratorNickname = moderator.ModeratorNickname
             };
         }
     }

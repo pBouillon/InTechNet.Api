@@ -4,18 +4,16 @@ using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.User
 {
-    /// <summary>
-    /// Service for various user operation handling wrapping both pupil and moderator service 
-    /// </summary>
+    /// <inheritdoc cref="IUserService" />
     public class UserService : IUserService
     {
         /// <summary>
-        /// Service for moderator's operations 
+        /// Service for moderator's operations
         /// </summary>
         private readonly IModeratorService _moderatorService;
 
         /// <summary>
-        /// Service for pupil's operations 
+        /// Service for pupil's operations
         /// </summary>
         private readonly IPupilService _pupilService;
 
@@ -30,21 +28,13 @@ namespace InTechNet.Service.User
             _pupilService = pupilService;
         }
 
-        /// <summary>
-        /// Authenticate the moderator from its associated information
-        /// </summary>
-        /// <param name="authenticationData">The <see cref="AuthenticationDto"/> containing its authentication data</param>
-        /// <returns>A <see cref="ModeratorDto"/> of the associated moderator</returns>
+        /// <inheritdoc cref="IUserService.AuthenticateModerator" />
         public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData)
         {
             return _moderatorService.AuthenticateModerator(authenticationData);
         }
 
-        /// <summary>
-        /// Authenticate the pupil from its associated information
-        /// </summary>
-        /// <param name="authenticationData">The <see cref="AuthenticationDto"/> containing its authentication data</param>
-        /// <returns>A <see cref="PupilDto"/> of the associated pupil</returns>
+        /// <inheritdoc cref="IUserService.AuthenticatePupil" />
         public PupilDto AuthenticatePupil(AuthenticationDto authenticationData)
         {
             return _pupilService.AuthenticatePupil(authenticationData);

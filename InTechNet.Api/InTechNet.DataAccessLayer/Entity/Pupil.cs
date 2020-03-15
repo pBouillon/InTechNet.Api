@@ -7,36 +7,36 @@ namespace InTechNet.DataAccessLayer.Entity
     [Table("pupil", Schema = "public")]
     public class Pupil
     {
-        ///<summary>
+        /// <summary>
         /// Unique ID of the Pupil
-        ///</summary>
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdPupil { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Nickname of the Pupil
-        ///</summary>
+        /// </summary>
         public string PupilNickname { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Email of the Pupil
-        ///</summary>
+        /// </summary>
         public string PupilEmail { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Password of the Pupil
-        ///</summary>
-        public string PupilPassword{ get; set; }
-        
-        ///<summary>
+        /// </summary>
+        public string PupilPassword { get; set; }
+
+        /// <summary>
         /// Salt of the Pupil
-        ///</summary>
+        /// </summary>
         public string PupilSalt { get; set; }
-        
-        ///<summary>
+
+        /// <summary>
         /// Hub of the pupil
-        ///</summary>
+        /// </summary>
         public IEnumerable<Attendee> Attendees { get; set; }
     }
 }

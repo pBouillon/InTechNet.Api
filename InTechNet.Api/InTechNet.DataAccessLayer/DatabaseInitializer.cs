@@ -1,14 +1,17 @@
-﻿using IdentityServer4.EntityFramework.DbContexts;
-using IdentityServer4.EntityFramework.Mappers;
-using Microsoft.AspNetCore.Builder;
+﻿using Microsoft.AspNetCore.Builder;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
-using System.Linq;
 
 namespace InTechNet.DataAccessLayer
 {
+    /// <summary>
+    /// Code-first database initialization object
+    /// </summary>
     public class DatabaseInitializer
     {
+        /// <summary>
+        /// Code-first database initialization
+        /// </summary>
         public static void Initialize(IApplicationBuilder app, AuthDbContext context)
         {
             context.Database.EnsureCreated();

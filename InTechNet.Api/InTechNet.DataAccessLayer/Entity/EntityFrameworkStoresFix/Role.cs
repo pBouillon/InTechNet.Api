@@ -2,7 +2,5 @@
 
 namespace InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix
 {
-    public class Role : IdentityRole<int>
-    {
-    }
+    public class Role : IdentityRole<int> { }
 }

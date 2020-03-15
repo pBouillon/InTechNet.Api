@@ -1,5 +1,10 @@
+using System;
+using System.Collections.Generic;
+using System.IO;
+using System.Reflection;
+using System.Text;
 using InTechNet.Api.Helpers;
-using InTechNet.Common.Utils.Configuration.Helper;
+using InTechNet.Common.Utils.Api.Configuration;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
@@ -9,26 +14,22 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.IdentityModel.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Reflection;
-using System.Text;
 
 namespace InTechNet.Api
 {
     public class Startup
     {
-        public IConfiguration Configuration { get; }
-
         /// <summary>
         /// InTechNet metadata
         /// </summary>
-        private ProjectDto _metadata;
+        private readonly ProjectDto _metadata;
 
+        /// <summary>
+        /// Default constructor
+        /// </summary>
+        /// <param name="configuration"></param>
         public Startup(IConfiguration configuration)
         {
             Configuration = configuration;
@@ -36,10 +37,11 @@ namespace InTechNet.Api
             _metadata = new ProjectDto();
         }
 
+        public IConfiguration Configuration { get; }
+
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-
             services.AddControllers();
             services.AddCors();
 
@@ -55,22 +57,18 @@ namespace InTechNet.Api
 
             // Uncomment to show errors on Identity methods
             // For logging/debugging purposes only
-            //IdentityModelEventSource.ShowPII = true;
+            // IdentityModelEventSource.ShowPII = true;
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AuthDbContext context)
         {
             if (env.IsDevelopment())
-            {
                 app.UseDeveloperExceptionPage();
-            }
             else
-            {
                 app.UseHsts();
-            }
 
-            //Start Identity Setup
+            // Start Identity Setup
             DatabaseInitializer.Initialize(app, context);
 
             app.UseHttpsRedirection();
@@ -78,18 +76,15 @@ namespace InTechNet.Api
             app.UseRouting();
 
             app.UseCors(option => option
-               .AllowAnyOrigin()
-               .AllowAnyMethod()
-               .AllowAnyHeader());
+                .AllowAnyOrigin()
+                .AllowAnyMethod()
+                .AllowAnyHeader());
 
             app.UseAuthentication();
 
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
 
             // Enable swagger middleware
             app.UseSwagger();
@@ -97,7 +92,7 @@ namespace InTechNet.Api
             app.UseSwaggerUI(_ =>
             {
                 _.SwaggerEndpoint(
-                    $"/swagger/{_metadata.Version}/swagger.json", 
+                    $"/swagger/{_metadata.Version}/swagger.json",
                     _metadata.Title);
             });
         }
@@ -112,32 +107,32 @@ namespace InTechNet.Api
                 .AddDefaultTokenProviders();
 
             services.AddIdentityServer()
-                    .AddDeveloperSigningCredential()
-                    .AddInMemoryPersistedGrants()
-                    .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                    .AddInMemoryApiResources(Config.GetApiResources())
-                    .AddInMemoryClients(Config.GetClients())
-                    .AddAspNetIdentity<User>();
+                .AddDeveloperSigningCredential()
+                .AddInMemoryPersistedGrants()
+                .AddInMemoryIdentityResources(Config.GetIdentityResources())
+                .AddInMemoryApiResources(Config.GetApiResources())
+                .AddInMemoryClients(Config.GetClients())
+                .AddAspNetIdentity<User>();
 
             services.AddAuthentication(options =>
-            {
-                options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
-                options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
-            })
-            .AddJwtBearer(options =>
-            {
-                options.TokenValidationParameters = new TokenValidationParameters
                 {
-                    ValidateIssuer = true,
-                    ValidateAudience = true,
-                    ValidateLifetime = true,
-                    ValidateIssuerSigningKey = true,
-                    ValidIssuer = Configuration["JwtToken:Issuer"],
-                    ValidAudience = Configuration["JwtToken:Audience"],
-                    IssuerSigningKey = new SymmetricSecurityKey(
-                        Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
-                };
-            });
+                    options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;
+                    options.DefaultChallengeScheme = JwtBearerDefaults.AuthenticationScheme;
+                })
+                .AddJwtBearer(options =>
+                {
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidateAudience = true,
+                        ValidateLifetime = true,
+                        ValidateIssuerSigningKey = true,
+                        ValidIssuer = Configuration["JwtToken:Issuer"],
+                        ValidAudience = Configuration["JwtToken:Audience"],
+                        IssuerSigningKey = new SymmetricSecurityKey(
+                            Encoding.UTF8.GetBytes(Configuration["JwtToken:SecretKey"]))
+                    };
+                });
         }
 
         /// <summary>

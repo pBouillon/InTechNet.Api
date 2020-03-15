@@ -8,37 +8,36 @@ namespace InTechNet.DataAccessLayer.Entity
     [Table("hub", Schema = "public")]
     public class Hub
     {
-        ///<summary>
+        /// <summary>
         /// Unique ID of the Hub
-        ///</summary>
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdHub { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Name of the Hub
-        ///</summary>
+        /// </summary>
         public string HubName { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Link of the Hub
-        ///</summary>
+        /// </summary>
         public string HubLink { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Creation date of the Hub
-        ///</summary>
+        /// </summary>
         public DateTime HubCreationDate { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Moderator of the Hub
-        ///</summary>
+        /// </summary>
         public Moderator Moderator { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Attendees of the Hub
-        ///</summary>
+        /// </summary>
         public IEnumerable<Attendee> Attendees { get; set; }
-
     }
 }

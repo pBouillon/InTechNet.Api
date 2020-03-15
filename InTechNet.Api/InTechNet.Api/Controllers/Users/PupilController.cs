@@ -1,6 +1,4 @@
-﻿using System.Linq;
-using InTechNet.Api.Attributes;
-using InTechNet.Common.Utils.Api;
+﻿using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
@@ -13,7 +11,7 @@ namespace InTechNet.Api.Controllers.Users
     /// <summary>
     /// Authentication controller for InTechNet API for pupils
     /// </summary>
-    [Route("api/v1/pupil/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class PupilController : ControllerBase
     {
@@ -27,9 +25,10 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// Login end point for a pupil
         /// </summary>
-        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto"/></param>
+        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
         /// <returns>A valid JWT on success</returns>
-        [HttpPost]
+        [HttpPost("login")]
+        [AllowAnonymous]
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(400, "Invalid credentials")]
         [SwaggerOperation(
@@ -45,22 +44,12 @@ namespace InTechNet.Api.Controllers.Users
             try
             {
                 var token = _authenticationService.GetPupilToken(authenticationDto);
-                return Ok(new { Token = token });
+                return Ok(new {Token = token});
             }
             catch (BaseException)
             {
                 return Unauthorized();
             }
-        }
-
-        [Authorize]
-        [PupilClaimRequired]
-        [HttpPost("Test")]
-        public IActionResult Test()
-        {
-            var current = HttpContext.User;
-
-            return Ok(current.Claims.Count());
         }
     }
 }

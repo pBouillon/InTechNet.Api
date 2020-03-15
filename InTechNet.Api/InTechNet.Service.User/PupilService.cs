@@ -8,7 +8,7 @@ using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.User
 {
-    /// <inheritdoc cref="IPupilService"/>
+    /// <inheritdoc cref="IPupilService" />
     public class PupilService : IPupilService
     {
         /// <summary>
@@ -25,7 +25,7 @@ namespace InTechNet.Service.User
             _context = context;
         }
 
-        /// <inheritdoc cref="IPupilService.AuthenticatePupil"/>
+        /// <inheritdoc cref="IPupilService.AuthenticatePupil" />
         public PupilDto AuthenticatePupil(AuthenticationDto authenticationData)
         {
             // Unwrap the provided connection data
@@ -37,26 +37,20 @@ namespace InTechNet.Service.User
                     _.PupilEmail == login
                     || _.PupilNickname == login);
 
-            if (pupil == null)
-            {
-                throw new UnknownUserException();
-            }
+            if (pupil == null) throw new UnknownUserException();
 
             // Hash the provided raw password with the associated salt
             var hashedPassword = password.HashedWith(pupil.PupilSalt);
 
             // Assert that the provided password matches the stored one
-            if (hashedPassword != pupil.PupilPassword)
-            {
-                throw new InvalidCredentialsException();
-            }
+            if (hashedPassword != pupil.PupilPassword) throw new InvalidCredentialsException();
 
             // Return the DTO associated to the moderator
             return new PupilDto
             {
                 IdPupil = pupil.IdPupil,
                 PupilEmail = pupil.PupilEmail,
-                PupilNickname = pupil.PupilNickname,
+                PupilNickname = pupil.PupilNickname
             };
         }
     }

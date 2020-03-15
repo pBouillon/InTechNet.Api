@@ -3,7 +3,7 @@
 namespace InTechNet.Service.User.Models
 {
     /// <summary>
-    /// <see cref="Moderator"/> DTO
+    /// <see cref="Moderator" /> DTO
     /// </summary>
     public class ModeratorDto
     {
@@ -12,14 +12,14 @@ namespace InTechNet.Service.User.Models
         /// </summary>
         public int IdModerator { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Nickname of the moderator
-        ///</summary>
+        /// </summary>
         public string ModeratorNickname { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Email of the moderator
-        ///</summary>
+        /// </summary>
         public string ModeratorEmail { get; set; }
     }
 }

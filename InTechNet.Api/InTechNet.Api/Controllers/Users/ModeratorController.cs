@@ -1,21 +1,17 @@
 ﻿using InTechNet.Common.Utils.Api;
+using InTechNet.Common.Utils.Authentication;
+using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System;
-using System.Linq;
-using System.Security.Claims;
-using InTechNet.Api.Attributes;
-using InTechNet.Common.Utils.Authentication;
-using InTechNet.Exception;
 
 namespace InTechNet.Api.Controllers.Users
 {
     /// <summary>
     /// Authentication controller for InTechNet API for moderators
     /// </summary>
-    [Route("api/v1/moderator/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class ModeratorController : ControllerBase
     {
@@ -29,10 +25,10 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// Login end point for a moderator
         /// </summary>
-        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto"/></param>
+        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
         /// <returns>A valid JWT on success</returns>
+        [HttpPost("login")]
         [AllowAnonymous]
-        [HttpPost]
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(400, "Invalid credentials")]
         [SwaggerOperation(
@@ -48,21 +44,12 @@ namespace InTechNet.Api.Controllers.Users
             try
             {
                 var token = _authenticationService.GetModeratorToken(authenticationDto);
-                return Ok(new { Token = token });
+                return Ok(new {Token = token});
             }
             catch (BaseException)
             {
                 return Unauthorized();
             }
-        }
-
-        [Authorize]
-        [ModeratorClaimRequired]
-        [HttpPost("Test")]
-        public IActionResult Test() {
-            var current = HttpContext.User;
-
-            return Ok(current.Claims.Count());
         }
     }
 }
