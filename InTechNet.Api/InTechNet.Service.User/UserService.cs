@@ -39,5 +39,11 @@ namespace InTechNet.Service.User
         {
             return _pupilService.AuthenticatePupil(authenticationData);
         }
+
+        /// <inheritdoc cref="IUserService.RegisterModerator" />
+        public void RegisterModerator(ModeratorDto newModeratorData)
+        {
+            _moderatorService.RegisterModerator(newModeratorData);
+        }
     }
 }

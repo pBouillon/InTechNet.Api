@@ -14,5 +14,11 @@ namespace InTechNet.Service.User.Interfaces
         /// <param name="authenticationData">The <see cref="AuthenticationDto" /> containing its authentication data</param>
         /// <returns>A <see cref="ModeratorDto" /> of the associated moderator</returns>
         public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
+
+        /// <summary>
+        /// Create a new moderator in the database
+        /// </summary>
+        /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
+        public void RegisterModerator(ModeratorDto newModeratorData);
     }
 }

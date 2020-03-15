@@ -51,8 +51,14 @@ namespace InTechNet.Service.User
                 Id = moderator.IdModerator,
                 Email = moderator.ModeratorEmail,
                 Nickname = moderator.ModeratorNickname,
-                Passowrd = string.Empty
+                Password = string.Empty
             };
+        }
+
+        /// <inheritdoc cref="IModeratorService.RegisterModerator" />
+        public void RegisterModerator(ModeratorDto newModeratorData)
+        {
+            throw new System.NotImplementedException();
         }
     }
 }
