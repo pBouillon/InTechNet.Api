@@ -19,5 +19,10 @@
         /// Endpoint relative to the pupil's logic
         /// </summary>
         public const string Pupil = "Pupil";
+
+        /// <summary>
+        /// Endpoint relative to the registration process
+        /// </summary>
+        public const string Registration = "Registration";
     }
 }

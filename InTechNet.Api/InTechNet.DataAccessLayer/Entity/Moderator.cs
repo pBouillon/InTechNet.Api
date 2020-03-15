@@ -17,16 +17,21 @@ namespace InTechNet.DataAccessLayer.Entity
         /// <summary>
         /// Nickname of the moderator
         /// </summary>
+        [Index(IsUnique = true)]
+        [MaxLength(64)]
         public string ModeratorNickname { get; set; }
 
         /// <summary>
         /// Email of the moderator
         /// </summary>
+        [Index(IsUnique = true)]
+        [MaxLength(128)]
         public string ModeratorEmail { get; set; }
 
         /// <summary>
         /// Password of the moderator
         /// </summary>
+        [MaxLength(64)]
         public string ModeratorPassword { get; set; }
 
         /// <summary>

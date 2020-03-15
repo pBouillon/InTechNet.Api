@@ -27,10 +27,10 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
         /// <returns>A valid JWT on success</returns>
-        [HttpPost("authenticate")]
         [AllowAnonymous]
+        [HttpPost("authenticate")]
         [SwaggerResponse(200, "Successful authentication")]
-        [SwaggerResponse(400, "Invalid credentials")]
+        [SwaggerResponse(401, "Invalid credentials")]
         [SwaggerOperation(
             Summary = "Login end point for a pupil",
             Tags = new[]

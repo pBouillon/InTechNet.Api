@@ -44,7 +44,7 @@ namespace InTechNet.Service.Authentication.Jwt
         }
 
         /// <inheritdoc cref="IJwtService.GetPupilToken" />
-        public string GetPupilToken(AuthenticationDto authenticationDto)
+        public string GetPupilToken(PupilDto authenticationDto)
         {
             var claims = new List<Claim>
             {
