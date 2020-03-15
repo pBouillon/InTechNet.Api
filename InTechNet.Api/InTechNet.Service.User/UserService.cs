@@ -45,5 +45,11 @@ namespace InTechNet.Service.User
         {
             _moderatorService.RegisterModerator(newModeratorData);
         }
+
+        /// <inheritdoc cref="IUserService.RegisterPupil" />
+        public void RegisterPupil(PupilDto newPupilData)
+        {
+            _pupilService.RegisterPupil(newPupilData);
+        }
     }
 }

@@ -27,5 +27,11 @@ namespace InTechNet.Service.User.Interfaces
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
         void RegisterModerator(ModeratorDto newModeratorData);
+
+        /// <summary>
+        /// Create a new pupil in the database
+        /// </summary>
+        /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>
+        void RegisterPupil(PupilDto newPupilData);
     }
 }

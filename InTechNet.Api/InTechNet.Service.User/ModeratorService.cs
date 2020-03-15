@@ -75,12 +75,7 @@ namespace InTechNet.Service.User
             }
 
             // Generate a random salt for this moderator
-            var saltBuffer = new byte[InTechNetSecurity.SaltByteLength];
-
-            using var cryptoServiceProvider = new RNGCryptoServiceProvider();
-            cryptoServiceProvider.GetNonZeroBytes(saltBuffer);
-
-            var salt = Convert.ToBase64String(saltBuffer);
+            var salt = InTechNetSecurity.GetSalt();
 
             // Salting the password
             var saltedPassword = newModeratorData.Password.HashedWith(salt);

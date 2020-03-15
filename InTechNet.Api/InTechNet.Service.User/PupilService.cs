@@ -1,7 +1,13 @@
-﻿using System.Linq;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
 using InTechNet.Common.Utils.Authentication;
+using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entity;
 using InTechNet.Exception.Authentication;
+using InTechNet.Exception.Registration;
 using InTechNet.Service.User.Helper;
 using InTechNet.Service.User.Interfaces;
 using InTechNet.Service.User.Models;
@@ -48,10 +54,42 @@ namespace InTechNet.Service.User
             // Return the DTO associated to the moderator
             return new PupilDto
             {
-                IdPupil = pupil.IdPupil,
-                PupilEmail = pupil.PupilEmail,
-                PupilNickname = pupil.PupilNickname
+                Id = pupil.IdPupil,
+                Email = pupil.PupilEmail,
+                Nickname = pupil.PupilNickname
             };
+        }
+
+        /// <inheritdoc cref="IPupilService.RegisterPupil" />
+        public void RegisterPupil(PupilDto newPupilData)
+        {
+            // Assert that its nickname or email is unique in InTechNet database
+            var isDuplicateTracked = _context.Pupils.Any(_ =>
+                _.PupilNickname == newPupilData.Nickname
+                || _.PupilEmail == newPupilData.Email);
+
+            if (isDuplicateTracked)
+            {
+                throw new DuplicateIdentifierException();
+            }
+
+            // Generate a random salt for this moderator
+            var salt = InTechNetSecurity.GetSalt();
+
+            // Salting the password
+            var saltedPassword = newPupilData.Password.HashedWith(salt);
+
+            // Record the new moderator
+            _context.Pupils.Add(new Pupil
+            {
+                Attendees = new List<Attendee>(),
+                PupilEmail = newPupilData.Email,
+                PupilNickname = newPupilData.Nickname,
+                PupilPassword = saltedPassword,
+                PupilSalt = salt,
+            });
+
+            _context.SaveChanges();
         }
     }
 }
