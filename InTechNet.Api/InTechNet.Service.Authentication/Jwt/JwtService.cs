@@ -25,7 +25,7 @@ namespace InTechNet.Service.Authentication.Jwt
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, InTechNetRoles.Moderator),
-                new Claim(ClaimTypes.UserData, moderator.IdModerator.ToString())
+                new Claim(ClaimTypes.UserData, moderator.Id.ToString())
             };
 
             var token = new JwtSecurityToken(

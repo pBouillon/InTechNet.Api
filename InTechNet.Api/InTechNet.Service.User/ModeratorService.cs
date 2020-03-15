@@ -45,12 +45,13 @@ namespace InTechNet.Service.User
             // Assert that the provided password matches the stored one
             if (hashedPassword != moderator.ModeratorPassword) throw new InvalidCredentialsException();
 
-            // Return the DTO associated to the moderator
+            // Return the DTO associated to the moderator without its password
             return new ModeratorDto
             {
-                IdModerator = moderator.IdModerator,
-                ModeratorEmail = moderator.ModeratorEmail,
-                ModeratorNickname = moderator.ModeratorNickname
+                Id = moderator.IdModerator,
+                Email = moderator.ModeratorEmail,
+                Nickname = moderator.ModeratorNickname,
+                Passowrd = string.Empty
             };
         }
     }

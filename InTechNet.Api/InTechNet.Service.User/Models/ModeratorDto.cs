@@ -10,16 +10,21 @@ namespace InTechNet.Service.User.Models
         /// <summary>
         /// Database ID
         /// </summary>
-        public int IdModerator { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Nickname of the moderator
         /// </summary>
-        public string ModeratorNickname { get; set; }
+        public string Nickname { get; set; }
 
         /// <summary>
         /// Email of the moderator
         /// </summary>
-        public string ModeratorEmail { get; set; }
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Moderator password
+        /// </summary>
+        public string Passowrd { get; set; }
     }
 }
