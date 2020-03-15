@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Utils.Authentication;
+using InTechNet.Service.User.Models;
 
 namespace InTechNet.Service.Authentication.Interfaces
 {
@@ -7,6 +8,12 @@ namespace InTechNet.Service.Authentication.Interfaces
     /// </summary>
     public interface IAuthenticationService
     {
+        /// <summary>
+        /// Get the current moderator's data based on the JWT information
+        /// </summary>
+        /// <returns>The <see cref="ModeratorDto" /> holding the data associated with the moderator</returns>
+        ModeratorDto GetCurrentModerator();
+
         /// <summary>
         /// Generate a valid JWT for the moderator
         /// </summary>

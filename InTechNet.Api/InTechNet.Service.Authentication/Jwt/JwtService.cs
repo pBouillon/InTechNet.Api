@@ -25,7 +25,7 @@ namespace InTechNet.Service.Authentication.Jwt
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, InTechNetRoles.Moderator),
-                new Claim(ClaimTypes.UserData, moderator.Id.ToString())
+                new Claim(ClaimTypes.NameIdentifier, moderator.Id.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -44,11 +44,12 @@ namespace InTechNet.Service.Authentication.Jwt
         }
 
         /// <inheritdoc cref="IJwtService.GetPupilToken" />
-        public string GetPupilToken(PupilDto authenticationDto)
+        public string GetPupilToken(PupilDto pupil)
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimTypes.Role, InTechNetRoles.Pupil)
+                new Claim(ClaimTypes.Role, InTechNetRoles.Pupil),
+                new Claim(ClaimTypes.NameIdentifier, pupil.Id.ToString())
             };
 
             var token = new JwtSecurityToken(

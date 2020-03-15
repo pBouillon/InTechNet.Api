@@ -23,6 +23,13 @@ namespace InTechNet.Service.User.Interfaces
         PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
 
         /// <summary>
+        /// Get the moderator's data based on its identifier
+        /// </summary>
+        /// <param name="moderatorId">The moderator's identifier</param>
+        /// <returns>A <see cref="ModeratorDto" /> containing the moderator's data</returns>
+        ModeratorDto GetModerator(int moderatorId);
+
+        /// <summary>
         /// Create a new moderator in the database
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>

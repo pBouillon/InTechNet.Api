@@ -46,6 +46,7 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<string> Authenticate([FromBody] AuthenticationDto authenticationDto)
         {
+
             try
             {
                 var token = _authenticationService.GetModeratorToken(authenticationDto);

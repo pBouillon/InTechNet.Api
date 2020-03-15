@@ -61,6 +61,22 @@ namespace InTechNet.Service.User
             };
         }
 
+        /// <inheritdoc cref="IModeratorService.GetModerator" />
+        public ModeratorDto GetModerator(int moderatorId)
+        {
+            var moderator = _context.Moderators
+                .FirstOrDefault(_ => _.IdModerator == moderatorId) 
+                            ?? throw new UnknownUserException();
+
+            return new ModeratorDto
+            {
+                Password = string.Empty,
+                Nickname = moderator.ModeratorNickname,
+                Email = moderator.ModeratorNickname,
+                Id = moderatorId
+            };
+        }
+
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
         public void RegisterModerator(ModeratorDto newModeratorData)
         {

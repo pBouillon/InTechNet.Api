@@ -1,6 +1,12 @@
-﻿using InTechNet.Common.Utils.Authentication;
+﻿using System;
+using System.Security.Claims;
+using InTechNet.Common.Utils.Authentication;
+using InTechNet.Common.Utils.Authentication.Jwt;
+using InTechNet.Exception.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
+using InTechNet.Service.User.Models;
+using Microsoft.AspNetCore.Http;
 
 namespace InTechNet.Service.Authentication
 {
@@ -18,14 +24,38 @@ namespace InTechNet.Service.Authentication
         private readonly IUserService _userService;
 
         /// <summary>
+        /// The current HTTP context accessor
+        /// </summary>
+        private readonly IHttpContextAccessor _httpContextAccessor;
+
+        /// <summary>
         /// Default AuthenticationService constructor
         /// </summary>
         /// <param name="userService">The <see cref="IUserService" /> to be used for authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
-        public AuthenticationService(IUserService userService, IJwtService jwtService)
+        /// <param name="httpContextAccessor">The current HTTP context accessor</param>
+        public AuthenticationService(IUserService userService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
         {
             _userService = userService;
             _jwtService = jwtService;
+            _httpContextAccessor = httpContextAccessor;
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.GetCurrentModerator" />
+        public ModeratorDto GetCurrentModerator()
+        {
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
+                _.Type == ClaimTypes.Role 
+                && _.Value != InTechNetRoles.Moderator))
+            {
+                throw new IllegalRoleException();
+            }
+
+            var moderatorId = _httpContextAccessor.HttpContext.User
+                .FindFirstValue(ClaimTypes.NameIdentifier)
+                ?? throw new UnknownUserException();
+
+            return _userService.GetModerator(Convert.ToInt32(moderatorId));
         }
 
         /// <inheritdoc cref="IAuthenticationService.GetModeratorToken" />
