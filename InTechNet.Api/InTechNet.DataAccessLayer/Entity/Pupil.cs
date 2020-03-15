@@ -18,12 +18,15 @@ namespace InTechNet.DataAccessLayer.Entity
         /// Nickname of the Pupil
         /// </summary>
         [Index("index_pupil_nickname", IsUnique = true)]
+        [MaxLength(64)] 
         public string PupilNickname { get; set; }
 
         /// <summary>
         /// Email of the Pupil
         /// </summary>
         [Index("index_pupil_email", IsUnique = true)]
+        [MaxLength(128)]
+        [EmailAddress] 
         public string PupilEmail { get; set; }
 
         /// <summary>

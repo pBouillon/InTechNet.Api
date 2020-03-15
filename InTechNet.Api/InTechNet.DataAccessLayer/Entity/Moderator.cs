@@ -32,7 +32,6 @@ namespace InTechNet.DataAccessLayer.Entity
         /// <summary>
         /// Password of the moderator
         /// </summary>
-        [MaxLength(64)]
         public string ModeratorPassword { get; set; }
 
         /// <summary>
