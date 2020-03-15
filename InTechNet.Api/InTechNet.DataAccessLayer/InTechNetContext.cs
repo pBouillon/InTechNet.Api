@@ -38,16 +38,6 @@ namespace InTechNet.DataAccessLayer
         /// <summary>
         /// Initialize initial data
         /// </summary>
-        protected override void OnModelCreating(ModelBuilder modelBuilder)
-        {
-            modelBuilder.Entity<Moderator>()
-                .HasIndex(b => b.ModeratorNickname);
-
-            modelBuilder.Entity<Pupil>()
-                .HasIndex(b => b.PupilNickname);
-
-            modelBuilder.Entity<Hub>()
-                .HasIndex(b => b.HubName);
-        }
+        protected override void OnModelCreating(ModelBuilder modelBuilder) { }
     }
 }

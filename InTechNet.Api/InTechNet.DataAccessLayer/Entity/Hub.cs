@@ -23,6 +23,7 @@ namespace InTechNet.DataAccessLayer.Entity
         /// <summary>
         /// Link of the Hub
         /// </summary>
+        [Index(IsUnique = true)] 
         public string HubLink { get; set; }
 
         /// <summary>
