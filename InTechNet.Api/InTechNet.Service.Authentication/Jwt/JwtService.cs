@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using InTechNet.Common.Utils.Authentication;
-using InTechNet.Common.Utils.Authentication.Jwt;
+﻿using InTechNet.Common.Utils.Authentication.Jwt;
+using InTechNet.Common.Utils.Security;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -35,7 +35,7 @@ namespace InTechNet.Service.Authentication.Jwt
                 signingCredentials: new SigningCredentials
                 (
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm
+                    InTechNetSecurity.JwtSigningAlgorithm
                 ),
                 claims: claims
             );
@@ -57,7 +57,7 @@ namespace InTechNet.Service.Authentication.Jwt
                 expires: _jwtResource.ValidUntil,
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm
+                    InTechNetSecurity.JwtSigningAlgorithm
                 ),
                 claims: claims);
 

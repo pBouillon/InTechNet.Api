@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
+using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer.Entity;
 using InTechNet.Exception.Registration;
 
@@ -74,8 +75,7 @@ namespace InTechNet.Service.User
             }
 
             // Generate a random salt for this moderator
-            // TODO: constant
-            var saltBuffer = new byte[256];
+            var saltBuffer = new byte[InTechNetSecurity.SaltByteLength];
 
             using var cryptoServiceProvider = new RNGCryptoServiceProvider();
             cryptoServiceProvider.GetNonZeroBytes(saltBuffer);
