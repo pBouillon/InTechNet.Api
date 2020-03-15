@@ -61,7 +61,7 @@ namespace InTechNet.Api.Controllers.Users
         /// Registration endpoint to create a new moderator
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        /// <returns>HTTP 200 on success</returns>
+        /// <returns>A JWT for the newly created user on success</returns>
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse(200, "New moderator successfully added")]
@@ -79,7 +79,14 @@ namespace InTechNet.Api.Controllers.Users
             try
             {
                 _userService.RegisterModerator(newModeratorData);
-                return Ok();
+
+                var associatedToken = _authenticationService.GetModeratorToken(new AuthenticationDto
+                {
+                    Login = newModeratorData.Nickname,
+                    Password = newModeratorData.Password
+                });
+
+                return Ok(new { Token = associatedToken });
             }
             catch (BaseException)
             {
