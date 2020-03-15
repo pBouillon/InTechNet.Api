@@ -17,14 +17,14 @@ namespace InTechNet.DataAccessLayer.Entity
         /// <summary>
         /// Nickname of the moderator
         /// </summary>
-        [Index(IsUnique = true)]
+        [Index("index_moderator_nickname", IsUnique = true)]
         [MaxLength(64)]
         public string ModeratorNickname { get; set; }
 
         /// <summary>
         /// Email of the moderator
         /// </summary>
-        [Index(IsUnique = true)]
+        [Index("index_moderator_email", IsUnique = true)]
         [MaxLength(128)]
         [EmailAddress] 
         public string ModeratorEmail { get; set; }

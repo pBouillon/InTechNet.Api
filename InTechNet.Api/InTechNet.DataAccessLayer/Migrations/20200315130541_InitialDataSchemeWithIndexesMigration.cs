@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
-    public partial class InitialDataSchemeMigration : Migration
+    public partial class InitialDataSchemeWithIndexesMigration : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -113,10 +113,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "PupilIdPupil");
 
             migrationBuilder.CreateIndex(
-                name: "IX_hub_HubName",
+                name: "index_hub_link",
                 schema: "public",
                 table: "hub",
-                column: "HubName");
+                column: "HubLink");
 
             migrationBuilder.CreateIndex(
                 name: "IX_hub_ModeratorIdModerator",
@@ -125,13 +125,25 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "ModeratorIdModerator");
 
             migrationBuilder.CreateIndex(
-                name: "IX_moderator_ModeratorNickname",
+                name: "index_moderator_email",
+                schema: "public",
+                table: "moderator",
+                column: "ModeratorEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "index_moderator_nickname",
                 schema: "public",
                 table: "moderator",
                 column: "ModeratorNickname");
 
             migrationBuilder.CreateIndex(
-                name: "IX_pupil_PupilNickname",
+                name: "index_pupil_email",
+                schema: "public",
+                table: "pupil",
+                column: "PupilEmail");
+
+            migrationBuilder.CreateIndex(
+                name: "index_pupil_nickname",
                 schema: "public",
                 table: "pupil",
                 column: "PupilNickname");

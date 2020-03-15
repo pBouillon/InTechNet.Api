@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200315122211_InitialDataSchemeMigration")]
-    partial class InitialDataSchemeMigration
+    [Migration("20200315130541_InitialDataSchemeWithIndexesMigration")]
+    partial class InitialDataSchemeWithIndexesMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -70,7 +70,8 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdHub");
 
-                    b.HasIndex("HubName");
+                    b.HasIndex("HubLink")
+                        .HasName("index_hub_link");
 
                     b.HasIndex("ModeratorIdModerator");
 
@@ -101,7 +102,11 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdModerator");
 
-                    b.HasIndex("ModeratorNickname");
+                    b.HasIndex("ModeratorEmail")
+                        .HasName("index_moderator_email");
+
+                    b.HasIndex("ModeratorNickname")
+                        .HasName("index_moderator_nickname");
 
                     b.ToTable("moderator","public");
                 });
@@ -127,7 +132,11 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdPupil");
 
-                    b.HasIndex("PupilNickname");
+                    b.HasIndex("PupilEmail")
+                        .HasName("index_pupil_email");
+
+                    b.HasIndex("PupilNickname")
+                        .HasName("index_pupil_nickname");
 
                     b.ToTable("pupil","public");
                 });

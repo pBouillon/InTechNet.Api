@@ -68,7 +68,8 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdHub");
 
-                    b.HasIndex("HubName");
+                    b.HasIndex("HubLink")
+                        .HasName("index_hub_link");
 
                     b.HasIndex("ModeratorIdModerator");
 
@@ -99,7 +100,11 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdModerator");
 
-                    b.HasIndex("ModeratorNickname");
+                    b.HasIndex("ModeratorEmail")
+                        .HasName("index_moderator_email");
+
+                    b.HasIndex("ModeratorNickname")
+                        .HasName("index_moderator_nickname");
 
                     b.ToTable("moderator","public");
                 });
@@ -125,7 +130,11 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasKey("IdPupil");
 
-                    b.HasIndex("PupilNickname");
+                    b.HasIndex("PupilEmail")
+                        .HasName("index_pupil_email");
+
+                    b.HasIndex("PupilNickname")
+                        .HasName("index_pupil_nickname");
 
                     b.ToTable("pupil","public");
                 });

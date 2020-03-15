@@ -35,9 +35,27 @@ namespace InTechNet.DataAccessLayer
         /// </summary>
         public DbSet<Attendee> Attendees { get; set; }
 
-        /// <summary>
-        /// Initialize initial data
-        /// </summary>
-        protected override void OnModelCreating(ModelBuilder modelBuilder) { }
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Moderator>()
+                .HasIndex(b => b.ModeratorNickname)
+                .HasName("index_moderator_nickname");
+
+            modelBuilder.Entity<Moderator>()
+                .HasIndex(b => b.ModeratorEmail)
+                .HasName("index_moderator_email");
+
+            modelBuilder.Entity<Pupil>()
+                .HasIndex(b => b.PupilNickname)
+                .HasName("index_pupil_nickname");
+
+            modelBuilder.Entity<Pupil>()
+                .HasIndex(b => b.PupilEmail)
+                .HasName("index_pupil_email");
+
+            modelBuilder.Entity<Hub>()
+                .HasIndex(b => b.HubLink)
+                .HasName("index_hub_link");
+        }
     }
 }
