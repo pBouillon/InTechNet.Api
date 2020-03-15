@@ -26,6 +26,7 @@ namespace InTechNet.DataAccessLayer.Entity
         /// </summary>
         [Index(IsUnique = true)]
         [MaxLength(128)]
+        [EmailAddress] 
         public string ModeratorEmail { get; set; }
 
         /// <summary>

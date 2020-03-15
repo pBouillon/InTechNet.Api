@@ -25,6 +25,7 @@ namespace InTechNet.Service.User.Models
         /// </summary>
         [Required]
         [MaxLength(128)] 
+        [EmailAddress]
         public string Email { get; set; }
 
         /// <summary>
