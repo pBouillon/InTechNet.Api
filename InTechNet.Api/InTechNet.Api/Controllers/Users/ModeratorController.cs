@@ -27,7 +27,7 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
         /// <returns>A valid JWT on success</returns>
-        [HttpPost("login")]
+        [HttpPost("authenticate")]
         [AllowAnonymous]
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(400, "Invalid credentials")]
@@ -39,7 +39,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<string> Login([FromBody] AuthenticationDto authenticationDto)
+        public ActionResult<string> Authenticate([FromBody] AuthenticationDto authenticationDto)
         {
             try
             {
