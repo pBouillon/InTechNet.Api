@@ -14,7 +14,7 @@ namespace InTechNet.Common.Utils.Security
         /// <summary>
         /// Size of the byte array for the salt generation
         /// </summary>
-        public const int SaltByteLength = 256;
+        public const int SaltByteLength = 128;
 
         /// <summary>
         /// Get a randomly generated salt
