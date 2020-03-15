@@ -3,15 +3,17 @@ using System;
 using InTechNet.DataAccessLayer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    partial class InTechNetContextModelSnapshot : ModelSnapshot
+    [Migration("20200314152709_migration_intechnet")]
+    partial class migration_intechnet
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -78,9 +80,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdHub = 1,
-                            HubCreationDate = new DateTime(2020, 3, 15, 1, 37, 41, 171, DateTimeKind.Local).AddTicks(5448),
-                            HubLink = "hub-link",
-                            HubName = "hub-name"
+                            HubCreationDate = new DateTime(2020, 3, 14, 16, 27, 9, 357, DateTimeKind.Local).AddTicks(3960),
+                            HubLink = "hublink1",
+                            HubName = "supername"
                         });
                 });
 
@@ -113,10 +115,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdModerator = 1,
-                            ModeratorEmail = "moderator@intechnet.io",
-                            ModeratorNickname = "moderator",
-                            ModeratorPassword = "720E39C10B81B3652B149FA74B3757AD1453F10FD4445F2A1AB4196BF2D23CE5D64A8DCD6DE157194853F35CC160F8A851155261B82B271BB81AD0B700AF9992",
-                            ModeratorSalt = "moderator-salt"
+                            ModeratorEmail = "test@test.com",
+                            ModeratorNickname = "modeNick",
+                            ModeratorPassword = "CC3827BF052E6B257CE6FBE896077A132448552CA6746CD538A11039950636ABD7440927318E5D9EBBD151C6A93364B8F5AD761A871403227395F4D99D01E34A",
+                            ModeratorSalt = "lesaltcestbien"
                         });
                 });
 
@@ -149,10 +151,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdPupil = 1,
-                            PupilEmail = "pupil@intechnet.io",
-                            PupilNickname = "pupil",
-                            PupilPassword = "CF28AF1039C0348CE7715232444454F47E085D6859913BFE531008D1BEF4992D27D7A3301E9CC70004F0F42513676FC01B941C848160351D389BBC3A264DC0E2",
-                            PupilSalt = "pupil-salt"
+                            PupilEmail = "pupil@pupil.com",
+                            PupilNickname = "pupilNick",
+                            PupilPassword = "4230B63D16DCEF8861AA9BE6F93B46F2E2ED20EC6C3E7E6001CDEC44DE1186BA015D98F19D3D5C43D38F84CBD00FDC977058066791A2AF7ACFE8863F92C71F8B",
+                            PupilSalt = "leselcestdrole"
                         });
                 });
 

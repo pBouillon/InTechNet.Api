@@ -1,3 +1,6 @@
+#Custom files
+*.rsa
+
 
 # Created by https://www.gitignore.io/api/csharp,dotnetcore,visualstudio,visualstudiocode
 # Edit at https://www.gitignore.io/?templates=csharp,dotnetcore,visualstudio,visualstudiocode
@@ -11,7 +14,6 @@
 # User-specific files
 *.rsuser
 *.suo
-*.user
 *.userosscache
 *.sln.docstates
 

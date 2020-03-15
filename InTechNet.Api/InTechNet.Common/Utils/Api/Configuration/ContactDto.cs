@@ -1,4 +1,4 @@
-﻿namespace InTechNet.Common.Utils.Configuration.Helper
+﻿namespace InTechNet.Common.Utils.Api.Configuration
 {
     /// <summary>
     /// Provides a helper for InTechNet metadata regarding its contact information

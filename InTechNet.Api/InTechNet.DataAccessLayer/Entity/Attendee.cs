@@ -6,31 +6,31 @@ namespace InTechNet.DataAccessLayer.Entity
     [Table("attendee", Schema = "public")]
     public class Attendee
     {
-        ///<summary>
+        /// <summary>
         /// Unique ID of the Attendee
-        ///</summary>
+        /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int IdAttendee { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Id the pupil for this Hub
-        ///</summary>
+        /// </summary>
         public int IdPupil { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Pupil for this Hub
-        ///</summary>
-        public Pupil Pupil{ get; set; }
+        /// </summary>
+        public Pupil Pupil { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Id of the Hub for the pupil
-        ///</summary>
+        /// </summary>
         public int IdHub { get; set; }
 
-        ///<summary>
+        /// <summary>
         /// Hub for the pupil
-        ///</summary>
+        /// </summary>
         public Hub Hub { get; set; }
     }
 }

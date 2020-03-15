@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200308153656_InTechNetMigration1")]
-    partial class InTechNetMigration1
+    [Migration("20200315003741_CleanDataIntablesMigration")]
+    partial class CleanDataIntablesMigration
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -65,14 +65,14 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("HubName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ModerateurIdModerator")
+                    b.Property<int?>("ModeratorIdModerator")
                         .HasColumnType("integer");
 
                     b.HasKey("IdHub");
 
                     b.HasIndex("HubName");
 
-                    b.HasIndex("ModerateurIdModerator");
+                    b.HasIndex("ModeratorIdModerator");
 
                     b.ToTable("hub","public");
 
@@ -80,9 +80,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdHub = 1,
-                            HubCreationDate = new DateTime(2020, 3, 8, 16, 36, 55, 787, DateTimeKind.Local).AddTicks(7193),
-                            HubLink = "hublink1",
-                            HubName = "supername"
+                            HubCreationDate = new DateTime(2020, 3, 15, 1, 37, 41, 171, DateTimeKind.Local).AddTicks(5448),
+                            HubLink = "hub-link",
+                            HubName = "hub-name"
                         });
                 });
 
@@ -115,10 +115,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdModerator = 1,
-                            ModeratorEmail = "test@test.com",
-                            ModeratorNickname = "modeNick",
-                            ModeratorPassword = "mdp123",
-                            ModeratorSalt = "lesaltcestbien"
+                            ModeratorEmail = "moderator@intechnet.io",
+                            ModeratorNickname = "moderator",
+                            ModeratorPassword = "720E39C10B81B3652B149FA74B3757AD1453F10FD4445F2A1AB4196BF2D23CE5D64A8DCD6DE157194853F35CC160F8A851155261B82B271BB81AD0B700AF9992",
+                            ModeratorSalt = "moderator-salt"
                         });
                 });
 
@@ -151,10 +151,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         new
                         {
                             IdPupil = 1,
-                            PupilEmail = "pupil@pupil.com",
-                            PupilNickname = "pupilNick",
-                            PupilPassword = "mdp456",
-                            PupilSalt = "leselcestdrole"
+                            PupilEmail = "pupil@intechnet.io",
+                            PupilNickname = "pupil",
+                            PupilPassword = "CF28AF1039C0348CE7715232444454F47E085D6859913BFE531008D1BEF4992D27D7A3301E9CC70004F0F42513676FC01B941C848160351D389BBC3A264DC0E2",
+                            PupilSalt = "pupil-salt"
                         });
                 });
 
@@ -171,9 +171,9 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Hub", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Moderator", "Moderateur")
+                    b.HasOne("InTechNet.DataAccessLayer.Entity.Moderator", "Moderator")
                         .WithMany("Hubs")
-                        .HasForeignKey("ModerateurIdModerator");
+                        .HasForeignKey("ModeratorIdModerator");
                 });
 #pragma warning restore 612, 618
         }

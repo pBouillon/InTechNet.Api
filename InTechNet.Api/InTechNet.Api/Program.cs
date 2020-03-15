@@ -19,10 +19,10 @@ namespace InTechNet.Api
         }
 
         /// <summary>
-        /// Creates the <see cref="IHostBuilder"/> from which the <see cref="IWebHost"/> will be built
+        /// Creates the <see cref="IHostBuilder" /> from which the <see cref="IWebHost" /> will be built
         /// </summary>
-        /// <param name="args">Provided args from <see cref="Program.Main"/></param>
-        /// <returns>The configured <see cref="IHostBuilder"/></returns>
+        /// <param name="args">Provided args from <see cref="Program.Main" /></param>
+        /// <returns>The configured <see cref="IHostBuilder" /></returns>
         public static IHostBuilder CreateHostBuilder(string[] args)
         {
             var configuration = new ConfigurationBuilder()
