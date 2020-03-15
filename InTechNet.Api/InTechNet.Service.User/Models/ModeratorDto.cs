@@ -25,6 +25,6 @@ namespace InTechNet.Service.User.Models
         /// <summary>
         /// Moderator password
         /// </summary>
-        public string Passowrd { get; set; }
+        public string Password { get; set; }
     }
 }
