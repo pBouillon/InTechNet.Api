@@ -12,12 +12,8 @@ namespace InTechNet.DataAccessLayer
         /// <summary>
         /// Code-first database initialization
         /// </summary>
-        public static void Initialize(IApplicationBuilder app, AuthDbContext context)
+        public static void Initialize(IApplicationBuilder app)
         {
-            context.Database.EnsureCreated();
-
-            context.SaveChanges();
-
             using var scope = app.ApplicationServices.GetService<IServiceScopeFactory>().CreateScope();
 
             scope.ServiceProvider.GetRequiredService<InTechNetContext>().Database.Migrate();

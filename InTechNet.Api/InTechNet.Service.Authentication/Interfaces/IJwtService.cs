@@ -20,6 +20,6 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// </summary>
         /// <param name="authenticationDto"></param>
         /// <returns>The valid JWT for the pupil</returns>
-        string GetPupilToken(AuthenticationDto authenticationDto);
+        string GetPupilToken(PupilDto authenticationDto);
     }
 }

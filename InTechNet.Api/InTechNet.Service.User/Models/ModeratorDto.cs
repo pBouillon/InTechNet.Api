@@ -1,4 +1,5 @@
-﻿using InTechNet.DataAccessLayer.Entity;
+﻿using System.ComponentModel.DataAnnotations;
+using InTechNet.DataAccessLayer.Entity;
 
 namespace InTechNet.Service.User.Models
 {
@@ -10,16 +11,28 @@ namespace InTechNet.Service.User.Models
         /// <summary>
         /// Database ID
         /// </summary>
-        public int IdModerator { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Nickname of the moderator
         /// </summary>
-        public string ModeratorNickname { get; set; }
+        [Required]
+        [MaxLength(64)]
+        public string Nickname { get; set; }
 
         /// <summary>
         /// Email of the moderator
         /// </summary>
-        public string ModeratorEmail { get; set; }
+        [Required]
+        [MaxLength(128)] 
+        [EmailAddress]
+        public string Email { get; set; }
+
+        /// <summary>
+        /// Moderator password
+        /// </summary>
+        [Required]
+        [MaxLength(64)] 
+        public string Password { get; set; }
     }
 }

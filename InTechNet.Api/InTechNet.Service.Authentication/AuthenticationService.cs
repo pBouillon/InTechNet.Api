@@ -41,7 +41,7 @@ namespace InTechNet.Service.Authentication
         {
             var pupil = _userService.AuthenticatePupil(authenticationDto);
 
-            return _jwtService.GetPupilToken(authenticationDto);
+            return _jwtService.GetPupilToken(pupil);
         }
     }
 }

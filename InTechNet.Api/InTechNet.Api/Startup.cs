@@ -61,7 +61,7 @@ namespace InTechNet.Api
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, AuthDbContext context)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
         {
             if (env.IsDevelopment())
                 app.UseDeveloperExceptionPage();
@@ -69,7 +69,7 @@ namespace InTechNet.Api
                 app.UseHsts();
 
             // Start Identity Setup
-            DatabaseInitializer.Initialize(app, context);
+            DatabaseInitializer.Initialize(app);
 
             app.UseHttpsRedirection();
 
@@ -102,18 +102,6 @@ namespace InTechNet.Api
         /// </summary>
         private void ConfigureIdentityServer(IServiceCollection services)
         {
-            services.AddIdentity<User, Role>()
-                .AddEntityFrameworkStores<AuthDbContext>()
-                .AddDefaultTokenProviders();
-
-            services.AddIdentityServer()
-                .AddDeveloperSigningCredential()
-                .AddInMemoryPersistedGrants()
-                .AddInMemoryIdentityResources(Config.GetIdentityResources())
-                .AddInMemoryApiResources(Config.GetApiResources())
-                .AddInMemoryClients(Config.GetClients())
-                .AddAspNetIdentity<User>();
-
             services.AddAuthentication(options =>
                 {
                     options.DefaultAuthenticateScheme = JwtBearerDefaults.AuthenticationScheme;

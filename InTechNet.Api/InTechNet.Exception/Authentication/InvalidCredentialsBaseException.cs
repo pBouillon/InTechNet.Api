@@ -15,8 +15,6 @@
         /// </summary>
         /// <param name="innerException">Nullable inner-exception</param>
         public InvalidCredentialsException(System.Exception innerException = null)
-            : base(ExceptionMessage, innerException)
-        {
-        }
+            : base(ExceptionMessage, innerException) { }
     }
 }

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Text;
-using Microsoft.IdentityModel.Tokens;
 
 namespace InTechNet.Common.Utils.Authentication.Jwt
 {
@@ -36,12 +35,6 @@ namespace InTechNet.Common.Utils.Authentication.Jwt
         /// JWT Secret key
         /// </summary>
         public string SecretKey { get; set; }
-
-        /// <summary>
-        /// Hashing algorithm used for JWT signature
-        /// </summary>
-        public string SigningAlgorithm
-            => SecurityAlgorithms.HmacSha512;
 
         /// <summary>
         /// Hours to be passed before invalidating a newly created JWT

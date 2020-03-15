@@ -1,10 +1,16 @@
-﻿using System.Linq;
-using InTechNet.Common.Utils.Authentication;
+﻿using InTechNet.Common.Utils.Authentication;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Authentication;
 using InTechNet.Service.User.Helper;
 using InTechNet.Service.User.Interfaces;
 using InTechNet.Service.User.Models;
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Security.Cryptography;
+using InTechNet.Common.Utils.Security;
+using InTechNet.DataAccessLayer.Entity;
+using InTechNet.Exception.Registration;
 
 namespace InTechNet.Service.User
 {
@@ -45,13 +51,51 @@ namespace InTechNet.Service.User
             // Assert that the provided password matches the stored one
             if (hashedPassword != moderator.ModeratorPassword) throw new InvalidCredentialsException();
 
-            // Return the DTO associated to the moderator
+            // Return the DTO associated to the moderator without its password
             return new ModeratorDto
             {
-                IdModerator = moderator.IdModerator,
-                ModeratorEmail = moderator.ModeratorEmail,
-                ModeratorNickname = moderator.ModeratorNickname
+                Id = moderator.IdModerator,
+                Email = moderator.ModeratorEmail,
+                Nickname = moderator.ModeratorNickname,
+                Password = string.Empty
             };
+        }
+
+        /// <inheritdoc cref="IModeratorService.RegisterModerator" />
+        public void RegisterModerator(ModeratorDto newModeratorData)
+        {
+            // Assert that its nickname or email is unique in InTechNet database
+            var isDuplicateTracked = _context.Moderators.Any(_ =>
+                _.ModeratorNickname == newModeratorData.Nickname
+                || _.ModeratorEmail == newModeratorData.Email);
+
+            if (isDuplicateTracked)
+            {
+                throw new DuplicateIdentifierException();
+            }
+
+            // Generate a random salt for this moderator
+            var saltBuffer = new byte[InTechNetSecurity.SaltByteLength];
+
+            using var cryptoServiceProvider = new RNGCryptoServiceProvider();
+            cryptoServiceProvider.GetNonZeroBytes(saltBuffer);
+
+            var salt = Convert.ToBase64String(saltBuffer);
+
+            // Salting the password
+            var saltedPassword = newModeratorData.Password.HashedWith(salt);
+
+            // Record the new moderator
+            _context.Moderators.Add(new Moderator
+            {
+                Hubs = new List<Hub>(),
+                ModeratorEmail = newModeratorData.Email,
+                ModeratorNickname = newModeratorData.Nickname,
+                ModeratorPassword = saltedPassword,
+                ModeratorSalt = salt
+            });
+
+            _context.SaveChanges();
         }
     }
 }

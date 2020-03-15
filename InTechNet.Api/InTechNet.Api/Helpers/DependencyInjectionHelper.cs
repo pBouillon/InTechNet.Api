@@ -76,10 +76,6 @@ namespace InTechNet.Api.Helpers
             // InTechNet database registration
             _services.AddDbContext<InTechNetContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("InTechNetDatabase")));
-
-            // IdentityServer database registration
-            _services.AddDbContext<AuthDbContext>(options =>
-                options.UseNpgsql(_configuration.GetConnectionString("InTechNetAuthenticationDatabase")));
         }
     }
 }

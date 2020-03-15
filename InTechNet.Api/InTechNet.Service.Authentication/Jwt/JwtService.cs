@@ -1,11 +1,11 @@
-﻿using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Security.Claims;
-using InTechNet.Common.Utils.Authentication;
-using InTechNet.Common.Utils.Authentication.Jwt;
+﻿using InTechNet.Common.Utils.Authentication.Jwt;
+using InTechNet.Common.Utils.Security;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Models;
 using Microsoft.IdentityModel.Tokens;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Security.Claims;
 
 namespace InTechNet.Service.Authentication.Jwt
 {
@@ -25,7 +25,7 @@ namespace InTechNet.Service.Authentication.Jwt
             var claims = new List<Claim>
             {
                 new Claim(ClaimTypes.Role, InTechNetRoles.Moderator),
-                new Claim(ClaimTypes.UserData, moderator.IdModerator.ToString())
+                new Claim(ClaimTypes.UserData, moderator.Id.ToString())
             };
 
             var token = new JwtSecurityToken(
@@ -35,7 +35,7 @@ namespace InTechNet.Service.Authentication.Jwt
                 signingCredentials: new SigningCredentials
                 (
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm
+                    InTechNetSecurity.JwtSigningAlgorithm
                 ),
                 claims: claims
             );
@@ -44,7 +44,7 @@ namespace InTechNet.Service.Authentication.Jwt
         }
 
         /// <inheritdoc cref="IJwtService.GetPupilToken" />
-        public string GetPupilToken(AuthenticationDto authenticationDto)
+        public string GetPupilToken(PupilDto authenticationDto)
         {
             var claims = new List<Claim>
             {
@@ -57,7 +57,7 @@ namespace InTechNet.Service.Authentication.Jwt
                 expires: _jwtResource.ValidUntil,
                 signingCredentials: new SigningCredentials(
                     new SymmetricSecurityKey(_jwtResource.EncodedSecretKey),
-                    _jwtResource.SigningAlgorithm
+                    InTechNetSecurity.JwtSigningAlgorithm
                 ),
                 claims: claims);
 
