@@ -9,6 +9,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Security.Cryptography;
 using InTechNet.DataAccessLayer.Entity;
+using InTechNet.Exception.Registration;
 
 namespace InTechNet.Service.User
 {
@@ -69,8 +70,7 @@ namespace InTechNet.Service.User
 
             if (isDuplicateTracked)
             {
-                // TODO: custom exception
-                throw new System.Exception();
+                throw new DuplicateIdentifierException();
             }
 
             // Generate a random salt for this moderator
