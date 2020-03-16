@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User;
 using System.Collections.Generic;
 
 namespace InTechNet.Service.Hub.Interfaces
@@ -12,7 +13,7 @@ namespace InTechNet.Service.Hub.Interfaces
         /// TODO
         /// </summary>
         /// <param name="hubData"></param>
-        void CreateHub(HubDto hubData);
+        void CreateHub(HubDto newHubData, ModeratorDto moderatorDto);
 
         /// <summary>
         /// TODO

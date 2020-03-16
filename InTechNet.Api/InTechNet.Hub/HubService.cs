@@ -4,6 +4,11 @@ using InTechNet.Service.Hub.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
 using InTechNet.DataAccessLayer;
+using InTechNet.Exception.Registration;
+using InTechNet.Service.Hub.Helpers;
+using System;
+using InTechNet.Exception.Authentication;
+using InTechNet.DataAccessLayer.Entity;
 
 namespace InTechNet.Service.Hub
 {
@@ -28,10 +33,39 @@ namespace InTechNet.Service.Hub
         /// TODO
         /// </summary>
         /// <param name="hubData"></param>
-        public void CreateHub(HubDto hubData)
+        public void CreateHub(HubDto newHubData, ModeratorDto moderatorDto)
         {
-            // TODO: ModeratorService call
-            throw new System.NotImplementedException();
+
+            var moderator = _context.Moderators.FirstOrDefault(
+                _ => _.IdModerator == moderatorDto.Id);
+
+            if (null == moderator)
+            {
+                throw new UnknownUserException();
+            }
+
+            var isDuplicateTracked = _context.Hubs.Any(_ =>
+                _.Moderator.IdModerator == moderator.IdModerator
+                && _.HubName == newHubData.Name);
+
+            if (isDuplicateTracked)
+            {
+                throw new DuplicateIdentifierException();
+            }
+
+            var hubLinkGenerated = HubLinkHelper.GenerateLink(newHubData, moderatorDto);
+
+            // Record the new hub
+            _context.Hubs.Add(new DataAccessLayer.Entity.Hub
+            {
+                HubName = newHubData.Name,
+                HubLink = hubLinkGenerated,
+                HubCreationDate = DateTime.Now,
+                Moderator = moderator,
+                Attendees = new List<Attendee>()
+            });
+
+            _context.SaveChanges();
         }
 
         /// <inheritdoc cref="IHubService.GetModeratorHubs" />

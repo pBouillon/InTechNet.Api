@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
@@ -65,6 +66,11 @@ namespace InTechNet.Service.User
                 Nickname = moderator.ModeratorNickname,
                 Password = string.Empty
             };
+        }
+
+        public void CreateHub(HubDto hub, ModeratorDto moderator)
+        {
+            _hubService.CreateHub(hub, moderator);
         }
 
         /// <inheritdoc cref="IModeratorService.GetModerator" />
