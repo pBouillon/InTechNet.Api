@@ -17,8 +17,14 @@ namespace InTechNet.Api.Controllers.Users
     [ApiController]
     public class ModeratorController : ControllerBase
     {
+        /// <summary>
+        /// TODO
+        /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
+        /// <summary>
+        /// TODO
+        /// </summary>
         private readonly IUserService _userService;
 
         public ModeratorController(IAuthenticationService authenticationService, IUserService userService)

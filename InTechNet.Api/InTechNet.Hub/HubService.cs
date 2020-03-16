@@ -24,6 +24,16 @@ namespace InTechNet.Service.Hub
             _context = context;
         }
 
+        /// <summary>
+        /// TODO
+        /// </summary>
+        /// <param name="hubData"></param>
+        public void CreateHub(HubDto hubData)
+        {
+            // TODO: ModeratorService call
+            throw new System.NotImplementedException();
+        }
+
         /// <inheritdoc cref="IHubService.GetModeratorHubs" />
         public IEnumerable<HubDto> GetModeratorHubs(int moderatorId)
         {

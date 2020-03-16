@@ -11,6 +11,12 @@ namespace InTechNet.Service.Hub.Interfaces
         /// <summary>
         /// TODO
         /// </summary>
+        /// <param name="hubData"></param>
+        void CreateHub(HubDto hubData);
+
+        /// <summary>
+        /// TODO
+        /// </summary>
         /// <param name="moderatorId"></param>
         /// <returns></returns>
         IEnumerable<HubDto> GetModeratorHubs(int moderatorId);
