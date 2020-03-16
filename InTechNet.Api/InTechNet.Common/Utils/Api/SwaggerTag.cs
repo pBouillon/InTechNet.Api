@@ -11,6 +11,11 @@
         public const string Authentication = "Authentication";
 
         /// <summary>
+        /// Endpoint relative to the hub's logic
+        /// </summary>
+        public const string Hub = "Hub";
+
+        /// <summary>
         /// Endpoint relative to the moderator's logic
         /// </summary>
         public const string Moderator = "Moderator";

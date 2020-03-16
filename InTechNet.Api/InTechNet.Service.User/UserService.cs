@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;

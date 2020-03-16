@@ -28,12 +28,21 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authenticationService"></param>
+        /// <param name="userService"></param>
         public ModeratorController(IAuthenticationService authenticationService, IUserService userService)
         {
             _authenticationService = authenticationService;
             _userService = userService;
         }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <returns></returns>
         [HttpGet]
         public ActionResult<ModeratorDto> Get()
         {
@@ -50,7 +59,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(401, "Invalid credentials")]
         [SwaggerOperation(
-            Summary = "Login end point for a moderator",
+            Summary = "Login endpoint for a moderator",
             Tags = new[]
             {
                 SwaggerTag.Authentication,

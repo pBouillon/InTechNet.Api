@@ -1,6 +1,7 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Helpers;
@@ -8,7 +9,6 @@ using InTechNet.Service.Hub.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.Hub
 {
@@ -29,13 +29,10 @@ namespace InTechNet.Service.Hub
             _context = context;
         }
 
-        /// <summary>
-        /// TODO
-        /// </summary>
-        /// <param name="hubData"></param>
-        public void CreateHub(HubCreationDto newHubData, ModeratorDto moderatorDto)
+        /// <inheritdoc cref="IHubService.CreateHub" />
+        public void CreateHub(ModeratorDto moderatorDto, HubCreationDto newHubDto)
         {
-
+            // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(
                 _ => _.IdModerator == moderatorDto.Id);
 
@@ -44,21 +41,23 @@ namespace InTechNet.Service.Hub
                 throw new UnknownUserException();
             }
 
+            // Assert that this moderator does not have a hub of the same name
             var isDuplicateTracked = _context.Hubs.Any(_ =>
                 _.Moderator.IdModerator == moderator.IdModerator
-                && _.HubName == newHubData.Name);
+                && _.HubName == newHubDto.Name);
 
             if (isDuplicateTracked)
             {
                 throw new DuplicateIdentifierException();
             }
 
-            var hubLinkGenerated = HubLinkHelper.GenerateLink(newHubData, moderatorDto);
+            // Generate a unique link for this hub
+            var hubLinkGenerated = HubLinkHelper.GenerateLink(newHubDto, moderatorDto);
 
             // Record the new hub
             _context.Hubs.Add(new DataAccessLayer.Entities.Hub
             {
-                HubName = newHubData.Name,
+                HubName = newHubDto.Name,
                 HubLink = hubLinkGenerated,
                 HubCreationDate = DateTime.Now,
                 Moderator = moderator,

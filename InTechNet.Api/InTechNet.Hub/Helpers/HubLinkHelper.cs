@@ -9,10 +9,10 @@ namespace InTechNet.Service.Hub.Helpers
     public static class HubLinkHelper
     {
         /// <summary>
-        /// Hash a hub name with the given salt using <see cref="SHA512Managed" />
+        /// Generate a unique identifier for a hub given its owner
         /// </summary>
-        /// <param name="hub"><see cref="HubCreationDto" /> for the name to hash</param>
-        /// <param name="moderator"><see cref="ModeratorDto" /> for the salt</param>
+        /// <param name="hub">The <see cref="HubCreationDto" /> containing the information on the hub to be created</param>
+        /// <param name="moderator">The <see cref="ModeratorDto" /> containing the owner's data</param>
         /// <returns>The Hub specific link</returns>
         public static string GenerateLink(HubCreationDto hub, ModeratorDto moderator)
         {

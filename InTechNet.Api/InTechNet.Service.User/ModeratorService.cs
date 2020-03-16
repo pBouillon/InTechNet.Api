@@ -69,11 +69,6 @@ namespace InTechNet.Service.User
             };
         }
 
-        public void CreateHub(HubCreationDto hub, ModeratorDto moderator)
-        {
-            _hubService.CreateHub(hub, moderator);
-        }
-
         /// <inheritdoc cref="IModeratorService.GetModerator" />
         public ModeratorDto GetModerator(int moderatorId)
         {

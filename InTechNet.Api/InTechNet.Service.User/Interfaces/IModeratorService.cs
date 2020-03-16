@@ -18,13 +18,6 @@ namespace InTechNet.Service.User.Interfaces
         ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
 
         /// <summary>
-        /// Create the hub from the HubDto
-        /// </summary>
-        /// <param name="hub"><see cref="HubCreationDto" /> obtained from the current moderator</param>
-        /// <param name="moderator"><see cref="ModeratorDto" /> containing the moderator's data</param>
-        void CreateHub(HubCreationDto hub, ModeratorDto moderator);
-
-        /// <summary>
         /// Get the moderator's data based on its identifier
         /// </summary>
         /// <param name="moderatorId">The moderator's identifier</param>

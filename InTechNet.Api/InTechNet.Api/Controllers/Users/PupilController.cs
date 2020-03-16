@@ -18,10 +18,21 @@ namespace InTechNet.Api.Controllers.Users
     [ApiController]
     public class PupilController : ControllerBase
     {
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
+        /// <summary>
+        /// 
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="authenticationService"></param>
+        /// <param name="userService"></param>
         public PupilController(IAuthenticationService authenticationService, IUserService userService)
         {
             _authenticationService = authenticationService;
@@ -38,7 +49,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(401, "Invalid credentials")]
         [SwaggerOperation(
-            Summary = "Login end point for a pupil",
+            Summary = "Login endpoint for a pupil",
             Tags = new[]
             {
                 SwaggerTag.Authentication,
