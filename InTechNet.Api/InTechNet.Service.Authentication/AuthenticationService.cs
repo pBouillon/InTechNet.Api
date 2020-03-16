@@ -1,11 +1,11 @@
 ﻿using System;
 using System.Security.Claims;
+using InTechNet.Common.Dto.User;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.Exception.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
 using Microsoft.AspNetCore.Http;
 
 namespace InTechNet.Service.Authentication

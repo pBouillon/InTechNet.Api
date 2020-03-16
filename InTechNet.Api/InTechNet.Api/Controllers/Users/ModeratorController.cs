@@ -1,9 +1,9 @@
-﻿using InTechNet.Common.Utils.Api;
+﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -25,6 +25,12 @@ namespace InTechNet.Api.Controllers.Users
         {
             _authenticationService = authenticationService;
             _userService = userService;
+        }
+
+        [HttpGet]
+        public ActionResult<ModeratorDto> Get()
+        {
+            return Ok(_authenticationService.GetCurrentModerator());
         }
 
         /// <summary>

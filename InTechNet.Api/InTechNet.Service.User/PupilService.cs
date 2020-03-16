@@ -1,7 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using InTechNet.Common.Dto.User;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
@@ -10,7 +7,8 @@ using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.User.Helper;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InTechNet.Service.User
 {

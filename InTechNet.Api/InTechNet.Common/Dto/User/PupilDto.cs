@@ -1,12 +1,8 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using InTechNet.DataAccessLayer.Entity;
 
-namespace InTechNet.Service.User.Models
+namespace InTechNet.Common.Dto.User
 {
-    /// <summary>
-    /// <see cref="Moderator" /> DTO
-    /// </summary>
-    public class ModeratorDto
+    public class PupilDto
     {
         /// <summary>
         /// Database ID
@@ -24,7 +20,7 @@ namespace InTechNet.Service.User.Models
         /// Email of the moderator
         /// </summary>
         [Required]
-        [MaxLength(128)] 
+        [MaxLength(128)]
         [EmailAddress]
         public string Email { get; set; }
 
@@ -32,7 +28,7 @@ namespace InTechNet.Service.User.Models
         /// Moderator password
         /// </summary>
         [Required]
-        [MaxLength(64)] 
+        [MaxLength(64)]
         public string Password { get; set; }
     }
 }

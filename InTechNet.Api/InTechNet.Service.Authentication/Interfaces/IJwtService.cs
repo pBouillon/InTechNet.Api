@@ -1,5 +1,5 @@
-﻿using InTechNet.Common.Utils.Authentication;
-using InTechNet.Service.User.Models;
+﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.Authentication.Interfaces
 {

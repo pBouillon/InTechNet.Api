@@ -3,6 +3,8 @@ using InTechNet.DataAccessLayer;
 using InTechNet.Service.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Authentication.Jwt;
+using InTechNet.Service.Hub;
+using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User;
 using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -70,6 +72,8 @@ namespace InTechNet.Api.Helpers
             _services.AddTransient<IPupilService, PupilService>();
 
             _services.AddTransient<IUserService, UserService>();
+
+            _services.AddTransient<IHubService, HubService>();
         }
 
         /// <summary>

@@ -1,11 +1,11 @@
 ﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.Common.Utils.Security;
 using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.User.Models;
 using Microsoft.IdentityModel.Tokens;
 using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
+using InTechNet.Common.Dto.User;
 
 namespace InTechNet.Service.Authentication.Jwt
 {

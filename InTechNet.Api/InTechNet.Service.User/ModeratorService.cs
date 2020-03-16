@@ -1,16 +1,15 @@
-﻿using InTechNet.Common.Utils.Authentication;
+﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Utils.Authentication;
+using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entity;
 using InTechNet.Exception.Authentication;
+using InTechNet.Exception.Registration;
+using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User.Helper;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using InTechNet.Common.Utils.Security;
-using InTechNet.DataAccessLayer.Entity;
-using InTechNet.Exception.Registration;
 
 namespace InTechNet.Service.User
 {
@@ -23,12 +22,19 @@ namespace InTechNet.Service.User
         private readonly InTechNetContext _context;
 
         /// <summary>
+        /// TODO
+        /// </summary>
+        private readonly IHubService _hubService;
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public ModeratorService(InTechNetContext context)
+        /// <param name="hubService">TODO</param>
+        public ModeratorService(InTechNetContext context, IHubService hubService)
         {
             _context = context;
+            _hubService = hubService;
         }
 
         /// <inheritdoc cref="IModeratorService.AuthenticateModerator" />
@@ -73,7 +79,8 @@ namespace InTechNet.Service.User
                 Password = string.Empty,
                 Nickname = moderator.ModeratorNickname,
                 Email = moderator.ModeratorNickname,
-                Id = moderatorId
+                Id = moderatorId,
+                Hubs = _hubService.GetModeratorHubs(moderator.IdModerator)
             };
         }
 
@@ -99,7 +106,7 @@ namespace InTechNet.Service.User
             // Record the new moderator
             _context.Moderators.Add(new Moderator
             {
-                Hubs = new List<Hub>(),
+                Hubs = new List<DataAccessLayer.Entity.Hub>(),
                 ModeratorEmail = newModeratorData.Email,
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,

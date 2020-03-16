@@ -17,7 +17,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTechNet.Service.User", "I
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTechNet.Exception", "InTechNet.Exception\InTechNet.Exception.csproj", "{1BA5AF65-1653-485B-98A4-52BC50125F9A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "InTechNet.Hub", "InTechNet.Hub\InTechNet.Hub.csproj", "{212BA54F-E280-4905-9D2D-AE6750090B57}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "InTechNet.Service.Hub", "InTechNet.Hub\InTechNet.Service.Hub.csproj", "{212BA54F-E280-4905-9D2D-AE6750090B57}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

@@ -8,6 +8,7 @@
     <ProjectReference Include="..\InTechNet.Common\InTechNet.Common.csproj" />
     <ProjectReference Include="..\InTechNet.DataAccessLayer\InTechNet.DataAccessLayer.csproj" />
     <ProjectReference Include="..\InTechNet.Exception\InTechNet.Exception.csproj" />
+    <ProjectReference Include="..\InTechNet.Hub\InTechNet.Service.Hub.csproj" />
   </ItemGroup>
 
 </Project>
