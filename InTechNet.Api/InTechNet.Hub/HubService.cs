@@ -1,14 +1,14 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
-using InTechNet.Service.Hub.Interfaces;
-using System.Collections.Generic;
-using System.Linq;
 using InTechNet.DataAccessLayer;
+using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Helpers;
+using InTechNet.Service.Hub.Interfaces;
 using System;
-using InTechNet.Exception.Authentication;
-using InTechNet.DataAccessLayer.Entity;
+using System.Collections.Generic;
+using System.Linq;
+using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.Hub
 {
@@ -33,7 +33,7 @@ namespace InTechNet.Service.Hub
         /// TODO
         /// </summary>
         /// <param name="hubData"></param>
-        public void CreateHub(HubDto newHubData, ModeratorDto moderatorDto)
+        public void CreateHub(HubCreationDto newHubData, ModeratorDto moderatorDto)
         {
 
             var moderator = _context.Moderators.FirstOrDefault(
@@ -56,7 +56,7 @@ namespace InTechNet.Service.Hub
             var hubLinkGenerated = HubLinkHelper.GenerateLink(newHubData, moderatorDto);
 
             // Record the new hub
-            _context.Hubs.Add(new DataAccessLayer.Entity.Hub
+            _context.Hubs.Add(new DataAccessLayer.Entities.Hub
             {
                 HubName = newHubData.Name,
                 HubLink = hubLinkGenerated,

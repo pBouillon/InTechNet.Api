@@ -13,7 +13,7 @@ namespace InTechNet.Service.Hub.Interfaces
         /// TODO
         /// </summary>
         /// <param name="hubData"></param>
-        void CreateHub(HubDto newHubData, ModeratorDto moderatorDto);
+        void CreateHub(HubCreationDto newHubData, ModeratorDto moderatorDto);
 
         /// <summary>
         /// TODO

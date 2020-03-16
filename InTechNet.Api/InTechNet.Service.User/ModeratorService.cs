@@ -3,14 +3,15 @@ using InTechNet.Common.Dto.User;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entity;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Interfaces;
-using InTechNet.Service.User.Helper;
+using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.User
 {
@@ -68,7 +69,7 @@ namespace InTechNet.Service.User
             };
         }
 
-        public void CreateHub(HubDto hub, ModeratorDto moderator)
+        public void CreateHub(HubCreationDto hub, ModeratorDto moderator)
         {
             _hubService.CreateHub(hub, moderator);
         }
@@ -91,7 +92,7 @@ namespace InTechNet.Service.User
         }
 
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public void RegisterModerator(ModeratorDto newModeratorData)
+        public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             // Assert that its nickname or email is unique in InTechNet database
             var isDuplicateTracked = _context.Moderators.Any(_ =>
@@ -112,7 +113,7 @@ namespace InTechNet.Service.User
             // Record the new moderator
             _context.Moderators.Add(new Moderator
             {
-                Hubs = new List<DataAccessLayer.Entity.Hub>(),
+                Hubs = new List<DataAccessLayer.Entities.Hub>(),
                 ModeratorEmail = newModeratorData.Email,
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,

@@ -1,7 +1,7 @@
-﻿using System.Collections.Generic;
+﻿using InTechNet.Common.Dto.Hub;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using InTechNet.Common.Dto.Hub;
-using InTechNet.DataAccessLayer.Entity;
+using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Common.Dto.User
 {

@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
@@ -74,7 +75,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Registration
             }
         )]
-        public IActionResult Register([FromBody] PupilDto newPupilData)
+        public IActionResult Register([FromBody] PupilRegistrationDto newPupilData)
         {
             try
             {

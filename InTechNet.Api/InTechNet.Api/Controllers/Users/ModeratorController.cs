@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
@@ -87,7 +88,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Registration
             }
         )]
-        public IActionResult Register([FromBody] ModeratorDto newModeratorData)
+        public IActionResult Register([FromBody] ModeratorRegistrationDto newModeratorData)
         {
             try
             {

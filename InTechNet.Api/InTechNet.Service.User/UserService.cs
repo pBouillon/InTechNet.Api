@@ -1,4 +1,6 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Service.User.Interfaces;
 
@@ -53,13 +55,13 @@ namespace InTechNet.Service.User
         }
 
         /// <inheritdoc cref="IUserService.RegisterModerator" />
-        public void RegisterModerator(ModeratorDto newModeratorData)
+        public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             _moderatorService.RegisterModerator(newModeratorData);
         }
 
         /// <inheritdoc cref="IUserService.RegisterPupil" />
-        public void RegisterPupil(PupilDto newPupilData)
+        public void RegisterPupil(PupilRegistrationDto newPupilData)
         {
             _pupilService.RegisterPupil(newPupilData);
         }

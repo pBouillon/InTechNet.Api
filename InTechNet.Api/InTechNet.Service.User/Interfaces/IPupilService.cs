@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.User.Interfaces
@@ -25,7 +26,7 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Create a new pupil in the database
         /// </summary>
-        /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>
-        void RegisterPupil(PupilDto newPupilData);
+        /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
+        void RegisterPupil(PupilRegistrationDto newPupilData);
     }
 }

@@ -1,5 +1,5 @@
-﻿using System.Collections.Generic;
-using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.User;
+using System.Collections.Generic;
 
 namespace InTechNet.Common.Dto.Hub
 {

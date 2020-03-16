@@ -30,7 +30,7 @@ namespace InTechNet.Api.Controllers.Hubs
 
         [HttpPost]
         [ModeratorClaimRequired]
-        public IActionResult CreateHub([FromBody] HubDto hub)
+        public IActionResult CreateHub([FromBody] HubCreationDto hub)
         {
             try
             {

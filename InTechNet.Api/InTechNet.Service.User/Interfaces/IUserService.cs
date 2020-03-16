@@ -1,4 +1,6 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.User.Interfaces
@@ -39,13 +41,13 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Create a new moderator in the database
         /// </summary>
-        /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        void RegisterModerator(ModeratorDto newModeratorData);
+        /// <param name="newModeratorData">A <see cref="ModeratorRegistrationDto" /> holding the new moderator's data</param>
+        void RegisterModerator(ModeratorRegistrationDto newModeratorData);
 
         /// <summary>
         /// Create a new pupil in the database
         /// </summary>
-        /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>
-        void RegisterPupil(PupilDto newPupilData);
+        /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
+        void RegisterPupil(PupilRegistrationDto newPupilData);
     }
 }

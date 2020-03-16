@@ -6,7 +6,6 @@ using System.Text;
 using InTechNet.Api.Helpers;
 using InTechNet.Common.Utils.Api.Configuration;
 using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;

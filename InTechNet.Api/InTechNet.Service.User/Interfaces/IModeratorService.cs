@@ -1,5 +1,6 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.User.Interfaces
@@ -19,9 +20,9 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Create the hub from the HubDto
         /// </summary>
-        /// <param name="hub"><see cref="HubDto" /> obtained from the current moderator</param>
+        /// <param name="hub"><see cref="HubCreationDto" /> obtained from the current moderator</param>
         /// <param name="moderator"><see cref="ModeratorDto" /> containing the moderator's data</param>
-        void CreateHub(HubDto hub, ModeratorDto moderator);
+        void CreateHub(HubCreationDto hub, ModeratorDto moderator);
 
         /// <summary>
         /// Get the moderator's data based on its identifier
@@ -33,7 +34,7 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Create a new moderator in the database
         /// </summary>
-        /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        void RegisterModerator(ModeratorDto newModeratorData);
+        /// <param name="newModeratorData">A <see cref="ModeratorRegistrationDto" /> holding the new moderator's data</param>
+        void RegisterModerator(ModeratorRegistrationDto newModeratorData);
     }
 }

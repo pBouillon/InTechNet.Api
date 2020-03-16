@@ -1,7 +1,7 @@
 ﻿using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InTechNet.DataAccessLayer.Entity
+namespace InTechNet.DataAccessLayer.Entities
 {
     [Table("attendee", Schema = "public")]
     public class Attendee
