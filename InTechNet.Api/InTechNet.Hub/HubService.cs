@@ -1,17 +1,16 @@
 ﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Attendee;
+using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
+using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Helpers;
 using InTechNet.Service.Hub.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Common.Dto.User.Attendee;
-using InTechNet.Common.Dto.User.Moderator;
-using InTechNet.Exception.Hub;
 
 namespace InTechNet.Service.Hub
 {
@@ -28,9 +27,7 @@ namespace InTechNet.Service.Hub
         /// </summary>
         /// <param name="context">Database context</param>
         public HubService(InTechNetContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         /// <inheritdoc cref="IHubService.CreateHub" />
         public void CreateHub(ModeratorDto moderatorDto, HubCreationDto newHubDto)

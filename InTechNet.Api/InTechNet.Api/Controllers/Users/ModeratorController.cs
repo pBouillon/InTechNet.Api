@@ -34,10 +34,7 @@ namespace InTechNet.Api.Controllers.Users
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="userService">User service for user related operations</param>
         public ModeratorController(IAuthenticationService authenticationService, IUserService userService)
-        {
-            _authenticationService = authenticationService;
-            _userService = userService;
-        }
+            => (_authenticationService, _userService) = (authenticationService, userService);
 
         /// <summary>
         /// Login end point for a moderator
