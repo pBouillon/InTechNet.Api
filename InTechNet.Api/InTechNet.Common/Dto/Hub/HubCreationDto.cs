@@ -1,7 +1,7 @@
 ﻿namespace InTechNet.Common.Dto.Hub
 {
     /// <summary>
-    /// <see cref="Hub" /> specialized for hub creation
+    /// <see cref="HubDto" /> specialized for hub creation
     /// </summary>
     public class HubCreationDto
     {
