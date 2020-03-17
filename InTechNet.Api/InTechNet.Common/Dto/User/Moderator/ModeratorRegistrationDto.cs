@@ -1,14 +1,12 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace InTechNet.Service.User.Models
+namespace InTechNet.Common.Dto.User.Moderator
 {
-    public class PupilDto
+    /// <summary>
+    /// <see cref="Moderator" /> specialized for moderator registration
+    /// </summary>
+    public class ModeratorRegistrationDto
     {
-        /// <summary>
-        /// Database ID
-        /// </summary>
-        public int Id { get; set; }
-
         /// <summary>
         /// Nickname of the moderator
         /// </summary>

@@ -1,5 +1,7 @@
-﻿using InTechNet.Common.Utils.Authentication;
-using InTechNet.Service.User.Models;
+﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.User.Interfaces
 {
@@ -13,12 +15,19 @@ namespace InTechNet.Service.User.Interfaces
         /// </summary>
         /// <param name="authenticationData">The <see cref="AuthenticationDto" /> containing its authentication data</param>
         /// <returns>A <see cref="ModeratorDto" /> of the associated moderator</returns>
-        public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
+        ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
+
+        /// <summary>
+        /// Get the moderator's data based on its identifier
+        /// </summary>
+        /// <param name="moderatorId">The moderator's identifier</param>
+        /// <returns>A <see cref="ModeratorDto" /> containing the moderator's data</returns>
+        ModeratorDto GetModerator(int moderatorId);
 
         /// <summary>
         /// Create a new moderator in the database
         /// </summary>
-        /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        public void RegisterModerator(ModeratorDto newModeratorData);
+        /// <param name="newModeratorData">A <see cref="ModeratorRegistrationDto" /> holding the new moderator's data</param>
+        void RegisterModerator(ModeratorRegistrationDto newModeratorData);
     }
 }

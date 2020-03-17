@@ -6,7 +6,6 @@ using System.Text;
 using InTechNet.Api.Helpers;
 using InTechNet.Common.Utils.Api.Configuration;
 using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entity.EntityFrameworkStoresFix;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -187,6 +186,8 @@ namespace InTechNet.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);
+
+                _.EnableAnnotations();
             });
         }
     }

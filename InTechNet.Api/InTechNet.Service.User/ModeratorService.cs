@@ -1,16 +1,17 @@
-﻿using InTechNet.Common.Utils.Authentication;
+﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User;
+using InTechNet.Common.Utils.Authentication;
+using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Authentication;
-using InTechNet.Service.User.Helper;
+using InTechNet.Exception.Registration;
+using InTechNet.Service.Hub.Interfaces;
+using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
-using System;
 using System.Collections.Generic;
 using System.Linq;
-using System.Security.Cryptography;
-using InTechNet.Common.Utils.Security;
-using InTechNet.DataAccessLayer.Entity;
-using InTechNet.Exception.Registration;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.User
 {
@@ -23,12 +24,19 @@ namespace InTechNet.Service.User
         private readonly InTechNetContext _context;
 
         /// <summary>
+        /// Hub service for hub related operations
+        /// </summary>
+        private readonly IHubService _hubService;
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public ModeratorService(InTechNetContext context)
+        /// <param name="hubService">Service for hub's operations</param>
+        public ModeratorService(InTechNetContext context, IHubService hubService)
         {
             _context = context;
+            _hubService = hubService;
         }
 
         /// <inheritdoc cref="IModeratorService.AuthenticateModerator" />
@@ -61,8 +69,25 @@ namespace InTechNet.Service.User
             };
         }
 
+        /// <inheritdoc cref="IModeratorService.GetModerator" />
+        public ModeratorDto GetModerator(int moderatorId)
+        {
+            var moderator = _context.Moderators
+                .FirstOrDefault(_ => _.IdModerator == moderatorId) 
+                            ?? throw new UnknownUserException();
+
+            return new ModeratorDto
+            {
+                Password = string.Empty,
+                Nickname = moderator.ModeratorNickname,
+                Email = moderator.ModeratorNickname,
+                Id = moderatorId,
+                Hubs = _hubService.GetModeratorHubs(moderator.IdModerator)
+            };
+        }
+
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public void RegisterModerator(ModeratorDto newModeratorData)
+        public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             // Assert that its nickname or email is unique in InTechNet database
             var isDuplicateTracked = _context.Moderators.Any(_ =>
@@ -83,7 +108,7 @@ namespace InTechNet.Service.User
             // Record the new moderator
             _context.Moderators.Add(new Moderator
             {
-                Hubs = new List<Hub>(),
+                Hubs = new List<DataAccessLayer.Entities.Hub>(),
                 ModeratorEmail = newModeratorData.Email,
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,

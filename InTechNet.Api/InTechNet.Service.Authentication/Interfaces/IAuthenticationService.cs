@@ -1,4 +1,7 @@
-﻿using InTechNet.Common.Utils.Authentication;
+﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
+using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Service.Authentication.Interfaces
 {
@@ -7,6 +10,18 @@ namespace InTechNet.Service.Authentication.Interfaces
     /// </summary>
     public interface IAuthenticationService
     {
+        /// <summary>
+        /// Get the current moderator's data based on the JWT information
+        /// </summary>
+        /// <returns>The <see cref="ModeratorDto" /> holding the data associated with the moderator</returns>
+        ModeratorDto GetCurrentModerator();
+
+        /// <summary>
+        /// Get the current pupil's data based on the JWT information
+        /// </summary>
+        /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
+        PupilDto GetCurrentPupil();
+
         /// <summary>
         /// Generate a valid JWT for the moderator
         /// </summary>

@@ -1,16 +1,15 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Security.Cryptography;
+﻿using InTechNet.Common.Dto.User;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entity;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.User.Helper;
+using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
+using System.Collections.Generic;
+using System.Linq;
+using InTechNet.Common.Dto.User.Pupil;
+using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.User
 {
@@ -60,8 +59,24 @@ namespace InTechNet.Service.User
             };
         }
 
+        /// <inheritdoc cref="IPupilService.GetPupil" />
+        public PupilDto GetPupil(int pupilId)
+        {
+            var pupil = _context.Pupils
+                                .FirstOrDefault(_ => _.IdPupil == pupilId)
+                            ?? throw new UnknownUserException();
+
+            return new PupilDto
+            {
+                Password = string.Empty,
+                Nickname = pupil.PupilNickname,
+                Email = pupil.PupilEmail,
+                Id = pupilId
+            };
+        }
+
         /// <inheritdoc cref="IPupilService.RegisterPupil" />
-        public void RegisterPupil(PupilDto newPupilData)
+        public void RegisterPupil(PupilRegistrationDto newPupilData)
         {
             // Assert that its nickname or email is unique in InTechNet database
             var isDuplicateTracked = _context.Pupils.Any(_ =>

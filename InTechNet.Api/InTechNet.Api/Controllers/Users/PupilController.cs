@@ -1,9 +1,10 @@
-﻿using InTechNet.Common.Utils.Api;
+﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Pupil;
+using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
-using InTechNet.Service.User.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
@@ -17,10 +18,21 @@ namespace InTechNet.Api.Controllers.Users
     [ApiController]
     public class PupilController : ControllerBase
     {
+        /// <summary>
+        /// Authentication service
+        /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
+        /// <summary>
+        /// User service for user related operations
+        /// </summary>
         private readonly IUserService _userService;
 
+        /// <summary>
+        /// Controller for hub endpoints relative to pupils management
+        /// </summary>
+        /// <param name="authenticationService"></param>
+        /// <param name="userService"></param>
         public PupilController(IAuthenticationService authenticationService, IUserService userService)
         {
             _authenticationService = authenticationService;
@@ -37,14 +49,15 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse(200, "Successful authentication")]
         [SwaggerResponse(401, "Invalid credentials")]
         [SwaggerOperation(
-            Summary = "Login end point for a pupil",
+            Summary = "Login endpoint for a pupil",
             Tags = new[]
             {
                 SwaggerTag.Authentication,
                 SwaggerTag.Pupil
             }
         )]
-        public ActionResult<string> Authenticate([FromBody] AuthenticationDto authenticationDto)
+        public ActionResult<string> Authenticate(
+            [FromBody, SwaggerParameter("Pupil login details")] AuthenticationDto authenticationDto)
         {
             try
             {
@@ -74,7 +87,8 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Registration
             }
         )]
-        public IActionResult Register([FromBody] PupilDto newPupilData)
+        public IActionResult Register(
+            [FromBody, SwaggerParameter("Pupil's creation payload")] PupilRegistrationDto newPupilData)
         {
             try
             {

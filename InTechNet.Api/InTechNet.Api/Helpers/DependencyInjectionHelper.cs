@@ -3,8 +3,11 @@ using InTechNet.DataAccessLayer;
 using InTechNet.Service.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Authentication.Jwt;
+using InTechNet.Service.Hub;
+using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User;
 using InTechNet.Service.User.Interfaces;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
@@ -40,6 +43,9 @@ namespace InTechNet.Api.Helpers
         /// </summary>
         private static void RegisterModels()
         {
+            // HTTP context accessor
+            _services.AddTransient<IHttpContextAccessor, HttpContextAccessor>();
+
             // JWT resource generation and registration
             var jwtResourcesDto = new JwtResourceHelper();
 
@@ -66,6 +72,8 @@ namespace InTechNet.Api.Helpers
             _services.AddTransient<IPupilService, PupilService>();
 
             _services.AddTransient<IUserService, UserService>();
+
+            _services.AddTransient<IHubService, HubService>();
         }
 
         /// <summary>
