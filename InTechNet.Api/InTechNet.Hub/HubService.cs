@@ -11,6 +11,7 @@ using System.Collections.Generic;
 using System.Linq;
 using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Exception.Hub;
 
 namespace InTechNet.Service.Hub
 {
@@ -36,12 +37,8 @@ namespace InTechNet.Service.Hub
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(
-                _ => _.IdModerator == moderatorDto.Id);
-
-            if (null == moderator)
-            {
-                throw new UnknownUserException();
-            }
+                                _ => _.IdModerator == moderatorDto.Id)
+                            ?? throw new UnknownUserException();
 
             // Assert that this moderator does not have a hub of the same name
             var isDuplicateTracked = _context.Hubs.Any(_ =>
@@ -65,6 +62,31 @@ namespace InTechNet.Service.Hub
                 Moderator = moderator,
                 Attendees = new List<Attendee>()
             });
+
+            _context.SaveChanges();
+        }
+
+        /// <inheritdoc cref="IHubService.DeleteHub" />
+        public void DeleteHub(ModeratorDto moderatorDto, HubDeletionDto hubDeletionData)
+        {
+            // Retrieve the associated moderator to `moderatorDto`
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                                _.IdModerator == moderatorDto.Id)
+                            ?? throw new UnknownUserException();
+
+            // Retrieve the current hub
+            var hub = _context.Hubs.FirstOrDefault(_ =>
+                          _.IdHub == hubDeletionData.Id)
+                      ?? throw new UnknownHubException();
+
+            // Assert that the moderator is allowed to delete this hub
+            if (moderator.IdModerator != hub.Moderator.IdModerator)
+            {
+                throw new IllegalHubOperationException();
+            }
+
+            // Deleting the hub
+            _context.Hubs.Remove(hub);
 
             _context.SaveChanges();
         }
