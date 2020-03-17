@@ -11,7 +11,7 @@ using Swashbuckle.AspNetCore.Annotations;
 namespace InTechNet.Api.Controllers.Hubs
 {
     [Authorize]
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class HubController : ControllerBase
     {
@@ -39,7 +39,7 @@ namespace InTechNet.Api.Controllers.Hubs
         /// <summary>
         /// Creation endpoint to add a new hub to the currently logged moderator
         /// </summary>
-        /// <param name="hub"><see cref="HubCreationDto" /> holding information on the hub to be created</param>
+        /// <param name="hubCreation"><see cref="HubCreationDto" /> holding information on the hub to be created</param>
         [HttpPost]
         [ModeratorClaimRequired]
         [SwaggerResponse(200, "Hub successfully created")]
