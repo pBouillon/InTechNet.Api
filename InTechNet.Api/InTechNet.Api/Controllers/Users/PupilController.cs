@@ -34,10 +34,7 @@ namespace InTechNet.Api.Controllers.Users
         /// <param name="authenticationService"></param>
         /// <param name="userService"></param>
         public PupilController(IAuthenticationService authenticationService, IUserService userService)
-        {
-            _authenticationService = authenticationService;
-            _userService = userService;
-        }
+            => (_authenticationService, _userService) = (authenticationService, userService);
 
         /// <summary>
         /// Login end point for a pupil

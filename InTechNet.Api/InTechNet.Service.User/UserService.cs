@@ -1,6 +1,4 @@
-﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User;
-using InTechNet.Common.Dto.User.Moderator;
+﻿using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Service.User.Interfaces;
@@ -26,10 +24,7 @@ namespace InTechNet.Service.User
         /// <param name="moderatorService">Service for moderator's operations</param>
         /// <param name="pupilService">Service for pupil's operations</param>
         public UserService(IModeratorService moderatorService, IPupilService pupilService)
-        {
-            _moderatorService = moderatorService;
-            _pupilService = pupilService;
-        }
+            => (_moderatorService, _pupilService) = (moderatorService, pupilService);
 
         /// <inheritdoc cref="IUserService.AuthenticateModerator" />
         public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData)

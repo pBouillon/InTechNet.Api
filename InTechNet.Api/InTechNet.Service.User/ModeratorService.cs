@@ -1,8 +1,8 @@
-﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Interfaces;
@@ -10,8 +10,6 @@ using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Common.Dto.User.Moderator;
-using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.User
 {
@@ -34,10 +32,7 @@ namespace InTechNet.Service.User
         /// <param name="context">Database context</param>
         /// <param name="hubService">Service for hub's operations</param>
         public ModeratorService(InTechNetContext context, IHubService hubService)
-        {
-            _context = context;
-            _hubService = hubService;
-        }
+            => (_context, _hubService) = (context, hubService);
 
         /// <inheritdoc cref="IModeratorService.AuthenticateModerator" />
         public ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData)

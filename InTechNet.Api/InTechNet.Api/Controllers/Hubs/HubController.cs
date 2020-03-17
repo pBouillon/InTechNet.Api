@@ -31,10 +31,7 @@ namespace InTechNet.Api.Controllers.Hubs
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="hubService">Hub service for hub related operations</param>
         public HubController(IAuthenticationService authenticationService, IHubService hubService)
-        {
-            _authenticationService = authenticationService;
-            _hubService = hubService;
-        }
+            => (_authenticationService, _hubService) = (authenticationService, hubService);
 
         /// <summary>
         /// Creation endpoint to add a new hub to the currently logged moderator

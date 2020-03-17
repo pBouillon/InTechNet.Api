@@ -1,15 +1,14 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Common.Dto.User.Pupil;
-using InTechNet.DataAccessLayer.Entities;
 
 namespace InTechNet.Service.User
 {
@@ -26,9 +25,7 @@ namespace InTechNet.Service.User
         /// </summary>
         /// <param name="context">Database context</param>
         public PupilService(InTechNetContext context)
-        {
-            _context = context;
-        }
+            => _context = context;
 
         /// <inheritdoc cref="IPupilService.AuthenticatePupil" />
         public PupilDto AuthenticatePupil(AuthenticationDto authenticationData)
