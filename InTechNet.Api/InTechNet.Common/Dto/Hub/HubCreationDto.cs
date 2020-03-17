@@ -1,12 +1,12 @@
 ﻿namespace InTechNet.Common.Dto.Hub
 {
     /// <summary>
-    /// TODO
+    /// <see cref="Hub" /> specialized for hub creation
     /// </summary>
     public class HubCreationDto
     {
         /// <summary>
-        /// TODO
+        /// Hub name, must be unique
         /// </summary>
         public string Name { get; set; }
     }

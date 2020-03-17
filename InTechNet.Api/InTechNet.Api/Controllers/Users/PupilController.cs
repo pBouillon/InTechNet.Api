@@ -19,17 +19,17 @@ namespace InTechNet.Api.Controllers.Users
     public class PupilController : ControllerBase
     {
         /// <summary>
-        /// 
+        /// Authentication service
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
         /// <summary>
-        /// 
+        /// User service for user related operations
         /// </summary>
         private readonly IUserService _userService;
 
         /// <summary>
-        /// 
+        /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService"></param>
         /// <param name="userService"></param>
@@ -56,7 +56,8 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Pupil
             }
         )]
-        public ActionResult<string> Authenticate([FromBody] AuthenticationDto authenticationDto)
+        public ActionResult<string> Authenticate(
+            [FromBody, SwaggerParameter("Pupil login details")] AuthenticationDto authenticationDto)
         {
             try
             {
@@ -86,7 +87,8 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Registration
             }
         )]
-        public IActionResult Register([FromBody] PupilRegistrationDto newPupilData)
+        public IActionResult Register(
+            [FromBody, SwaggerParameter("Pupil's creation payload")] PupilRegistrationDto newPupilData)
         {
             try
             {

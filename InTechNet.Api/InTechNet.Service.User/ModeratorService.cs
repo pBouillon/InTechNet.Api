@@ -24,7 +24,7 @@ namespace InTechNet.Service.User
         private readonly InTechNetContext _context;
 
         /// <summary>
-        /// TODO
+        /// Hub service for hub related operations
         /// </summary>
         private readonly IHubService _hubService;
 
@@ -32,7 +32,7 @@ namespace InTechNet.Service.User
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        /// <param name="hubService">TODO</param>
+        /// <param name="hubService">Service for hub's operations</param>
         public ModeratorService(InTechNetContext context, IHubService hubService)
         {
             _context = context;

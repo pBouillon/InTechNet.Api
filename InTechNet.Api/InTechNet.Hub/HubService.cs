@@ -9,6 +9,8 @@ using InTechNet.Service.Hub.Interfaces;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.User.Attendee;
+using InTechNet.Common.Dto.User.Moderator;
 
 namespace InTechNet.Service.Hub
 {
@@ -21,7 +23,7 @@ namespace InTechNet.Service.Hub
         private readonly InTechNetContext _context;
 
         /// <summary>
-        /// TODO
+        /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
         public HubService(InTechNetContext context)

@@ -15,20 +15,20 @@ namespace InTechNet.Api.Controllers.Hubs
     public class HubController : ControllerBase
     {
         /// <summary>
-        /// TODO
+        /// Authentication service
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
 
         /// <summary>
-        /// TODO
+        /// Hub service for hub related operations
         /// </summary>
         private readonly IHubService _hubService;
 
         /// <summary>
-        /// 
+        /// Controller for hub related endpoints
         /// </summary>
-        /// <param name="authenticationService"></param>
-        /// <param name="hubService"></param>
+        /// <param name="authenticationService">Authentication service</param>
+        /// <param name="hubService">Hub service for hub related operations</param>
         public HubController(IAuthenticationService authenticationService, IHubService hubService)
         {
             _authenticationService = authenticationService;
@@ -52,7 +52,8 @@ namespace InTechNet.Api.Controllers.Hubs
                 SwaggerTag.Moderator
             }
         )]
-        public IActionResult CreateHub([FromBody] HubCreationDto hub)
+        public IActionResult CreateHub(
+            [FromBody, SwaggerParameter("Basic data for hub creation")] HubCreationDto hub)
         {
             try
             {

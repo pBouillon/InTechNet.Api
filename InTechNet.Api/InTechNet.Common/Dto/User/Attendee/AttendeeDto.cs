@@ -1,22 +1,22 @@
-﻿namespace InTechNet.Common.Dto.User
+﻿namespace InTechNet.Common.Dto.User.Attendee
 {
     /// <summary>
-    /// TODO
+    /// <see cref="Attendee"/> DTO
     /// </summary>
     public class AttendeeDto
     {
         /// <summary>
-        /// TODO
+        /// ID of this record in the junction table
         /// </summary>
         public int Id { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Id of the pupil attending this hub
         /// </summary>
         public int IdPupil { get; set; }
 
         /// <summary>
-        /// TODO
+        /// Id of the hub
         /// </summary>
         public int IdHub { get; set; }
     }

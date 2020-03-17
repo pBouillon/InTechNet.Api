@@ -186,6 +186,8 @@ namespace InTechNet.Api
                 var xmlFile = $"{Assembly.GetExecutingAssembly().GetName().Name}.xml";
                 var xmlPath = Path.Combine(AppContext.BaseDirectory, xmlFile);
                 _.IncludeXmlComments(xmlPath);
+
+                _.EnableAnnotations();
             });
         }
     }

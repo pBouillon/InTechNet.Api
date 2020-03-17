@@ -1,9 +1,8 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
-using InTechNet.DataAccessLayer.Entities;
 
-namespace InTechNet.Common.Dto.User
+namespace InTechNet.Common.Dto.User.Moderator
 {
     /// <summary>
     /// <see cref="Moderator" /> DTO
@@ -37,6 +36,9 @@ namespace InTechNet.Common.Dto.User
         [MaxLength(64)] 
         public string Password { get; set; }
 
+        /// <summary>
+        /// Hubs managed by this moderator
+        /// </summary>
         public IEnumerable<HubDto> Hubs { get; set; }
     }
 }

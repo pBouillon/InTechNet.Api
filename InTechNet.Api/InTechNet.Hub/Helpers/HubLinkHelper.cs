@@ -3,6 +3,7 @@ using InTechNet.Common.Dto.User;
 using Microsoft.AspNetCore.WebUtilities;
 using System.Security.Cryptography;
 using System.Text;
+using InTechNet.Common.Dto.User.Moderator;
 
 namespace InTechNet.Service.Hub.Helpers
 {

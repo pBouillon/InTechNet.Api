@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace InTechNet.Common.Dto.User
+namespace InTechNet.Common.Dto.User.Pupil
 {
     public class PupilDto
     {

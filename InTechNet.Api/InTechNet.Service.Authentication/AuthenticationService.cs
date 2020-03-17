@@ -1,6 +1,8 @@
 ﻿using System;
 using System.Security.Claims;
 using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.Exception.Authentication;

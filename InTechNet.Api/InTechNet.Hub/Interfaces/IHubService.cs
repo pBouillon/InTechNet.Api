@@ -1,6 +1,7 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
 using System.Collections.Generic;
+using InTechNet.Common.Dto.User.Moderator;
 
 namespace InTechNet.Service.Hub.Interfaces
 {

@@ -2,6 +2,9 @@
 
 namespace InTechNet.Common.Dto.User.Moderator
 {
+    /// <summary>
+    /// <see cref="Moderator" /> specialized for moderator registration
+    /// </summary>
     public class ModeratorRegistrationDto
     {
         /// <summary>
