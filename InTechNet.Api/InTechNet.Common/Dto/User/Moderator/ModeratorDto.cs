@@ -30,15 +30,13 @@ namespace InTechNet.Common.Dto.User.Moderator
         public string Email { get; set; }
 
         /// <summary>
-        /// Moderator password
-        /// </summary>
-        [Required]
-        [MaxLength(64)] 
-        public string Password { get; set; }
-
-        /// <summary>
         /// Hubs managed by this moderator
         /// </summary>
         public IEnumerable<HubDto> Hubs { get; set; }
+
+        /// <summary>
+        /// Moderator's JWT
+        /// </summary>
+        public string Token { get; set; }
     }
 }

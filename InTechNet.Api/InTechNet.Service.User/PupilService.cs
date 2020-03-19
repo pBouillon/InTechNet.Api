@@ -65,7 +65,6 @@ namespace InTechNet.Service.User
 
             return new PupilDto
             {
-                Password = string.Empty,
                 Nickname = pupil.PupilNickname,
                 Email = pupil.PupilEmail,
                 Id = pupilId

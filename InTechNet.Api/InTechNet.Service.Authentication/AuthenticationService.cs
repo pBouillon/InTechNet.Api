@@ -43,6 +43,26 @@ namespace InTechNet.Service.Authentication
             _httpContextAccessor = httpContextAccessor;
         }
 
+        /// <inheritdoc cref="IAuthenticationService.GetAuthenticatedModerator" />
+        public ModeratorDto GetAuthenticatedModerator(AuthenticationDto authenticationDto)
+        {
+            var moderator = _userService.AuthenticateModerator(authenticationDto);
+
+            moderator.Token = _jwtService.GetModeratorToken(moderator);
+
+            return moderator;
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.GetAuthenticatedPupil" />
+        public PupilDto GetAuthenticatedPupil(AuthenticationDto authenticationDto)
+        {
+            var pupil = _userService.AuthenticatePupil(authenticationDto);
+
+            pupil.Token = _jwtService.GetPupilToken(pupil);
+
+            return pupil;
+        }
+
         /// <inheritdoc cref="IAuthenticationService.GetCurrentModerator" />
         public ModeratorDto GetCurrentModerator()
         {
@@ -75,22 +95,6 @@ namespace InTechNet.Service.Authentication
                               ?? throw new UnknownUserException();
 
             return _userService.GetPupil(Convert.ToInt32(moderatorId));
-        }
-
-        /// <inheritdoc cref="IAuthenticationService.GetModeratorToken" />
-        public string GetModeratorToken(AuthenticationDto authenticationDto)
-        {
-            var moderator = _userService.AuthenticateModerator(authenticationDto);
-
-            return _jwtService.GetModeratorToken(moderator);
-        }
-
-        /// <inheritdoc cref="IAuthenticationService.GetPupilToken" />
-        public string GetPupilToken(AuthenticationDto authenticationDto)
-        {
-            var pupil = _userService.AuthenticatePupil(authenticationDto);
-
-            return _jwtService.GetPupilToken(pupil);
         }
     }
 }

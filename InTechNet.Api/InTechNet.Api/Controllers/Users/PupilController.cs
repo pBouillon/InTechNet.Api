@@ -58,8 +58,8 @@ namespace InTechNet.Api.Controllers.Users
         {
             try
             {
-                var token = _authenticationService.GetPupilToken(authenticationDto);
-                return Ok(new {Token = token});
+                return Ok(
+                    _authenticationService.GetAuthenticatedPupil(authenticationDto));
             }
             catch (BaseException)
             {
@@ -91,13 +91,13 @@ namespace InTechNet.Api.Controllers.Users
             {
                 _userService.RegisterPupil(newPupilData);
 
-                var associatedToken = _authenticationService.GetModeratorToken(new AuthenticationDto
+                var authenticatedPupil = _authenticationService.GetAuthenticatedPupil(new AuthenticationDto
                 {
                     Login = newPupilData.Nickname,
                     Password = newPupilData.Password
                 });
 
-                return Ok(new { Token = associatedToken });
+                return Ok(authenticatedPupil);
             }
             catch (BaseException)
             {

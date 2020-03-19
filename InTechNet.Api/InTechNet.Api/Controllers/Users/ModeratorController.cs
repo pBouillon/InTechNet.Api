@@ -40,7 +40,7 @@ namespace InTechNet.Api.Controllers.Users
         /// Login end point for a moderator
         /// </summary>
         /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
-        /// <returns>A valid JWT on success</returns>
+        /// <returns>A <see cref="ModeratorDto" /> holding the authenticated moderator's data</returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         [SwaggerResponse(200, "Successful authentication")]
@@ -53,14 +53,13 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<string> Authenticate(
+        public ActionResult<ModeratorDto> Authenticate(
             [FromBody, SwaggerParameter("Moderator login details")] AuthenticationDto authenticationDto)
         {
-
             try
             {
-                var token = _authenticationService.GetModeratorToken(authenticationDto);
-                return Ok(new {Token = token});
+                return Ok(
+                    _authenticationService.GetAuthenticatedModerator(authenticationDto));
             }
             catch (BaseException)
             {
@@ -72,7 +71,7 @@ namespace InTechNet.Api.Controllers.Users
         /// Registration endpoint to create a new moderator
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        /// <returns>A JWT for the newly created user on success</returns>
+        /// <returns>A <see cref="ModeratorDto" /> holding the authenticated moderator's data</returns>
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse(200, "New moderator successfully added")]
@@ -92,13 +91,13 @@ namespace InTechNet.Api.Controllers.Users
             {
                 _userService.RegisterModerator(newModeratorData);
 
-                var associatedToken = _authenticationService.GetModeratorToken(new AuthenticationDto
+                var authenticatedModerator = _authenticationService.GetAuthenticatedModerator(new AuthenticationDto
                 {
                     Login = newModeratorData.Nickname,
                     Password = newModeratorData.Password
                 });
 
-                return Ok(new { Token = associatedToken });
+                return Ok(authenticatedModerator);
             }
             catch (BaseException)
             {

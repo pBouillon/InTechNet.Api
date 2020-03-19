@@ -11,6 +11,18 @@ namespace InTechNet.Service.Authentication.Interfaces
     public interface IAuthenticationService
     {
         /// <summary>
+        /// Authenticate a moderator
+        /// </summary>
+        /// <returns>The <see cref="ModeratorDto"/> of the authenticated moderator</returns>
+        ModeratorDto GetAuthenticatedModerator(AuthenticationDto authenticationDto);
+
+        /// <summary>
+        /// Generate a valid JWT for the pupil
+        /// </summary>
+        /// <returns>The valid JWT for the pupil</returns>
+        public PupilDto GetAuthenticatedPupil(AuthenticationDto authenticationDto);
+
+        /// <summary>
         /// Get the current moderator's data based on the JWT information
         /// </summary>
         /// <returns>The <see cref="ModeratorDto" /> holding the data associated with the moderator</returns>
@@ -21,17 +33,5 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// </summary>
         /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
         PupilDto GetCurrentPupil();
-
-        /// <summary>
-        /// Generate a valid JWT for the moderator
-        /// </summary>
-        /// <returns>The valid JWT for the moderator</returns>
-        string GetModeratorToken(AuthenticationDto authenticationDto);
-
-        /// <summary>
-        /// Generate a valid JWT for the pupil
-        /// </summary>
-        /// <returns>The valid JWT for the pupil</returns>
-        public string GetPupilToken(AuthenticationDto authenticationDto);
     }
 }
