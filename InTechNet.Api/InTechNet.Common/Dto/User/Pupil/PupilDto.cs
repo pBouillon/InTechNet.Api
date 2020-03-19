@@ -25,10 +25,8 @@ namespace InTechNet.Common.Dto.User.Pupil
         public string Email { get; set; }
 
         /// <summary>
-        /// Moderator password
+        /// Pupil's JWT
         /// </summary>
-        [Required]
-        [MaxLength(64)]
-        public string Password { get; set; }
+        public string Token { get; set; }
     }
 }

@@ -60,7 +60,6 @@ namespace InTechNet.Service.User
                 Id = moderator.IdModerator,
                 Email = moderator.ModeratorEmail,
                 Nickname = moderator.ModeratorNickname,
-                Password = string.Empty
             };
         }
 
@@ -73,7 +72,6 @@ namespace InTechNet.Service.User
 
             return new ModeratorDto
             {
-                Password = string.Empty,
                 Nickname = moderator.ModeratorNickname,
                 Email = moderator.ModeratorNickname,
                 Id = moderatorId,
