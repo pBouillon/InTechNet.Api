@@ -116,5 +116,14 @@ namespace InTechNet.Service.User
 
             _context.SaveChanges();
         }
+
+        /// <inheritdoc cref="IModeratorService.RegisterModerator" />
+        public bool CheckEmail(EmailDto emailDto)
+        {
+            return !_context.Moderators
+                .Any(_ =>
+                    _.ModeratorEmail == emailDto.Email
+                );
+        }
     }
 }

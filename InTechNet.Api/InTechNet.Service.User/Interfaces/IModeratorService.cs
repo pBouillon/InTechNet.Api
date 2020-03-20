@@ -29,5 +29,12 @@ namespace InTechNet.Service.User.Interfaces
         /// </summary>
         /// <param name="newModeratorData">A <see cref="ModeratorRegistrationDto" /> holding the new moderator's data</param>
         void RegisterModerator(ModeratorRegistrationDto newModeratorData);
+
+        /// <summary>
+        /// Check the email from the EmailDto
+        /// </summary>
+        /// <param name="emailDto">A <see cref="EmailDto" /> holding the email</param>
+        /// /// <returns>A <see cref="bool" /> with value true if email is OK, false otherwise</returns>
+        bool CheckEmail(EmailDto emailDto);
     }
 }

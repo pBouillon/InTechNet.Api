@@ -61,5 +61,11 @@ namespace InTechNet.Service.User
         {
             _pupilService.RegisterPupil(newPupilData);
         }
+
+        /// <inheritdoc cref="IUserService.CheckEmail(EmailDto)" />w²
+        public bool CheckEmail(EmailDto emailDto)
+        {
+            return _moderatorService.CheckEmail(emailDto);
+        }
     }
 }

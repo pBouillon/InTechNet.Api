@@ -33,5 +33,11 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// </summary>
         /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
         PupilDto GetCurrentPupil();
+
+        /// <summary>
+        /// Check the email written by the user
+        /// </summary>
+        /// <returns>A <see cref="bool" /> with value true if email is OK, false otherwise</returns>
+        bool CheckEmail(EmailDto emailDto);
     }
 }
