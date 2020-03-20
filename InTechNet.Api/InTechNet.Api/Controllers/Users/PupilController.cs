@@ -4,6 +4,7 @@ using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
+using InTechNet.Exception.Registration;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -103,6 +104,13 @@ namespace InTechNet.Api.Controllers.Users
             }
             catch (BaseException ex)
             {
+                if (ex is DuplicatedEmailException
+                    || ex is DuplicatedIdentifierException)
+                {
+                    return Conflict(
+                        new ConflictError(ex));
+                }
+
                 return BadRequest(
                     new BadRequestError(ex));
             }

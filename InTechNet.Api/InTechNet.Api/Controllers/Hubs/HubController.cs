@@ -3,6 +3,7 @@ using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
+using InTechNet.Exception.Registration;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Hub.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -62,6 +63,12 @@ namespace InTechNet.Api.Controllers.Hubs
             }
             catch (BaseException ex)
             {
+                if (ex is DuplicatedIdentifierException)
+                {
+                    return Conflict(
+                        new ConflictError(ex));
+                }
+
                 return BadRequest(
                     new BadRequestError(ex));
             }
