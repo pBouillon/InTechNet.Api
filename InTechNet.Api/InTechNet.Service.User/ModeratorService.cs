@@ -74,8 +74,7 @@ namespace InTechNet.Service.User
             {
                 Nickname = moderator.ModeratorNickname,
                 Email = moderator.ModeratorNickname,
-                Id = moderatorId,
-                Hubs = _hubService.GetModeratorHubs(moderator.IdModerator)
+                Id = moderatorId
             };
         }
 

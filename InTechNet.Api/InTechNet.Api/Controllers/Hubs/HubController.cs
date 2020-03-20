@@ -1,4 +1,5 @@
-﻿using InTechNet.Api.Attributes;
+﻿using System.Collections.Generic;
+using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
@@ -99,6 +100,68 @@ namespace InTechNet.Api.Controllers.Hubs
                 _hubService.DeleteHub(currentModerator, hubDeletion);
 
                 return Ok();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get the details of a requested hub
+        /// </summary>
+        [HttpGet("{hubId}")]
+        [ModeratorClaimRequired]
+        [SwaggerResponse(200, "Hub successfully fetched")]
+        [SwaggerResponse(401, "Hub fetching failed")]
+        [SwaggerOperation(
+            Summary = "Get the details of a requested hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hub,
+            }
+        )]
+        public ActionResult<HubDto> GetHub(int hubId)
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+
+                var hub =_hubService.GetModeratorHub(currentModerator, hubId);
+
+                return Ok(hub);
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get a list of all hubs owned by the current moderator
+        /// </summary>
+        [HttpGet]
+        [ModeratorClaimRequired]
+        [SwaggerResponse(200, "Hubs successfully fetched")]
+        [SwaggerResponse(401, "Hubs fetching failed")]
+        [SwaggerOperation(
+            Summary = "Get a list of all hubs owned by the current moderator",
+            Tags = new[]
+            {
+                SwaggerTag.Hub,
+            }
+        )]
+        public ActionResult<IEnumerable<LightweightHubDto>> GetHubs()
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+
+                var hubs = _hubService.GetModeratorHubs(currentModerator);
+
+                return Ok(hubs);
             }
             catch (BaseException ex)
             {

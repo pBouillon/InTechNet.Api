@@ -1,12 +1,11 @@
 ﻿using InTechNet.Common.Dto.User.Attendee;
-using System.Collections.Generic;
 
 namespace InTechNet.Common.Dto.Hub
 {
     /// <summary>
-    /// <see cref="Hub" /> DTO
+    /// Light version of the <see cref="HubDto"/>
     /// </summary>
-    public class HubDto
+    public class LightweightHubDto
     {
         /// <summary>
         /// Id of this hub
@@ -28,13 +27,8 @@ namespace InTechNet.Common.Dto.Hub
         public string Link { get; set; }
 
         /// <summary>
-        /// Id of the moderator managing this hub
+        /// Number of all <see cref="AttendeeDto" /> attending this hub
         /// </summary>
-        public int IdModerator { get; set; }
-
-        /// <summary>
-        /// Collection of all <see cref="AttendeeDto" /> attending this hub
-        /// </summary>
-        public IEnumerable<AttendeeDto> Attendees { get; set; }
+        public int AttendeesCount { get; set; }
     }
 }

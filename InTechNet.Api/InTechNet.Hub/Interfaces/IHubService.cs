@@ -1,5 +1,4 @@
 ﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User;
 using System.Collections.Generic;
 using InTechNet.Common.Dto.User.Moderator;
 
@@ -25,10 +24,18 @@ namespace InTechNet.Service.Hub.Interfaces
         void DeleteHub(ModeratorDto moderatorDto, HubDeletionDto hubDeletionData);
 
         /// <summary>
+        /// Retrieve the information for a specific hub
+        /// </summary>
+        /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
+        /// <param name="hubId">The id of the hub to retriever</param>
+        /// <returns>The <see cref="HubDto"/> containing the hub details</returns>
+        HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId);
+
+        /// <summary>
         /// Retrieve all hubs owned by the moderator matching the provided moderator's id
         /// </summary>
-        /// <param name="moderatorId">The id of the moderator to look for</param>
-        /// <returns>An <see cref="IEnumerable&lt;HubDto&gt;" /> of its owned hubs</returns>
-        IEnumerable<HubDto> GetModeratorHubs(int moderatorId);
+        /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
+        /// <returns>An <see cref="IEnumerable&lt;LightweightHubDto&gt;" /> of its owned hubs</returns>
+        IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto);
     }
 }
