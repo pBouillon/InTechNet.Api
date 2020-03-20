@@ -100,12 +100,12 @@ namespace InTechNet.Service.Hub
                 return new HubDto
                 {
                     IdModerator = hub.IdHub,
-                    Attendees = hub.Attendees.Select(_ => new AttendeeDto
+                    Attendees = hub.Attendees?.Select(_ => new AttendeeDto
                     {
                         IdHub = _.IdHub,
                         Id = _.IdAttendee,
                         IdPupil = _.IdPupil
-                    }),
+                    }) ?? new List<AttendeeDto>(),
                     Id = hub.IdHub,
                     Name = hub.HubName,
                     Link = hub.HubLink,
