@@ -120,7 +120,6 @@ namespace InTechNet.Api.Controllers.Hubs
             Tags = new[]
             {
                 SwaggerTag.Hub,
-                SwaggerTag.Moderator,
             }
         )]
         public ActionResult<HubDto> GetHub(int hubId)
@@ -152,7 +151,6 @@ namespace InTechNet.Api.Controllers.Hubs
             Tags = new[]
             {
                 SwaggerTag.Hub,
-                SwaggerTag.Moderator,
             }
         )]
         public ActionResult<IEnumerable<LightweightHubDto>> GetHubs()
