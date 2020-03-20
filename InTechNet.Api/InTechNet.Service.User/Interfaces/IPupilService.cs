@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
@@ -28,5 +29,12 @@ namespace InTechNet.Service.User.Interfaces
         /// </summary>
         /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
         void RegisterPupil(PupilRegistrationDto newPupilData);
+
+        /// <summary>
+        /// Check the nickname from the NicknameDuplicationCheckDto
+        /// </summary>
+        /// <param name="nicknameDto">A <see cref="NicknameDuplicationCheckDto" /> holding the nickname</param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto);
     }
 }

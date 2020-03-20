@@ -31,10 +31,17 @@ namespace InTechNet.Service.User.Interfaces
         void RegisterModerator(ModeratorRegistrationDto newModeratorData);
 
         /// <summary>
-        /// Check the email from the EmailDto
+        /// Check the email from the EmailDuplicationCheckDto
         /// </summary>
-        /// <param name="emailDto">A <see cref="EmailDto" /> holding the email</param>
-        /// /// <returns>A <see cref="bool" /> with value true if email is OK, false otherwise</returns>
-        bool CheckEmail(EmailDto emailDto);
+        /// <param name="emailDto">A <see cref="EmailDuplicationCheckDto" /> holding the email</param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto);
+
+        /// <summary>
+        /// Check the nickname from the NicknameDuplicationCheckDto
+        /// </summary>
+        /// <param name="nicknameDto">A <see cref="NicknameDuplicationCheckDto" /> holding the nickname</param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto);
     }
 }

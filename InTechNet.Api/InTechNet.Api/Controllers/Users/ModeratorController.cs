@@ -71,29 +71,62 @@ namespace InTechNet.Api.Controllers.Users
 
 
         /// <summary>
-        /// End point for the email check
+        /// Endpoint for the email duplication check
         /// </summary>
-        /// <param name="emailDto">The login parameters as <see cref="EmailDto" /></param>
-        /// <returns>A <see cref="bool" /> with value true if email is OK, false otherwise</returns>
+        /// <param name="emailDto">The login parameters as <see cref="EmailDuplicationCheckDto" /></param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
         [AllowAnonymous]
         [HttpPost("emailCheck")]
-        [SwaggerResponse(200, "Email OK")]
+        [SwaggerResponse(200, "Email not already in use")]
         [SwaggerResponse(401, "Email already used")]
         [SwaggerOperation(
-            Summary = "End point for the email check",
+            Summary = "Endpoint for the email check",
             Tags = new[]
             {
                 SwaggerTag.Authentication,
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<bool> EmailCheck(
-            [FromBody, SwaggerParameter("Email to check")] EmailDto emailDto)
+        public ActionResult<bool> EmailCheckDuplicates(
+            [FromBody, SwaggerParameter("Email to check")] EmailDuplicationCheckDto emailDto)
         {
             try
             {
                 return Ok(
-                    _authenticationService.CheckEmail(emailDto));
+                    _authenticationService.CheckEmailDuplicates(emailDto));
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+
+        /// <summary>
+        /// Endpoint for the nickname duplication check
+        /// </summary>
+        /// <param name="nicknameDto">The login parameters as <see cref="NicknameDuplicationCheckDto" /></param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        [AllowAnonymous]
+        [HttpPost("nicknameCheck")]
+        [SwaggerResponse(200, "Nickname not already in use")]
+        [SwaggerResponse(401, "Nickname already used")]
+        [SwaggerOperation(
+            Summary = "Endpoint for the nickname check",
+            Tags = new[]
+            {
+                SwaggerTag.Authentication,
+                SwaggerTag.Moderator
+            }
+        )]
+        public ActionResult<bool> NicknameCheckDuplicates(
+            [FromBody, SwaggerParameter("Email to check")] NicknameDuplicationCheckDto nicknameDto)
+        {
+            try
+            {
+                return Ok(
+                    _authenticationService.CheckNickNameDuplicates(nicknameDto));
             }
             catch (BaseException ex)
             {

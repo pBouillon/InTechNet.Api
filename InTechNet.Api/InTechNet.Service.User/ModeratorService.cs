@@ -118,11 +118,20 @@ namespace InTechNet.Service.User
         }
 
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public bool CheckEmail(EmailDto emailDto)
+        public bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto)
         {
             return !_context.Moderators
                 .Any(_ =>
                     _.ModeratorEmail == emailDto.Email
+                );
+        }
+
+        /// <inheritdoc cref="IModeratorService.CheckNickNameDuplicates" />
+        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        {
+            return !_context.Moderators
+                .Any(_ =>
+                    _.ModeratorNickname == nicknameDto.Nickname
                 );
         }
     }

@@ -62,10 +62,17 @@ namespace InTechNet.Service.User
             _pupilService.RegisterPupil(newPupilData);
         }
 
-        /// <inheritdoc cref="IUserService.CheckEmail(EmailDto)" />w²
-        public bool CheckEmail(EmailDto emailDto)
+        /// <inheritdoc cref="IUserService.CheckEmailDuplicates" />
+        public bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto)
         {
-            return _moderatorService.CheckEmail(emailDto);
+            return _moderatorService.CheckEmailDuplicates(emailDto);
+        }
+
+        /// <inheritdoc cref="IUserService.CheckNickNameDuplicates" />
+        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        {
+            return _moderatorService.CheckNickNameDuplicates(nicknameDto)
+                && _pupilService.CheckNickNameDuplicates(nicknameDto);
         }
     }
 }

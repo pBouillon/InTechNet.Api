@@ -97,10 +97,16 @@ namespace InTechNet.Service.Authentication
             return _userService.GetPupil(Convert.ToInt32(moderatorId));
         }
 
-        /// <inheritdoc cref="IAuthenticationService.CheckEmail(EmailDto)" />
-        public bool CheckEmail(EmailDto emailDto)
+        /// <inheritdoc cref="IAuthenticationService.CheckEmailDuplicates" />
+        public bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto)
         {
-            return _userService.CheckEmail(emailDto);
+            return _userService.CheckEmailDuplicates(emailDto);
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.CheckNickNameDuplicates" />
+        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        {
+            return _userService.CheckNickNameDuplicates(nicknameDto);
         }
     }
 }

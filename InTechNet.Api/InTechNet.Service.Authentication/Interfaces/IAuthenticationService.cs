@@ -37,7 +37,13 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// <summary>
         /// Check the email written by the user
         /// </summary>
-        /// <returns>A <see cref="bool" /> with value true if email is OK, false otherwise</returns>
-        bool CheckEmail(EmailDto emailDto);
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto);
+
+        /// <summary>
+        /// Check the nickname written by the user
+        /// </summary>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto);
     }
 }

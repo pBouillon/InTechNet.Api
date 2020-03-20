@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.User.Pupil;
+﻿using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
@@ -108,6 +109,15 @@ namespace InTechNet.Service.User
             });
 
             _context.SaveChanges();
+        }
+
+        /// <inheritdoc cref="IPupilService.CheckNickNameDuplicates" />
+        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        {
+            return !_context.Pupils
+                .Any(_ =>
+                    _.PupilNickname == nicknameDto.Nickname
+                );
         }
     }
 }
