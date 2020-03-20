@@ -10,8 +10,8 @@ namespace InTechNet.Api.Errors.Classes
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="message">Custom error message</param>
-        public InternalServerError(string message = "") 
-            : base(HttpStatusCode.InternalServerError, message) { }
+        /// <param name="ex">Exception raised on this code</param>
+        public InternalServerError(System.Exception ex)
+            : base(HttpStatusCode.InternalServerError, ex) { }
     }
 }

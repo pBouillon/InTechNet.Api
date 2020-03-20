@@ -64,7 +64,7 @@ namespace InTechNet.Api.Controllers.Users
             catch (BaseException ex)
             {
                 return Unauthorized(
-                    new UnauthorizedError(ex.Message));
+                    new UnauthorizedError(ex));
             }
         }
 
@@ -103,7 +103,7 @@ namespace InTechNet.Api.Controllers.Users
             catch (BaseException ex)
             {
                 return BadRequest(
-                    new BadRequestError(ex.Message));
+                    new BadRequestError(ex));
             }
         }
     }

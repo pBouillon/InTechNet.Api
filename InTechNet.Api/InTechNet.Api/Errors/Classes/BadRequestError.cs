@@ -10,8 +10,8 @@ namespace InTechNet.Api.Errors.Classes
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="message">Custom error message</param>
-        public BadRequestError(string message = "")
-            : base(HttpStatusCode.BadRequest, message) { }
+        /// <param name="ex">Exception raised on this code</param>
+        public BadRequestError(System.Exception ex)
+            : base(HttpStatusCode.BadRequest, ex) { }
     }
 }

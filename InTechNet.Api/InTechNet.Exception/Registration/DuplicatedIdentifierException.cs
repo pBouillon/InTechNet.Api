@@ -4,7 +4,7 @@
     /// Exception to be thrown when attempting to add a resource with an identifier
     /// violating the `unique` constraint
     /// </summary>
-    public class DuplicateIdentifierException : BaseException
+    public class DuplicatedIdentifierException : BaseException
     {
         /// <summary>
         /// Custom exception message for this exception
@@ -15,7 +15,7 @@
         /// Default constructor
         /// </summary>
         /// <param name="innerException">Nullable inner-exception</param>
-        public DuplicateIdentifierException(System.Exception innerException = null)
+        public DuplicatedIdentifierException(System.Exception innerException = null)
             : base(ExceptionMessage, innerException) { }
     }
 }

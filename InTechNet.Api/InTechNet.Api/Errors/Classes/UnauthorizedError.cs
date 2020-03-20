@@ -10,8 +10,8 @@ namespace InTechNet.Api.Errors.Classes
         /// <summary>
         /// Default constructor
         /// </summary>
-        /// <param name="message">Custom error message</param>
-        public UnauthorizedError(string message = "")
-            : base(HttpStatusCode.Unauthorized, message) { }
+        /// <param name="ex">Exception raised on this code</param>
+        public UnauthorizedError(System.Exception ex)
+            : base(HttpStatusCode.Unauthorized, ex) { }
     }
 }

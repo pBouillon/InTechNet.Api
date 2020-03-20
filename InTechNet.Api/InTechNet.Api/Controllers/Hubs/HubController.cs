@@ -63,7 +63,7 @@ namespace InTechNet.Api.Controllers.Hubs
             catch (BaseException ex)
             {
                 return BadRequest(
-                    new BadRequestError(ex.Message));
+                    new BadRequestError(ex));
             }
         }
 
@@ -96,7 +96,7 @@ namespace InTechNet.Api.Controllers.Hubs
             catch (BaseException ex)
             {
                 return Unauthorized(
-                    new UnauthorizedError(ex.Message));
+                    new UnauthorizedError(ex));
             }
         }
     }

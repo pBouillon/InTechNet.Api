@@ -44,7 +44,7 @@ namespace InTechNet.Service.Hub
 
             if (isDuplicateTracked)
             {
-                throw new DuplicateIdentifierException();
+                throw new DuplicatedIdentifierException();
             }
 
             // Generate a unique link for this hub

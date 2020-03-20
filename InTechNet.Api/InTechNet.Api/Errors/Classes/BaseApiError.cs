@@ -1,5 +1,5 @@
-﻿using System.Net;
-using InTechNet.Api.Errors.Interfaces;
+﻿using InTechNet.Api.Errors.Interfaces;
+using System.Net;
 
 namespace InTechNet.Api.Errors.Classes
 {
@@ -19,8 +19,8 @@ namespace InTechNet.Api.Errors.Classes
         /// Default constructor
         /// </summary>
         /// <param name="statusCode">The associated <see cref="HttpStatusCode"/></param>
-        /// <param name="message"><inheritdoc cref="IApiError.ErrorMessage"/></param>
-        protected BaseApiError(HttpStatusCode statusCode, string message = "")
-            => (StatusCode, StatusDescription, ErrorMessage) = ((int) statusCode, statusCode.ToString(), message);
+        /// <param name="ex">Exception raised on this code</param>
+        protected BaseApiError(HttpStatusCode statusCode, System.Exception ex)
+            => (StatusCode, StatusDescription, ErrorMessage) = ((int) statusCode, statusCode.ToString(), ex.Message);
     }
 }
