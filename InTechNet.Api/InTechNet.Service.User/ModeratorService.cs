@@ -83,13 +83,20 @@ namespace InTechNet.Service.User
         public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             // Assert that its nickname or email is unique in InTechNet database
-            var isDuplicateTracked = _context.Moderators.Any(_ =>
-                _.ModeratorNickname == newModeratorData.Nickname
-                || _.ModeratorEmail == newModeratorData.Email);
+            var isEmailDuplicated = _context.Moderators.Any(_ =>
+                _.ModeratorEmail == newModeratorData.Email);
 
-            if (isDuplicateTracked)
+            var isNicknameDuplicated = _context.Moderators.Any(_ =>
+                _.ModeratorNickname == newModeratorData.Nickname);
+
+            if (isEmailDuplicated)
             {
-                throw new DuplicateIdentifierException();
+                throw new DuplicatedEmailException();
+            }
+
+            if (isNicknameDuplicated)
+            {
+                throw new DuplicatedIdentifierException();
             }
 
             // Generate a random salt for this moderator

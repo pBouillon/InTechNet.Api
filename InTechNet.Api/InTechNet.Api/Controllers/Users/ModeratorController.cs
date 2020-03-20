@@ -1,8 +1,9 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
+using InTechNet.Exception.Registration;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -61,9 +62,10 @@ namespace InTechNet.Api.Controllers.Users
                 return Ok(
                     _authenticationService.GetAuthenticatedModerator(authenticationDto));
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return Unauthorized();
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
 
@@ -99,9 +101,17 @@ namespace InTechNet.Api.Controllers.Users
 
                 return Ok(authenticatedModerator);
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                if (ex is DuplicatedEmailException
+                    || ex is DuplicatedIdentifierException)
+                {
+                    return Conflict(
+                        new ConflictError(ex));
+                }
+
+                return BadRequest(
+                    new BadRequestError(ex));
             }
         }
     }

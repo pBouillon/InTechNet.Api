@@ -1,7 +1,9 @@
 ﻿using InTechNet.Api.Attributes;
+using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
+using InTechNet.Exception.Registration;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.Hub.Interfaces;
 using Microsoft.AspNetCore.Authorization;
@@ -59,9 +61,16 @@ namespace InTechNet.Api.Controllers.Hubs
 
                 return Ok();
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                if (ex is DuplicatedIdentifierException)
+                {
+                    return Conflict(
+                        new ConflictError(ex));
+                }
+
+                return BadRequest(
+                    new BadRequestError(ex));
             }
         }
 
@@ -91,9 +100,10 @@ namespace InTechNet.Api.Controllers.Hubs
 
                 return Ok();
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return Unauthorized();
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
     }

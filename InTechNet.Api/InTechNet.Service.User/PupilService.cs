@@ -75,13 +75,20 @@ namespace InTechNet.Service.User
         public void RegisterPupil(PupilRegistrationDto newPupilData)
         {
             // Assert that its nickname or email is unique in InTechNet database
-            var isDuplicateTracked = _context.Pupils.Any(_ =>
-                _.PupilNickname == newPupilData.Nickname
-                || _.PupilEmail == newPupilData.Email);
+            var isEmailDuplicated = _context.Pupils.Any(_ =>
+                _.PupilEmail == newPupilData.Email);
 
-            if (isDuplicateTracked)
+            var isNicknameDuplicated = _context.Pupils.Any(_ =>
+                _.PupilNickname == newPupilData.Nickname);
+
+            if (isEmailDuplicated)
             {
-                throw new DuplicateIdentifierException();
+                throw new DuplicatedEmailException();
+            }
+
+            if (isNicknameDuplicated)
+            {
+                throw new DuplicatedIdentifierException();
             }
 
             // Generate a random salt for this moderator
