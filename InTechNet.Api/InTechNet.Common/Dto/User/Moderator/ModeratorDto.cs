@@ -1,6 +1,4 @@
-﻿using InTechNet.Common.Dto.Hub;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
 
 namespace InTechNet.Common.Dto.User.Moderator
 {
@@ -28,11 +26,6 @@ namespace InTechNet.Common.Dto.User.Moderator
         [MaxLength(128)] 
         [EmailAddress]
         public string Email { get; set; }
-
-        /// <summary>
-        /// Hubs managed by this moderator
-        /// </summary>
-        public IEnumerable<HubDto> Hubs { get; set; }
 
         /// <summary>
         /// Moderator's JWT

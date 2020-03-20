@@ -88,25 +88,48 @@ namespace InTechNet.Service.Hub
             _context.SaveChanges();
         }
 
-        /// <inheritdoc cref="IHubService.GetModeratorHubs" />
-        public IEnumerable<HubDto> GetModeratorHubs(int moderatorId)
+        /// <inheritdoc cref="IHubService.GetModeratorHub"/>
+        public HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId)
         {
-            return _context.Hubs
-                .Select(_ => new HubDto
+            try
+            {
+                var hub = _context.Hubs.Single(_ =>
+                    _.Moderator.IdModerator == moderatorDto.Id
+                    && _.IdHub == hubId);
+
+                return new HubDto
                 {
-                    Name = _.HubName,
-                    Id = _.IdHub,
-                    Attendees = _.Attendees.Select(attendee 
-                        => new AttendeeDto
+                    IdModerator = hub.IdHub,
+                    Attendees = hub.Attendees.Select(_ => new AttendeeDto
                     {
-                            IdHub = attendee.IdHub,
-                            Id = attendee.IdAttendee,
-                            IdPupil = attendee.IdPupil
+                        IdHub = _.IdHub,
+                        Id = _.IdAttendee,
+                        IdPupil = _.IdPupil
                     }),
-                    Link = _.HubLink,
-                    IdModerator = _.Moderator.IdModerator
-                })
-                .Where(_ => _.IdModerator == moderatorId);
+                    Id = hub.IdHub,
+                    Name = hub.HubName,
+                    Link = hub.HubLink,
+                };
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new UnknownHubException(ex);
+            }
+        }
+
+        /// <inheritdoc cref="IHubService.GetModeratorHubs"/>
+        public IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto)
+        {
+            var moderatorsHubs = _context.Hubs.Where(_ =>
+                    _.Moderator.IdModerator == moderatorDto.Id);
+
+            return moderatorsHubs.Select(_ => new LightweightHubDto
+            {
+                Name = _.HubName,
+                Link = _.HubLink,
+                Id = _.IdHub,
+                AttendeesCount = _.Attendees.Count()
+            });
         }
     }
 }
