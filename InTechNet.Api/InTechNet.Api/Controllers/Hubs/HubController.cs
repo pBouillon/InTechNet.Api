@@ -1,4 +1,5 @@
 ﻿using InTechNet.Api.Attributes;
+using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
@@ -59,9 +60,10 @@ namespace InTechNet.Api.Controllers.Hubs
 
                 return Ok();
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                return BadRequest(
+                    new BadRequestError(ex.Message));
             }
         }
 
@@ -91,9 +93,10 @@ namespace InTechNet.Api.Controllers.Hubs
 
                 return Ok();
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return Unauthorized();
+                return Unauthorized(
+                    new UnauthorizedError(ex.Message));
             }
         }
     }

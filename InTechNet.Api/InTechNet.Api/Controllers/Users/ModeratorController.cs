@@ -1,4 +1,4 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
@@ -61,9 +61,10 @@ namespace InTechNet.Api.Controllers.Users
                 return Ok(
                     _authenticationService.GetAuthenticatedModerator(authenticationDto));
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return Unauthorized();
+                return Unauthorized(
+                    new UnauthorizedError(ex.Message));
             }
         }
 
@@ -99,9 +100,10 @@ namespace InTechNet.Api.Controllers.Users
 
                 return Ok(authenticatedModerator);
             }
-            catch (BaseException)
+            catch (BaseException ex)
             {
-                return BadRequest();
+                return BadRequest(
+                    new BadRequestError(ex.Message));
             }
         }
     }
