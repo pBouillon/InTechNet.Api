@@ -33,5 +33,17 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// </summary>
         /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
         PupilDto GetCurrentPupil();
+
+        /// <summary>
+        /// Check the email written by the user
+        /// </summary>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
+
+        /// <summary>
+        /// Check the nickname written by the user
+        /// </summary>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
     }
 }

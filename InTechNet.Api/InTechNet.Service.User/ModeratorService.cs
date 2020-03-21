@@ -116,5 +116,22 @@ namespace InTechNet.Service.User
 
             _context.SaveChanges();
         }
+
+        /// <inheritdoc cref="IModeratorService.RegisterModerator" />
+        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
+        {
+            return !_context.Moderators
+                .Any(_ =>
+                    _.ModeratorEmail == emailDto.Email
+                );
+        }
+
+        /// <inheritdoc cref="IModeratorService.IsNicknameAlreadyInUse" />
+        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
+        {
+            return !_context.Moderators
+                .Any(_ =>
+                    _.ModeratorNickname == nicknameDto.Nickname);
+        }
     }
 }

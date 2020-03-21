@@ -50,5 +50,19 @@ namespace InTechNet.Service.User.Interfaces
         /// </summary>
         /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
         void RegisterPupil(PupilRegistrationDto newPupilData);
+
+        /// <summary>
+        /// Check the email from the EmailDuplicationCheckDto
+        /// </summary>
+        /// <param name="emailDto">A <see cref="EmailDuplicationCheckDto" /> holding the email</param>
+        /// /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
+
+        /// <summary>
+        /// Check the nickname from the NicknameDuplicationCheckDto
+        /// </summary>
+        /// <param name="nicknameDto">A <see cref="NicknameDuplicationCheckDto" /> holding the nickname</param>
+        /// /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
     }
 }
