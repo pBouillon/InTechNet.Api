@@ -131,8 +131,7 @@ namespace InTechNet.Service.User
         {
             return !_context.Moderators
                 .Any(_ =>
-                    _.ModeratorNickname == nicknameDto.Nickname
-                );
+                    _.ModeratorNickname == nicknameDto.Nickname);
         }
     }
 }

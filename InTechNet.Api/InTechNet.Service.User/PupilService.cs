@@ -116,8 +116,7 @@ namespace InTechNet.Service.User
         {
             return !_context.Pupils
                 .Any(_ =>
-                    _.PupilNickname == nicknameDto.Nickname
-                );
+                    _.PupilNickname == nicknameDto.Nickname);
         }
     }
 }
