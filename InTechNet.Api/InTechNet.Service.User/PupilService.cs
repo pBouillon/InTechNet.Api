@@ -114,7 +114,7 @@ namespace InTechNet.Service.User
         /// <inheritdoc cref="IPupilService.IsNicknameAlreadyInUse" />
         public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
         {
-            return !_context.Pupils
+            return _context.Pupils
                 .Any(_ =>
                     _.PupilNickname == nicknameDto.Nickname);
         }

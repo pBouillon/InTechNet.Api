@@ -28,6 +28,11 @@ namespace InTechNet.Common.Dto.Hub
         public string Link { get; set; }
 
         /// <summary>
+        /// Description of the hub
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Id of the moderator managing this hub
         /// </summary>
         public int IdModerator { get; set; }

@@ -43,5 +43,10 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Hubs of this Moderator
         /// </summary>
         public IEnumerable<Hub> Hubs { get; set; }
+
+        /// <summary>
+        /// Subscription this moderator has
+        /// </summary>
+        public Subscription ModeratorSubscription { get; set; }
     }
 }

@@ -35,8 +35,25 @@ namespace InTechNet.DataAccessLayer
         /// </summary>
         public DbSet<Attendee> Attendees { get; set; }
 
+        /// <summary>
+        /// DbSet for the Subscription Entity
+        /// </summary>
+        public DbSet<Subscription> Subscriptions { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<Subscription>()
+                .HasMany(_ => _.Moderators)
+                .WithOne(_ => _.ModeratorSubscription);
+
+            modelBuilder.Entity<Hub>()
+                .HasMany(_ => _.Attendees)
+                .WithOne(_ => _.Hub);
+
+            modelBuilder.Entity<Moderator>()
+                .HasMany(_ => _.Hubs)
+                .WithOne(_ => _.Moderator);
+
             modelBuilder.Entity<Moderator>()
                 .HasIndex(b => b.ModeratorNickname)
                 .HasName("index_moderator_nickname");
