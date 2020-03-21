@@ -77,7 +77,7 @@ namespace InTechNet.Api.Helpers
 
             _services.AddTransient<IHubService, HubService>();
 
-            _services.AddTransient<ISubscriptionService, SubscriptionService>();
+            _services.AddTransient<ISubscriptionPlanService, SubscriptionPlanService>();
         }
 
         /// <summary>

@@ -9,6 +9,7 @@ using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
+using InTechNet.Common.Utils.SubscriptionPlan;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
@@ -56,8 +57,18 @@ namespace InTechNet.Service.User
             var hashedPassword = password.HashedWith(moderator.ModeratorSalt);
 
             // Assert that the provided password matches the stored one
-            if (hashedPassword != moderator.ModeratorPassword) throw new InvalidCredentialsException();
-            
+            if (hashedPassword != moderator.ModeratorPassword)
+            {
+                throw new InvalidCredentialsException();
+            }
+
+            SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
+            {
+                IdSubscription = moderator.ModeratorSubscription.IdSubscription,
+                HubMaxNumber = moderator.ModeratorSubscription.MaxHubPerModeratorAccount,
+                SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
+                SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
+            };
 
             // Return the DTO associated to the moderator without its password
             return new ModeratorDto
@@ -66,13 +77,7 @@ namespace InTechNet.Service.User
                 Email = moderator.ModeratorEmail,
                 Nickname = moderator.ModeratorNickname,
                 NumberOfHub = moderator.Hubs.Count(),
-                SubscriptionDto = new SubscriptionDto
-                {
-                    IdSubscription = moderator.ModeratorSubscription.IdSubscription,
-                    HubMaxNumber = moderator.ModeratorSubscription.HubMaxNumber,
-                    SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
-                    SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
-                }
+                SubscriptionPlanDto = subscriptionPlanDtoForCurrentModerator
             };
         }
 
@@ -85,19 +90,21 @@ namespace InTechNet.Service.User
                 .FirstOrDefault(_ => _.IdModerator == moderatorId) 
                             ?? throw new UnknownUserException();
 
+            SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
+            {
+                IdSubscription = moderator.ModeratorSubscription.IdSubscription,
+                HubMaxNumber = moderator.ModeratorSubscription.MaxHubPerModeratorAccount,
+                SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
+                SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
+            };
+
             return new ModeratorDto
             {
                 Nickname = moderator.ModeratorNickname,
                 Email = moderator.ModeratorNickname,
                 Id = moderatorId,
                 NumberOfHub = moderator.Hubs.Count(),
-                SubscriptionDto = new SubscriptionDto
-                {
-                    IdSubscription = moderator.ModeratorSubscription.IdSubscription,
-                    HubMaxNumber = moderator.ModeratorSubscription.HubMaxNumber,
-                    SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
-                    SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
-                }
+                SubscriptionPlanDto = subscriptionPlanDtoForCurrentModerator
             };
         }
 
@@ -127,12 +134,9 @@ namespace InTechNet.Service.User
             // Salting the password
             var saltedPassword = newModeratorData.Password.HashedWith(salt);
 
-            //Getting the free subscription
-            var subscription = _context.Subscriptions.FirstOrDefault(_ =>
-                _.SubscriptionName == "free");
-
-            /* HARD CODE JE SAIS FLEMME ATM :) keur bisous
-             */
+            // Getting the free subscription
+            var subscription = _context.SubscriptionPlans.First(_ =>
+                _.SubscriptionName == SubscriptionPlanUtil.CommunityEdition);
 
             // Record the new moderator
             _context.Moderators.Add(new Moderator
@@ -153,8 +157,7 @@ namespace InTechNet.Service.User
         {
             return _context.Moderators
                 .Any(_ =>
-                    _.ModeratorEmail == emailDto.Email
-                );
+                    _.ModeratorEmail == emailDto.Email);
         }
 
         /// <inheritdoc cref="IModeratorService.IsNicknameAlreadyInUse" />

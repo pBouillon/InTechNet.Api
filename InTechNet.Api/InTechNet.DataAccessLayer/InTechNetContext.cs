@@ -37,11 +37,11 @@ namespace InTechNet.DataAccessLayer
         /// <summary>
         /// DbSet for the Subscription Entity
         /// </summary>
-        public DbSet<Subscription> Subscriptions { get; set; }
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
-            modelBuilder.Entity<Subscription>()
+            modelBuilder.Entity<SubscriptionPlan>()
                 .HasMany(_ => _.Moderators)
                 .WithOne(_ => _.ModeratorSubscription);
 

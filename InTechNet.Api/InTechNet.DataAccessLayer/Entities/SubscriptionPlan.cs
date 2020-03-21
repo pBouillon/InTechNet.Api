@@ -6,7 +6,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 namespace InTechNet.DataAccessLayer.Entities
 {
     [Table("subscription", Schema = "public")]
-    public class Subscription
+    public class SubscriptionPlan
     {
         /// <summary>
         /// Unique ID of the subscription
@@ -23,7 +23,7 @@ namespace InTechNet.DataAccessLayer.Entities
         /// <summary>
         /// Maximum number of hub
         /// </summary>
-        public int HubMaxNumber{ get; set; }
+        public int MaxHubPerModeratorAccount { get; set; }
 
         /// <summary>
         /// Price of the subscription
@@ -33,13 +33,11 @@ namespace InTechNet.DataAccessLayer.Entities
         /// <summary>
         /// Maximum number of attendee per hub
         /// </summary>
-        public string AttendeeMaxNumber { get; set; }
+        public string MaxAttendeesPerHub { get; set; }
 
         /// <summary>
         /// Moderators using this subscription
         /// </summary>
         public IEnumerable<Moderator> Moderators { get; set; }
-
-
     }
 }

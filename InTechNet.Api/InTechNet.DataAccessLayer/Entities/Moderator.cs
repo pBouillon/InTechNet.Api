@@ -47,6 +47,6 @@ namespace InTechNet.DataAccessLayer.Entities
         /// <summary>
         /// Subscription this moderator has
         /// </summary>
-        public Subscription ModeratorSubscription { get; set; }
+        public SubscriptionPlan ModeratorSubscription { get; set; }
     }
 }

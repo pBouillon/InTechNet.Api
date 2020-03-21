@@ -31,6 +31,7 @@ namespace InTechNet.Common.Dto.User.Moderator
         /// <summary>
         /// Number of hub of the moderator
         /// </summary>
+        [Range(0, double.MaxValue)]
         public int NumberOfHub { get; set; }
 
         /// <summary>
@@ -41,6 +42,6 @@ namespace InTechNet.Common.Dto.User.Moderator
         /// <summary>
         /// Moderator's Subscription
         /// </summary>
-        public SubscriptionDto SubscriptionDto { get; set; }
+        public SubscriptionPlanDto SubscriptionPlanDto { get; set; }
     }
 }

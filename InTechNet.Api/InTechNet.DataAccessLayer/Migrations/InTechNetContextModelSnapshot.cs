@@ -148,17 +148,17 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("pupil","public");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Subscription", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", b =>
                 {
                     b.Property<int>("IdSubscription")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("AttendeeMaxNumber")
+                    b.Property<string>("MaxAttendeesPerHub")
                         .HasColumnType("text");
 
-                    b.Property<int>("HubMaxNumber")
+                    b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");
 
                     b.Property<string>("SubscriptionName")
@@ -192,7 +192,7 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entities.Subscription", "ModeratorSubscription")
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscription")
                         .WithMany("Moderators")
                         .HasForeignKey("ModeratorSubscriptionIdSubscription");
                 });

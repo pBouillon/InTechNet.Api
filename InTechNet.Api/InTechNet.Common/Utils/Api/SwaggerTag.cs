@@ -31,8 +31,8 @@
         public const string Registration = "Registration";
 
         /// <summary>
-        /// Endpoint relative to the subscription process
+        /// Endpoint relative to the subscription plans available and their process
         /// </summary>
-        public const string Subscription = "Subscription";
+        public const string SubscriptionPlan = "SubscriptionPlan";
     }
 }

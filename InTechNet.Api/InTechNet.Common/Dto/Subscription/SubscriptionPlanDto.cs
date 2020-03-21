@@ -2,7 +2,7 @@
 
 namespace InTechNet.Common.Dto.Subscription
 {
-    public class SubscriptionDto
+    public class SubscriptionPlanDto
     {
         /// <summary>
         /// Unique ID of the subscription

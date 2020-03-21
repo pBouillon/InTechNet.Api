@@ -13,19 +13,19 @@ namespace InTechNet.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SubscriptionController : ControllerBase
+    public class SubscriptionPlanController : ControllerBase
     {
         /// <summary>
         /// Subscription service for subscription related operations
         /// </summary>
-        private readonly ISubscriptionService _subscriptionService;
+        private readonly ISubscriptionPlanService _subscriptionService;
 
         /// <summary>
-        /// Controller for subscription related endpoints
+        /// Constructor for subscription related endpoints
         /// </summary>
         /// <param name="subscriptionService">Subscription service for subscription related operations</param>
-        public SubscriptionController(ISubscriptionService subscriptionService)
-            => (_subscriptionService) = (subscriptionService);
+        public SubscriptionPlanController(ISubscriptionPlanService subscriptionService)
+            => _subscriptionService = subscriptionService;
 
         /// <summary>
         /// Get a list of all hubs owned by the current moderator
@@ -38,14 +38,13 @@ namespace InTechNet.Api.Controllers
             Summary = "Get a list of all subcriptions available",
             Tags = new[]
             {
-                SwaggerTag.Subscription,
+                SwaggerTag.SubscriptionPlan,
             }
         )]
-        public ActionResult<IEnumerable<SubscriptionDto>> GetHubs()
+        public ActionResult<IEnumerable<SubscriptionPlanDto>> GetHubs()
         {
             try
             {
-
                 var subscriptions = _subscriptionService.GetAllSubscriptions();
 
                 return Ok(subscriptions);

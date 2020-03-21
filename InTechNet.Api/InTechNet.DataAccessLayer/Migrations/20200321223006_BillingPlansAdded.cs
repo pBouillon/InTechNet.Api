@@ -27,9 +27,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                     IdSubscription = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SubscriptionName = table.Column<string>(nullable: true),
-                    HubMaxNumber = table.Column<int>(nullable: false),
+                    MaxHubPerModeratorAccount = table.Column<int>(nullable: false),
                     SubscriptionPrice = table.Column<decimal>(nullable: false),
-                    AttendeeMaxNumber = table.Column<string>(nullable: true)
+                    MaxAttendeesPerHub = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {

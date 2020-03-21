@@ -6,7 +6,8 @@ using System.Linq;
 
 namespace InTechNet.Service.Subscription
 {
-    public class SubscriptionService : ISubscriptionService
+    /// <inheritdoc cref="ISubscriptionPlanService" />
+    public class SubscriptionPlanService : ISubscriptionPlanService
     {
         /// <summary>
         /// Database context
@@ -17,20 +18,16 @@ namespace InTechNet.Service.Subscription
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public SubscriptionService(InTechNetContext context)
+        public SubscriptionPlanService(InTechNetContext context)
             => _context = context;
 
         /// <inheritdoc cref="ISubscriptionService.getAllSubscriptions" />
-        public IEnumerable<SubscriptionDto> GetAllSubscriptions()
+        public IEnumerable<SubscriptionPlanDto> GetAllSubscriptions()
         {
-            
-
-            var AllSubscription =  _context.Subscriptions.ToList();
-
-            return AllSubscription.AsQueryable().Select( _ => new SubscriptionDto
+            return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
             {
                 IdSubscription = _.IdSubscription,
-                HubMaxNumber = _.HubMaxNumber,
+                HubMaxNumber = _.MaxHubPerModeratorAccount,
                 SubscriptionName = _.SubscriptionName,
                 SubscriptionPrice = _.SubscriptionPrice
             });
