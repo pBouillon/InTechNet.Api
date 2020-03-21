@@ -111,8 +111,8 @@ namespace InTechNet.Service.User
             _context.SaveChanges();
         }
 
-        /// <inheritdoc cref="IPupilService.CheckNickNameDuplicates" />
-        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        /// <inheritdoc cref="IPupilService.IsNicknameAlreadyInUse" />
+        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
         {
             return !_context.Pupils
                 .Any(_ =>

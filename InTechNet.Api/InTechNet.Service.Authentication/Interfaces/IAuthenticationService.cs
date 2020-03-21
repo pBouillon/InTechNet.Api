@@ -38,12 +38,12 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// Check the email written by the user
         /// </summary>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto);
+        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
 
         /// <summary>
         /// Check the nickname written by the user
         /// </summary>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto);
+        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
     }
 }

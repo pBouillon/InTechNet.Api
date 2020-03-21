@@ -87,13 +87,13 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<bool> EmailCheckDuplicates(
+        public ActionResult<bool> IsEmailAlreadyInUse(
             [FromBody, SwaggerParameter("Email to check")] EmailDuplicationCheckDto emailDto)
         {
             try
             {
                 return Ok(
-                    _authenticationService.CheckEmailDuplicates(emailDto));
+                    _authenticationService.IsEmailAlreadyInUse(emailDto));
             }
             catch (BaseException ex)
             {
@@ -120,13 +120,13 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderator
             }
         )]
-        public ActionResult<bool> NicknameCheckDuplicates(
+        public ActionResult<bool> IsNicknameAlreadyInUse(
             [FromBody, SwaggerParameter("Email to check")] NicknameDuplicationCheckDto nicknameDto)
         {
             try
             {
                 return Ok(
-                    _authenticationService.CheckNickNameDuplicates(nicknameDto));
+                    _authenticationService.IsNicknameAlreadyInUse(nicknameDto));
             }
             catch (BaseException ex)
             {

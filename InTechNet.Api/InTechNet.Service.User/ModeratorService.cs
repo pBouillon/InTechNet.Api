@@ -118,7 +118,7 @@ namespace InTechNet.Service.User
         }
 
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto)
+        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
         {
             return !_context.Moderators
                 .Any(_ =>
@@ -126,8 +126,8 @@ namespace InTechNet.Service.User
                 );
         }
 
-        /// <inheritdoc cref="IModeratorService.CheckNickNameDuplicates" />
-        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        /// <inheritdoc cref="IModeratorService.IsNicknameAlreadyInUse" />
+        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
         {
             return !_context.Moderators
                 .Any(_ =>

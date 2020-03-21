@@ -62,17 +62,17 @@ namespace InTechNet.Service.User
             _pupilService.RegisterPupil(newPupilData);
         }
 
-        /// <inheritdoc cref="IUserService.CheckEmailDuplicates" />
-        public bool CheckEmailDuplicates(EmailDuplicationCheckDto emailDto)
+        /// <inheritdoc cref="IUserService.IsEmailAlreadyInUse" />
+        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
         {
-            return _moderatorService.CheckEmailDuplicates(emailDto);
+            return _moderatorService.IsEmailAlreadyInUse(emailDto);
         }
 
-        /// <inheritdoc cref="IUserService.CheckNickNameDuplicates" />
-        public bool CheckNickNameDuplicates(NicknameDuplicationCheckDto nicknameDto)
+        /// <inheritdoc cref="IUserService.IsNicknameAlreadyInUse" />
+        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
         {
-            return _moderatorService.CheckNickNameDuplicates(nicknameDto)
-                && _pupilService.CheckNickNameDuplicates(nicknameDto);
+            return _moderatorService.IsNicknameAlreadyInUse(nicknameDto)
+                && _pupilService.IsNicknameAlreadyInUse(nicknameDto);
         }
     }
 }
