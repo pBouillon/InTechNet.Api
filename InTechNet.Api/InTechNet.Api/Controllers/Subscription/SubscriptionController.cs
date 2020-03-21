@@ -4,6 +4,7 @@ using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
 using InTechNet.Service.Subscription.Interfaces;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
@@ -15,7 +16,7 @@ namespace InTechNet.Api.Controllers
     public class SubscriptionController : ControllerBase
     {
         /// <summary>
-        /// Hub service for hub related operations
+        /// Subscription service for subscription related operations
         /// </summary>
         private readonly ISubscriptionService _subscriptionService;
 
@@ -30,7 +31,7 @@ namespace InTechNet.Api.Controllers
         /// Get a list of all hubs owned by the current moderator
         /// </summary>
         [HttpGet]
-        [ModeratorClaimRequired]
+        [AllowAnonymous]
         [SwaggerResponse(200, "Subscriptions successfully fetched")]
         [SwaggerResponse(401, "Subscriptions fetching failed")]
         [SwaggerOperation(
