@@ -1,5 +1,4 @@
-﻿using System;
-using InTechNet.DataAccessLayer.Entities;
+﻿using InTechNet.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace InTechNet.DataAccessLayer

@@ -1,19 +1,12 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Hub.Interfaces;
-using InTechNet.Service.Subscription;
 using InTechNet.Service.Subscription.Interfaces;
-using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 
 namespace InTechNet.Api.Controllers
 {

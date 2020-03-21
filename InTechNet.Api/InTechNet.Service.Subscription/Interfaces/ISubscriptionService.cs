@@ -1,7 +1,5 @@
 ﻿using InTechNet.Common.Dto.Subscription;
-using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace InTechNet.Service.Subscription.Interfaces
 {
