@@ -10,7 +10,7 @@ using System.Collections.Generic;
 
 namespace InTechNet.Api.Controllers
 {
-    [Route("api/[controller]")]
+    [Route("api/v1/[controller]")]
     [ApiController]
     public class SubscriptionController : ControllerBase
     {
