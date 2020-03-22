@@ -21,7 +21,7 @@ namespace InTechNet.Service.Subscription
         public SubscriptionPlanService(InTechNetContext context)
             => _context = context;
 
-        /// <inheritdoc cref="ISubscriptionService.getAllSubscriptions" />
+        /// <inheritdoc cref="ISubscriptionPlanService.GetAllSubscriptions" />
         public IEnumerable<SubscriptionPlanDto> GetAllSubscriptions()
         {
             return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
@@ -29,7 +29,9 @@ namespace InTechNet.Service.Subscription
                 IdSubscriptionPlan = _.IdSubscriptionPlan,
                 MaxHubPerModeratorAccount = _.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = _.SubscriptionPlanName,
-                SubscriptionPlanPrice = _.SubscriptionPlanPrice
+                SubscriptionPlanPrice = _.SubscriptionPlanPrice,
+                MaxAttendeesPerHub = _.MaxAttendeesPerHub
+                
             });
         }
     }

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200322120539_AddBillingPlan")]
-    partial class AddBillingPlan
+    [Migration("20200322123759_InTechNetMigrationBaseAndBilling")]
+    partial class InTechNetMigrationBaseAndBilling
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -172,6 +172,16 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasKey("IdSubscriptionPlan");
 
                     b.ToTable("subscription_plan","public");
+
+                    b.HasData(
+                        new
+                        {
+                            IdSubscriptionPlan = 1,
+                            MaxAttendeesPerHub = 32,
+                            MaxHubPerModeratorAccount = 3,
+                            SubscriptionPlanName = "Standard",
+                            SubscriptionPlanPrice = 0.0m
+                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>

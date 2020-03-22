@@ -170,6 +170,16 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasKey("IdSubscriptionPlan");
 
                     b.ToTable("subscription_plan","public");
+
+                    b.HasData(
+                        new
+                        {
+                            IdSubscriptionPlan = 1,
+                            MaxAttendeesPerHub = 32,
+                            MaxHubPerModeratorAccount = 3,
+                            SubscriptionPlanName = "Standard",
+                            SubscriptionPlanPrice = 0.0m
+                        });
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>
