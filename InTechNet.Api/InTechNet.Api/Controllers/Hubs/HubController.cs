@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using System.Net;
 using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
@@ -42,8 +43,8 @@ namespace InTechNet.Api.Controllers.Hubs
         /// <param name="hubCreation"><see cref="HubCreationDto" /> holding information on the hub to be created</param>
         [HttpPost]
         [ModeratorClaimRequired]
-        [SwaggerResponse(200, "Hub successfully created")]
-        [SwaggerResponse(400, "Hub creation failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully created")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub creation failed")]
         [SwaggerOperation(
             Summary = "Creation endpoint to add a new hub to the currently logged moderator",
             Tags = new[]
@@ -81,8 +82,8 @@ namespace InTechNet.Api.Controllers.Hubs
         /// <param name="hubDeletion"><see cref="HubDeletionDto" /> holding information on the hub to be deleted</param>
         [HttpDelete]
         [ModeratorClaimRequired]
-        [SwaggerResponse(200, "Hub successfully deleted")]
-        [SwaggerResponse(401, "Hub deletion failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully deleted")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub deletion failed")]
         [SwaggerOperation(
             Summary = "Deletion endpoint to remove an existing hub",
             Tags = new[]
@@ -113,8 +114,8 @@ namespace InTechNet.Api.Controllers.Hubs
         /// </summary>
         [HttpGet("{hubId}")]
         [ModeratorClaimRequired]
-        [SwaggerResponse(200, "Hub successfully fetched")]
-        [SwaggerResponse(401, "Hub fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub fetching failed")]
         [SwaggerOperation(
             Summary = "Get the details of a requested hub",
             Tags = new[]
@@ -144,8 +145,8 @@ namespace InTechNet.Api.Controllers.Hubs
         /// </summary>
         [HttpGet]
         [ModeratorClaimRequired]
-        [SwaggerResponse(200, "Hubs successfully fetched")]
-        [SwaggerResponse(401, "Hubs fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hubs fetching failed")]
         [SwaggerOperation(
             Summary = "Get a list of all hubs owned by the current moderator",
             Tags = new[]
@@ -162,6 +163,38 @@ namespace InTechNet.Api.Controllers.Hubs
                 var hubs = _hubService.GetModeratorHubs(currentModerator);
 
                 return Ok(hubs);
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        /// <summary>
+        /// Update a specific hub
+        /// </summary>
+        [HttpPut]
+        [ModeratorClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully updated")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub update failed")]
+        [SwaggerOperation(
+            Summary = "Update hub's data",
+            Tags = new[]
+            {
+                SwaggerTag.Hub,
+            }
+        )]
+        public IActionResult UpdateHub(
+            [FromBody, SwaggerParameter("Data for hub update")] HubUpdateDto hubUpdate)
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+
+                _hubService.UpdateHub(currentModerator, hubUpdate);
+
+                return Ok();
             }
             catch (BaseException ex)
             {

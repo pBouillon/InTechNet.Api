@@ -18,6 +18,11 @@ namespace InTechNet.Common.Dto.Hub
         public string Name { get; set; }
 
         /// <summary>
+        /// Description of the hub
+        /// </summary>
+        public string Description { get; set; }
+
+        /// <summary>
         /// Link of the hub, must be unique
         /// </summary>
         /// <remarks>
