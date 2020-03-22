@@ -31,7 +31,6 @@ namespace InTechNet.Service.Subscription
                 SubscriptionPlanName = _.SubscriptionPlanName,
                 SubscriptionPlanPrice = _.SubscriptionPlanPrice,
                 MaxAttendeesPerHub = _.MaxAttendeesPerHub
-                
             });
         }
     }
