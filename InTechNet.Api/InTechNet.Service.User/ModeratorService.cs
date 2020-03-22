@@ -45,7 +45,7 @@ namespace InTechNet.Service.User
 
             // Retrieve the user associated with this login
             var moderator = _context.Moderators
-                .Include(_ => _.ModeratorSubscription)
+                .Include(_ => _.ModeratorSubscriptionPlan)
                 .Include(_ => _.Hubs)
                 .FirstOrDefault(_ =>
                     _.ModeratorNickname == login
@@ -62,12 +62,15 @@ namespace InTechNet.Service.User
                 throw new InvalidCredentialsException();
             }
 
+            var moderatorSubscriptionPlan = moderator.ModeratorSubscriptionPlan;
+
             SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
             {
-                IdSubscription = moderator.ModeratorSubscription.IdSubscription,
-                HubMaxNumber = moderator.ModeratorSubscription.MaxHubPerModeratorAccount,
-                SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
-                SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
+                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
+                SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
             };
 
             // Return the DTO associated to the moderator without its password
@@ -85,17 +88,20 @@ namespace InTechNet.Service.User
         public ModeratorDto GetModerator(int moderatorId)
         {
             var moderator = _context.Moderators
-                .Include(_ => _.ModeratorSubscription)
+                .Include(_ => _.ModeratorSubscriptionPlan)
                 .Include(_ => _.Hubs)
                 .FirstOrDefault(_ => _.IdModerator == moderatorId) 
                             ?? throw new UnknownUserException();
 
+            var moderatorSubscriptionPlan = moderator.ModeratorSubscriptionPlan;
+
             SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
             {
-                IdSubscription = moderator.ModeratorSubscription.IdSubscription,
-                HubMaxNumber = moderator.ModeratorSubscription.MaxHubPerModeratorAccount,
-                SubscriptionName = moderator.ModeratorSubscription.SubscriptionName,
-                SubscriptionPrice = moderator.ModeratorSubscription.SubscriptionPrice
+                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
+                SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
             };
 
             return new ModeratorDto
@@ -125,12 +131,14 @@ namespace InTechNet.Service.User
             // Generate a random salt for this moderator
             var salt = InTechNetSecurity.GetSalt();
 
+            FreeSubscriptionPlan freeSubscriptionPlan = new FreeSubscriptionPlan();
+
             // Salting the password
             var saltedPassword = newModeratorData.Password.HashedWith(salt);
 
             // Getting the free subscription
             var subscription = _context.SubscriptionPlans.First(_ =>
-                _.SubscriptionName == SubscriptionPlanUtil.CommunityEdition);
+                _.SubscriptionPlanName == freeSubscriptionPlan.SubscriptionPlanName);
 
             // Record the new moderator
             _context.Moderators.Add(new Moderator
@@ -140,7 +148,7 @@ namespace InTechNet.Service.User
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,
                 ModeratorSalt = salt,
-                ModeratorSubscription = subscription
+                ModeratorSubscriptionPlan = subscription
             });
 
             _context.SaveChanges();

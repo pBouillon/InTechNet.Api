@@ -3,12 +3,12 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
-    public partial class BillingPlansAdded : Migration
+    public partial class AddBillingPlan : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.AddColumn<int>(
-                name: "ModeratorSubscriptionIdSubscription",
+                name: "ModeratorSubscriptionPlanIdSubscriptionPlan",
                 schema: "public",
                 table: "moderator",
                 nullable: true);
@@ -20,57 +20,57 @@ namespace InTechNet.DataAccessLayer.Migrations
                 nullable: true);
 
             migrationBuilder.CreateTable(
-                name: "subscription",
+                name: "subscription_plan",
                 schema: "public",
                 columns: table => new
                 {
-                    IdSubscription = table.Column<int>(nullable: false)
+                    IdSubscriptionPlan = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    SubscriptionName = table.Column<string>(nullable: true),
+                    SubscriptionPlanName = table.Column<string>(nullable: true),
                     MaxHubPerModeratorAccount = table.Column<int>(nullable: false),
-                    SubscriptionPrice = table.Column<decimal>(nullable: false),
+                    SubscriptionPlanPrice = table.Column<decimal>(nullable: false),
                     MaxAttendeesPerHub = table.Column<string>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_subscription", x => x.IdSubscription);
+                    table.PrimaryKey("PK_subscription_plan", x => x.IdSubscriptionPlan);
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_moderator_ModeratorSubscriptionIdSubscription",
+                name: "IX_moderator_ModeratorSubscriptionPlanIdSubscriptionPlan",
                 schema: "public",
                 table: "moderator",
-                column: "ModeratorSubscriptionIdSubscription");
+                column: "ModeratorSubscriptionPlanIdSubscriptionPlan");
 
             migrationBuilder.AddForeignKey(
-                name: "FK_moderator_subscription_ModeratorSubscriptionIdSubscription",
+                name: "FK_moderator_subscription_plan_ModeratorSubscriptionPlanIdSubs~",
                 schema: "public",
                 table: "moderator",
-                column: "ModeratorSubscriptionIdSubscription",
+                column: "ModeratorSubscriptionPlanIdSubscriptionPlan",
                 principalSchema: "public",
-                principalTable: "subscription",
-                principalColumn: "IdSubscription",
+                principalTable: "subscription_plan",
+                principalColumn: "IdSubscriptionPlan",
                 onDelete: ReferentialAction.Restrict);
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)
         {
             migrationBuilder.DropForeignKey(
-                name: "FK_moderator_subscription_ModeratorSubscriptionIdSubscription",
+                name: "FK_moderator_subscription_plan_ModeratorSubscriptionPlanIdSubs~",
                 schema: "public",
                 table: "moderator");
 
             migrationBuilder.DropTable(
-                name: "subscription",
+                name: "subscription_plan",
                 schema: "public");
 
             migrationBuilder.DropIndex(
-                name: "IX_moderator_ModeratorSubscriptionIdSubscription",
+                name: "IX_moderator_ModeratorSubscriptionPlanIdSubscriptionPlan",
                 schema: "public",
                 table: "moderator");
 
             migrationBuilder.DropColumn(
-                name: "ModeratorSubscriptionIdSubscription",
+                name: "ModeratorSubscriptionPlanIdSubscriptionPlan",
                 schema: "public",
                 table: "moderator");
 

@@ -100,7 +100,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("ModeratorSalt")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ModeratorSubscriptionIdSubscription")
+                    b.Property<int?>("ModeratorSubscriptionPlanIdSubscriptionPlan")
                         .HasColumnType("integer");
 
                     b.HasKey("IdModerator");
@@ -111,7 +111,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("ModeratorNickname")
                         .HasName("index_moderator_nickname");
 
-                    b.HasIndex("ModeratorSubscriptionIdSubscription");
+                    b.HasIndex("ModeratorSubscriptionPlanIdSubscriptionPlan");
 
                     b.ToTable("moderator","public");
                 });
@@ -150,7 +150,7 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", b =>
                 {
-                    b.Property<int>("IdSubscription")
+                    b.Property<int>("IdSubscriptionPlan")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -161,15 +161,15 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");
 
-                    b.Property<string>("SubscriptionName")
+                    b.Property<string>("SubscriptionPlanName")
                         .HasColumnType("text");
 
-                    b.Property<decimal>("SubscriptionPrice")
+                    b.Property<decimal>("SubscriptionPlanPrice")
                         .HasColumnType("numeric");
 
-                    b.HasKey("IdSubscription");
+                    b.HasKey("IdSubscriptionPlan");
 
-                    b.ToTable("subscription","public");
+                    b.ToTable("subscription_plan","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>
@@ -192,9 +192,9 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscription")
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscriptionPlan")
                         .WithMany("Moderators")
-                        .HasForeignKey("ModeratorSubscriptionIdSubscription");
+                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan");
                 });
 #pragma warning restore 612, 618
         }

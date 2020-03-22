@@ -4,11 +4,14 @@ using System.Text;
 
 namespace InTechNet.Common.Utils.SubscriptionPlan
 {
-    public class SubscriptionPlanUtil
+    /// <summary>
+    /// Abstract class for all subscription plans
+    /// </summary>
+    public abstract class BaseSubscriptionPlan
     {
         /// <summary>
         /// Name of the free subscription plan
         /// </summary>
-        public const string CommunityEdition = "community";
+        public abstract string SubscriptionPlanName { get; }
     }
 }

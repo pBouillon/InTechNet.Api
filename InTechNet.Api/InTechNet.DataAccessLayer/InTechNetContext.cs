@@ -43,7 +43,7 @@ namespace InTechNet.DataAccessLayer
         {
             modelBuilder.Entity<SubscriptionPlan>()
                 .HasMany(_ => _.Moderators)
-                .WithOne(_ => _.ModeratorSubscription);
+                .WithOne(_ => _.ModeratorSubscriptionPlan);
 
             modelBuilder.Entity<Hub>()
                 .HasMany(_ => _.Attendees)

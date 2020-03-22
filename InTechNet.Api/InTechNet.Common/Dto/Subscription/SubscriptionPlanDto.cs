@@ -5,23 +5,28 @@ namespace InTechNet.Common.Dto.Subscription
     public class SubscriptionPlanDto
     {
         /// <summary>
-        /// Unique ID of the subscription
+        /// Unique ID of the subscription plan
         /// </summary>
-        public int IdSubscription { get; set; }
+        public int IdSubscriptionPlan { get; set; }
 
         /// <summary>
-        /// Name of the subscription
+        /// Name of the subscription plan
         /// </summary>
-        public string SubscriptionName { get; set; }
+        public string SubscriptionPlanName { get; set; }
 
         /// <summary>
         /// Maximum number of hub
         /// </summary>
-        public int HubMaxNumber { get; set; }
+        public int MaxHubPerModeratorAccount { get; set; }
 
         /// <summary>
-        /// Price of the subscription
+        /// Maximum number of attendee per hub
         /// </summary>
-        public Decimal SubscriptionPrice { get; set; }
+        public string MaxAttendeesPerHub { get; set; }
+
+        /// <summary>
+        /// Price of the subscription plan
+        /// </summary>
+        public Decimal SubscriptionPlanPrice { get; set; }
     }
 }

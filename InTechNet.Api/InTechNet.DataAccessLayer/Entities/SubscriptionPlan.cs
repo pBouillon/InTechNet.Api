@@ -5,7 +5,7 @@ using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entities
 {
-    [Table("subscription", Schema = "public")]
+    [Table("subscription_plan", Schema = "public")]
     public class SubscriptionPlan
     {
         /// <summary>
@@ -13,12 +13,12 @@ namespace InTechNet.DataAccessLayer.Entities
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdSubscription { get; set; }
+        public int IdSubscriptionPlan { get; set; }
 
         /// <summary>
         /// Name of the subscription
         /// </summary>
-        public string SubscriptionName { get; set; }
+        public string SubscriptionPlanName { get; set; }
 
         /// <summary>
         /// Maximum number of hub
@@ -28,7 +28,7 @@ namespace InTechNet.DataAccessLayer.Entities
         /// <summary>
         /// Price of the subscription
         /// </summary>
-        public Decimal SubscriptionPrice { get; set; }
+        public Decimal SubscriptionPlanPrice { get; set; }
 
         /// <summary>
         /// Maximum number of attendee per hub

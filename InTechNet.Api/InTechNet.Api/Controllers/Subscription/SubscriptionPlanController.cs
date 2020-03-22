@@ -18,14 +18,14 @@ namespace InTechNet.Api.Controllers
         /// <summary>
         /// Subscription service for subscription related operations
         /// </summary>
-        private readonly ISubscriptionPlanService _subscriptionService;
+        private readonly ISubscriptionPlanService _subscriptionPlanService;
 
         /// <summary>
         /// Constructor for subscription related endpoints
         /// </summary>
-        /// <param name="subscriptionService">Subscription service for subscription related operations</param>
-        public SubscriptionPlanController(ISubscriptionPlanService subscriptionService)
-            => _subscriptionService = subscriptionService;
+        /// <param name="subscriptionPlanService">Subscription service for subscription related operations</param>
+        public SubscriptionPlanController(ISubscriptionPlanService subscriptionPlanService)
+            => _subscriptionPlanService = subscriptionPlanService;
 
         /// <summary>
         /// Get a list of all hubs owned by the current moderator
@@ -35,7 +35,7 @@ namespace InTechNet.Api.Controllers
         [SwaggerResponse(200, "Subscriptions successfully fetched")]
         [SwaggerResponse(401, "Subscriptions fetching failed")]
         [SwaggerOperation(
-            Summary = "Get a list of all subcriptions available",
+            Summary = "Get a list of all subscriptions available",
             Tags = new[]
             {
                 SwaggerTag.SubscriptionPlan,
@@ -45,9 +45,9 @@ namespace InTechNet.Api.Controllers
         {
             try
             {
-                var subscriptions = _subscriptionService.GetAllSubscriptions();
+                var subscriptionPlans = _subscriptionPlanService.GetAllSubscriptions();
 
-                return Ok(subscriptions);
+                return Ok(subscriptionPlans);
             }
             catch (BaseException ex)
             {
