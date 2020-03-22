@@ -29,7 +29,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     SubscriptionPlanName = table.Column<string>(nullable: true),
                     MaxHubPerModeratorAccount = table.Column<int>(nullable: false),
                     SubscriptionPlanPrice = table.Column<decimal>(nullable: false),
-                    MaxAttendeesPerHub = table.Column<string>(nullable: true)
+                    MaxAttendeesPerHub = table.Column<int>(nullable: false)
                 },
                 constraints: table =>
                 {

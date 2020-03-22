@@ -155,8 +155,8 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("MaxAttendeesPerHub")
-                        .HasColumnType("text");
+                    b.Property<int>("MaxAttendeesPerHub")
+                        .HasColumnType("integer");
 
                     b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");

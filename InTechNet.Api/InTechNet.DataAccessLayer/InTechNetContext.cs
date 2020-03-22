@@ -81,11 +81,13 @@ namespace InTechNet.DataAccessLayer
         private static void PopulateSubscriptionPlans(ModelBuilder modelBuilder)
         {
             var subscriptionPlans = new Queue<SubscriptionPlan>();
+            var subscriptionId = 0;
 
             // Free plan
             var freeSubscriptionPlan = new FreeSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
+                IdSubscriptionPlan = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
@@ -93,7 +95,7 @@ namespace InTechNet.DataAccessLayer
                 SubscriptionPlanPrice = freeSubscriptionPlan.Price
             });
 
-            modelBuilder.Entity<Pupil>()
+            modelBuilder.Entity<SubscriptionPlan>()
                 .HasData(subscriptionPlans);
         }
     }

@@ -13,6 +13,8 @@
     <Compile Remove="Migrations\20200321223006_BillingPlansAdded.Designer.cs" />
     <Compile Remove="Migrations\20200322104312_AddBillingPlan.cs" />
     <Compile Remove="Migrations\20200322104312_AddBillingPlan.Designer.cs" />
+    <Compile Remove="Migrations\20200322110028_AddBillingPlan.cs" />
+    <Compile Remove="Migrations\20200322110028_AddBillingPlan.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

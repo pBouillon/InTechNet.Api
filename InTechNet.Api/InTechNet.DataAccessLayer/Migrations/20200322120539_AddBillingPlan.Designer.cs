@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200322110028_AddBillingPlan")]
+    [Migration("20200322120539_AddBillingPlan")]
     partial class AddBillingPlan
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -157,8 +157,8 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<string>("MaxAttendeesPerHub")
-                        .HasColumnType("text");
+                    b.Property<int>("MaxAttendeesPerHub")
+                        .HasColumnType("integer");
 
                     b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");
