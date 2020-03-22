@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.User.Moderator;
+﻿using InTechNet.Common.Dto.Subscription;
+using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
@@ -8,6 +9,8 @@ using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User.Helpers;
 using InTechNet.Service.User.Interfaces;
+using InTechNet.Common.Utils.SubscriptionPlan;
+using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
 using System.Linq;
 
@@ -42,6 +45,8 @@ namespace InTechNet.Service.User
 
             // Retrieve the user associated with this login
             var moderator = _context.Moderators
+                .Include(_ => _.ModeratorSubscriptionPlan)
+                .Include(_ => _.Hubs)
                 .FirstOrDefault(_ =>
                     _.ModeratorNickname == login
                     || _.ModeratorEmail == login);
@@ -52,7 +57,21 @@ namespace InTechNet.Service.User
             var hashedPassword = password.HashedWith(moderator.ModeratorSalt);
 
             // Assert that the provided password matches the stored one
-            if (hashedPassword != moderator.ModeratorPassword) throw new InvalidCredentialsException();
+            if (hashedPassword != moderator.ModeratorPassword)
+            {
+                throw new InvalidCredentialsException();
+            }
+
+            var moderatorSubscriptionPlan = moderator.ModeratorSubscriptionPlan;
+
+            SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
+            {
+                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
+                SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+            };
 
             // Return the DTO associated to the moderator without its password
             return new ModeratorDto
@@ -60,6 +79,8 @@ namespace InTechNet.Service.User
                 Id = moderator.IdModerator,
                 Email = moderator.ModeratorEmail,
                 Nickname = moderator.ModeratorNickname,
+                NumberOfHub = moderator.Hubs.Count(),
+                SubscriptionPlanDto = subscriptionPlanDtoForCurrentModerator
             };
         }
 
@@ -67,14 +88,29 @@ namespace InTechNet.Service.User
         public ModeratorDto GetModerator(int moderatorId)
         {
             var moderator = _context.Moderators
+                .Include(_ => _.ModeratorSubscriptionPlan)
+                .Include(_ => _.Hubs)
                 .FirstOrDefault(_ => _.IdModerator == moderatorId) 
                             ?? throw new UnknownUserException();
+
+            var moderatorSubscriptionPlan = moderator.ModeratorSubscriptionPlan;
+
+            SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
+            {
+                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
+                SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+            };
 
             return new ModeratorDto
             {
                 Nickname = moderator.ModeratorNickname,
                 Email = moderator.ModeratorNickname,
-                Id = moderatorId
+                Id = moderatorId,
+                NumberOfHub = moderator.Hubs.Count(),
+                SubscriptionPlanDto = subscriptionPlanDtoForCurrentModerator
             };
         }
 
@@ -82,18 +118,12 @@ namespace InTechNet.Service.User
         public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             // Assert that its nickname or email is unique in InTechNet database
-            var isEmailDuplicated = _context.Moderators.Any(_ =>
-                _.ModeratorEmail == newModeratorData.Email);
-
-            var isNicknameDuplicated = _context.Moderators.Any(_ =>
-                _.ModeratorNickname == newModeratorData.Nickname);
-
-            if (isEmailDuplicated)
+            if (IsEmailAlreadyInUse(newModeratorData.Email))
             {
                 throw new DuplicatedEmailException();
             }
 
-            if (isNicknameDuplicated)
+            if (IsNicknameAlreadyInUse(newModeratorData.Nickname))
             {
                 throw new DuplicatedIdentifierException();
             }
@@ -101,8 +131,14 @@ namespace InTechNet.Service.User
             // Generate a random salt for this moderator
             var salt = InTechNetSecurity.GetSalt();
 
+            FreeSubscriptionPlan freeSubscriptionPlan = new FreeSubscriptionPlan();
+
             // Salting the password
             var saltedPassword = newModeratorData.Password.HashedWith(salt);
+
+            // Getting the free subscription
+            var subscription = _context.SubscriptionPlans.First(_ =>
+                _.SubscriptionPlanName == freeSubscriptionPlan.SubscriptionPlanName);
 
             // Record the new moderator
             _context.Moderators.Add(new Moderator
@@ -111,27 +147,25 @@ namespace InTechNet.Service.User
                 ModeratorEmail = newModeratorData.Email,
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,
-                ModeratorSalt = salt
+                ModeratorSalt = salt,
+                ModeratorSubscriptionPlan = subscription
             });
 
             _context.SaveChanges();
         }
 
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
+        public bool IsEmailAlreadyInUse(string email)
         {
-            return !_context.Moderators
-                .Any(_ =>
-                    _.ModeratorEmail == emailDto.Email
-                );
+            return _context.Moderators.Any(_ =>
+                    _.ModeratorEmail == email);
         }
 
         /// <inheritdoc cref="IModeratorService.IsNicknameAlreadyInUse" />
-        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
+        public bool IsNicknameAlreadyInUse(string nickname)
         {
-            return !_context.Moderators
-                .Any(_ =>
-                    _.ModeratorNickname == nicknameDto.Nickname);
+            return _context.Moderators.Any(_ =>
+                    _.ModeratorNickname == nickname);
         }
     }
 }

@@ -19,7 +19,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 .HasAnnotation("ProductVersion", "3.1.2")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Attendee", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>
                 {
                     b.Property<int>("IdAttendee")
                         .ValueGeneratedOnAdd()
@@ -47,7 +47,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("attendee","public");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Hub", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
                 {
                     b.Property<int>("IdHub")
                         .ValueGeneratedOnAdd()
@@ -56,6 +56,9 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.Property<DateTime>("HubCreationDate")
                         .HasColumnType("timestamp without time zone");
+
+                    b.Property<string>("HubDescription")
+                        .HasColumnType("text");
 
                     b.Property<string>("HubLink")
                         .HasColumnType("text");
@@ -76,7 +79,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("hub","public");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Moderator", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
                 {
                     b.Property<int>("IdModerator")
                         .ValueGeneratedOnAdd()
@@ -97,6 +100,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("ModeratorSalt")
                         .HasColumnType("text");
 
+                    b.Property<int?>("ModeratorSubscriptionPlanIdSubscriptionPlan")
+                        .HasColumnType("integer");
+
                     b.HasKey("IdModerator");
 
                     b.HasIndex("ModeratorEmail")
@@ -105,10 +111,12 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("ModeratorNickname")
                         .HasName("index_moderator_nickname");
 
+                    b.HasIndex("ModeratorSubscriptionPlanIdSubscriptionPlan");
+
                     b.ToTable("moderator","public");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Pupil", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Pupil", b =>
                 {
                     b.Property<int>("IdPupil")
                         .ValueGeneratedOnAdd()
@@ -140,22 +148,63 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("pupil","public");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Attendee", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Hub", "Hub")
+                    b.Property<int>("IdSubscriptionPlan")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("MaxAttendeesPerHub")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("MaxHubPerModeratorAccount")
+                        .HasColumnType("integer");
+
+                    b.Property<string>("SubscriptionPlanName")
+                        .HasColumnType("text");
+
+                    b.Property<decimal>("SubscriptionPlanPrice")
+                        .HasColumnType("numeric");
+
+                    b.HasKey("IdSubscriptionPlan");
+
+                    b.ToTable("subscription_plan","public");
+
+                    b.HasData(
+                        new
+                        {
+                            IdSubscriptionPlan = 1,
+                            MaxAttendeesPerHub = 32,
+                            MaxHubPerModeratorAccount = 3,
+                            SubscriptionPlanName = "Standard",
+                            SubscriptionPlanPrice = 0.0m
+                        });
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Hub", "Hub")
                         .WithMany("Attendees")
                         .HasForeignKey("HubIdHub");
 
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Pupil", "Pupil")
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Pupil", "Pupil")
                         .WithMany("Attendees")
                         .HasForeignKey("PupilIdPupil");
                 });
 
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entity.Hub", b =>
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
                 {
-                    b.HasOne("InTechNet.DataAccessLayer.Entity.Moderator", "Moderator")
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Moderator", "Moderator")
                         .WithMany("Hubs")
                         .HasForeignKey("ModeratorIdModerator");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscriptionPlan")
+                        .WithMany("Moderators")
+                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan");
                 });
 #pragma warning restore 612, 618
         }

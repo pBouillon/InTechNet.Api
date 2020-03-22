@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InTechNet.Common.Dto.Subscription;
+using System.ComponentModel.DataAnnotations;
 
 namespace InTechNet.Common.Dto.User.Moderator
 {
@@ -28,8 +29,19 @@ namespace InTechNet.Common.Dto.User.Moderator
         public string Email { get; set; }
 
         /// <summary>
+        /// Number of hub of the moderator
+        /// </summary>
+        [Range(0, double.MaxValue)]
+        public int NumberOfHub { get; set; }
+
+        /// <summary>
         /// Moderator's JWT
         /// </summary>
         public string Token { get; set; }
+
+        /// <summary>
+        /// Moderator's Subscription
+        /// </summary>
+        public SubscriptionPlanDto SubscriptionPlanDto { get; set; }
     }
 }

@@ -1,4 +1,5 @@
 ﻿using InTechNet.Api.Errors.Classes;
+using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
@@ -38,6 +39,33 @@ namespace InTechNet.Api.Controllers.Users
             => (_authenticationService, _userService) = (authenticationService, userService);
 
         /// <summary>
+        /// Endpoint for the credentials duplication checks
+        /// </summary>
+        /// <param name="credentials">The credentials to be checked for duplicates</param>
+        /// <returns>
+        /// A <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
+        /// property true if any provided credential is already in use; false otherwise
+        /// </returns>
+        [AllowAnonymous]
+        [HttpGet("identifiers-checks")]
+        [SwaggerResponse(200, "Email not already in use")]
+        [SwaggerResponse(401, "Email already used")]
+        [SwaggerOperation(
+            Summary = "Endpoint for the credential duplicates checks",
+            Tags = new[]
+            {
+                SwaggerTag.Authentication,
+                SwaggerTag.Moderator
+            }
+        )]
+        public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
+            [FromQuery, SwaggerParameter("Credentials to check")] CredentialsCheckDto credentials)
+        {
+            return Ok(
+                _authenticationService.AreCredentialsAlreadyInUse(credentials));
+        }
+
+        /// <summary>
         /// Login end point for a moderator
         /// </summary>
         /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
@@ -68,74 +96,6 @@ namespace InTechNet.Api.Controllers.Users
                     new UnauthorizedError(ex));
             }
         }
-
-
-        /// <summary>
-        /// Endpoint for the email duplication check
-        /// </summary>
-        /// <param name="emailDto">The login parameters as <see cref="EmailDuplicationCheckDto" /></param>
-        /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        [AllowAnonymous]
-        [HttpPost("emailCheck")]
-        [SwaggerResponse(200, "Email not already in use")]
-        [SwaggerResponse(401, "Email already used")]
-        [SwaggerOperation(
-            Summary = "Endpoint for the email check",
-            Tags = new[]
-            {
-                SwaggerTag.Authentication,
-                SwaggerTag.Moderator
-            }
-        )]
-        public ActionResult<bool> IsEmailAlreadyInUse(
-            [FromBody, SwaggerParameter("Email to check")] EmailDuplicationCheckDto emailDto)
-        {
-            try
-            {
-                return Ok(
-                    _authenticationService.IsEmailAlreadyInUse(emailDto));
-            }
-            catch (BaseException ex)
-            {
-                return Unauthorized(
-                    new UnauthorizedError(ex));
-            }
-        }
-
-
-        /// <summary>
-        /// Endpoint for the nickname duplication check
-        /// </summary>
-        /// <param name="nicknameDto">The login parameters as <see cref="NicknameDuplicationCheckDto" /></param>
-        /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        [AllowAnonymous]
-        [HttpPost("nicknameCheck")]
-        [SwaggerResponse(200, "Nickname not already in use")]
-        [SwaggerResponse(401, "Nickname already used")]
-        [SwaggerOperation(
-            Summary = "Endpoint for the nickname check",
-            Tags = new[]
-            {
-                SwaggerTag.Authentication,
-                SwaggerTag.Moderator
-            }
-        )]
-        public ActionResult<bool> IsNicknameAlreadyInUse(
-            [FromBody, SwaggerParameter("Email to check")] NicknameDuplicationCheckDto nicknameDto)
-        {
-            try
-            {
-                return Ok(
-                    _authenticationService.IsNicknameAlreadyInUse(nicknameDto));
-            }
-            catch (BaseException ex)
-            {
-                return Unauthorized(
-                    new UnauthorizedError(ex));
-            }
-        }
-
-
 
         /// <summary>
         /// Registration endpoint to create a new moderator

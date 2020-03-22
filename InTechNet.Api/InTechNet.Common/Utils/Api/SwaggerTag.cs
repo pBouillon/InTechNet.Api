@@ -29,5 +29,10 @@
         /// Endpoint relative to the registration process
         /// </summary>
         public const string Registration = "Registration";
+
+        /// <summary>
+        /// Endpoint relative to the subscription plans available and their process
+        /// </summary>
+        public const string SubscriptionPlan = "SubscriptionPlan";
     }
 }

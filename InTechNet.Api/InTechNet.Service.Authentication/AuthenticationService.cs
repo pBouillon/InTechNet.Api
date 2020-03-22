@@ -37,10 +37,15 @@ namespace InTechNet.Service.Authentication
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
         /// <param name="httpContextAccessor">The current HTTP context accessor</param>
         public AuthenticationService(IUserService userService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+            => (_userService, _jwtService, _httpContextAccessor) = (userService, jwtService, httpContextAccessor);
+
+        /// <inheritdoc cref="IAuthenticationService.AreCredentialsAlreadyInUse" />
+        public CredentialsCheckDto AreCredentialsAlreadyInUse(CredentialsCheckDto credentials)
         {
-            _userService = userService;
-            _jwtService = jwtService;
-            _httpContextAccessor = httpContextAccessor;
+            credentials.AreUnique = !_userService.IsNicknameAlreadyInUse(credentials.Nickname)
+                   && !_userService.IsEmailAlreadyInUse(credentials.Email);
+
+            return credentials;
         }
 
         /// <inheritdoc cref="IAuthenticationService.GetAuthenticatedModerator" />
@@ -95,18 +100,6 @@ namespace InTechNet.Service.Authentication
                               ?? throw new UnknownUserException();
 
             return _userService.GetPupil(Convert.ToInt32(moderatorId));
-        }
-
-        /// <inheritdoc cref="IAuthenticationService.IsEmailAlreadyInUse" />
-        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
-        {
-            return _userService.IsEmailAlreadyInUse(emailDto);
-        }
-
-        /// <inheritdoc cref="IAuthenticationService.IsNicknameAlreadyInUse" />
-        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
-        {
-            return _userService.IsNicknameAlreadyInUse(nicknameDto);
         }
     }
 }

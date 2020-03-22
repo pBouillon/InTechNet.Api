@@ -11,6 +11,16 @@ namespace InTechNet.Service.Authentication.Interfaces
     public interface IAuthenticationService
     {
         /// <summary>
+        /// Check if any of those credentials are in use
+        /// </summary>
+        /// <param name="credentials"></param>
+        /// <returns>
+        /// The <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
+        /// property true if any provided credential is already in use; false otherwise
+        /// </returns>
+        CredentialsCheckDto AreCredentialsAlreadyInUse(CredentialsCheckDto credentials);
+
+        /// <summary>
         /// Authenticate a moderator
         /// </summary>
         /// <returns>The <see cref="ModeratorDto"/> of the authenticated moderator</returns>
@@ -33,17 +43,5 @@ namespace InTechNet.Service.Authentication.Interfaces
         /// </summary>
         /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
         PupilDto GetCurrentPupil();
-
-        /// <summary>
-        /// Check the email written by the user
-        /// </summary>
-        /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
-
-        /// <summary>
-        /// Check the nickname written by the user
-        /// </summary>
-        /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
     }
 }

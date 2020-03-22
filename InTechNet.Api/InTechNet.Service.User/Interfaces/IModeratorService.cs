@@ -33,15 +33,15 @@ namespace InTechNet.Service.User.Interfaces
         /// <summary>
         /// Check the email from the EmailDuplicationCheckDto
         /// </summary>
-        /// <param name="emailDto">A <see cref="EmailDuplicationCheckDto" /> holding the email</param>
+        /// <param name="email">The email to be checked for duplicates</param>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
+        bool IsEmailAlreadyInUse(string email);
 
         /// <summary>
         /// Check the nickname from the NicknameDuplicationCheckDto
         /// </summary>
-        /// <param name="nicknameDto">A <see cref="NicknameDuplicationCheckDto" /> holding the nickname</param>
+        /// <param name="nickname">The nickname to be checked for duplicates</param>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
+        bool IsNicknameAlreadyInUse(string nickname);
     }
 }

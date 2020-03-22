@@ -27,6 +27,11 @@ namespace InTechNet.DataAccessLayer.Entities
         public string HubLink { get; set; }
 
         /// <summary>
+        /// Description of the Hub
+        /// </summary>
+        public string HubDescription { get; set; }
+
+        /// <summary>
         /// Creation date of the Hub
         /// </summary>
         public DateTime HubCreationDate { get; set; }

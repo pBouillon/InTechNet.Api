@@ -1,4 +1,5 @@
-﻿using System;
+﻿using System.Collections.Generic;
+using InTechNet.Common.Utils.SubscriptionPlan;
 using InTechNet.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
@@ -35,8 +36,25 @@ namespace InTechNet.DataAccessLayer
         /// </summary>
         public DbSet<Attendee> Attendees { get; set; }
 
+        /// <summary>
+        /// DbSet for the Subscription Entity
+        /// </summary>
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<SubscriptionPlan>()
+                .HasMany(_ => _.Moderators)
+                .WithOne(_ => _.ModeratorSubscriptionPlan);
+
+            modelBuilder.Entity<Hub>()
+                .HasMany(_ => _.Attendees)
+                .WithOne(_ => _.Hub);
+
+            modelBuilder.Entity<Moderator>()
+                .HasMany(_ => _.Hubs)
+                .WithOne(_ => _.Moderator);
+
             modelBuilder.Entity<Moderator>()
                 .HasIndex(b => b.ModeratorNickname)
                 .HasName("index_moderator_nickname");
@@ -56,6 +74,29 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<Hub>()
                 .HasIndex(b => b.HubLink)
                 .HasName("index_hub_link");
+
+            PopulateSubscriptionPlans(modelBuilder);
+        }
+
+        private static void PopulateSubscriptionPlans(ModelBuilder modelBuilder)
+        {
+            var subscriptionPlans = new Queue<SubscriptionPlan>();
+            var subscriptionId = 0;
+
+            // Free plan
+            var freeSubscriptionPlan = new FreeSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                IdSubscriptionPlan = ++subscriptionId,
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
+                SubscriptionPlanName = freeSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = freeSubscriptionPlan.Price
+            });
+
+            modelBuilder.Entity<SubscriptionPlan>()
+                .HasData(subscriptionPlans);
         }
     }
 }

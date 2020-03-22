@@ -52,17 +52,17 @@ namespace InTechNet.Service.User.Interfaces
         void RegisterPupil(PupilRegistrationDto newPupilData);
 
         /// <summary>
-        /// Check the email from the EmailDuplicationCheckDto
+        /// Check if the provided email is already in use
         /// </summary>
-        /// <param name="emailDto">A <see cref="EmailDuplicationCheckDto" /> holding the email</param>
+        /// <param name="email">The email to be checked for duplicates</param>
         /// /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto);
+        bool IsEmailAlreadyInUse(string email);
 
         /// <summary>
-        /// Check the nickname from the NicknameDuplicationCheckDto
+        /// Check if the provided nickname is already in use
         /// </summary>
-        /// <param name="nicknameDto">A <see cref="NicknameDuplicationCheckDto" /> holding the nickname</param>
+        /// <param name="nickname">The nickname to be checked for duplicates</param>
         /// /// <returns>A bool with value true if email is OK, false otherwise</returns>
-        bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto);
+        bool IsNicknameAlreadyInUse(string nickname);
     }
 }
