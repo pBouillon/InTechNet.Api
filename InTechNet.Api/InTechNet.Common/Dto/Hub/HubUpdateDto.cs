@@ -1,10 +1,15 @@
 ﻿namespace InTechNet.Common.Dto.Hub
 {
     /// <summary>
-    /// <see cref="HubDto" /> specialized for hub creation
+    /// <see cref="HubDto" /> specialized for hub update
     /// </summary>
-    public class HubCreationDto
+    public class HubUpdateDto
     {
+        /// <summary>
+        /// Id of this hub
+        /// </summary>
+        public int Id { get; set; }
+
         /// <summary>
         /// Hub name, must be unique
         /// </summary>

@@ -37,5 +37,12 @@ namespace InTechNet.Service.Hub.Interfaces
         /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
         /// <returns>An <see cref="IEnumerable&lt;LightweightHubDto&gt;" /> of its owned hubs</returns>
         IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto);
+
+        /// <summary>
+        /// Update the hub general information
+        /// </summary>
+        /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
+        /// <param name="hubUpdateDto">The <see cref="HubUpdateDto" /> data for the hub to be updated</param>
+        void UpdateHub(ModeratorDto moderatorDto, HubUpdateDto hubUpdateDto);
     }
 }

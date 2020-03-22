@@ -57,6 +57,7 @@ namespace InTechNet.Service.Hub
                 HubLink = hubLinkGenerated,
                 HubCreationDate = DateTime.Now,
                 Moderator = moderator,
+                HubDescription = newHubDto.Description,
                 Attendees = new List<Attendee>()
             });
 
@@ -88,7 +89,7 @@ namespace InTechNet.Service.Hub
             _context.SaveChanges();
         }
 
-        /// <inheritdoc cref="IHubService.GetModeratorHub"/>
+        /// <inheritdoc cref="IHubService.GetModeratorHub" />
         public HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId)
         {
             try
@@ -106,6 +107,7 @@ namespace InTechNet.Service.Hub
                         Id = _.IdAttendee,
                         IdPupil = _.IdPupil
                     }) ?? new List<AttendeeDto>(),
+                    Description = hub.HubDescription,
                     Id = hub.IdHub,
                     Name = hub.HubName,
                     Link = hub.HubLink,
@@ -117,7 +119,7 @@ namespace InTechNet.Service.Hub
             }
         }
 
-        /// <inheritdoc cref="IHubService.GetModeratorHubs"/>
+        /// <inheritdoc cref="IHubService.GetModeratorHubs" />
         public IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto)
         {
             var moderatorsHubs = _context.Hubs.Where(_ =>
@@ -128,8 +130,48 @@ namespace InTechNet.Service.Hub
                 Name = _.HubName,
                 Link = _.HubLink,
                 Id = _.IdHub,
+                Description = _.HubDescription,
                 AttendeesCount = _.Attendees.Count()
             });
+        }
+
+        /// <inheritdoc cref="IHubService.UpdateHub" />
+        public void UpdateHub(ModeratorDto moderatorDto, HubUpdateDto hubUpdateDto)
+        {
+            // Retrieve the associated moderator to `moderatorDto`
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                                _.IdModerator == moderatorDto.Id)
+                            ?? throw new UnknownUserException();
+
+            // Retrieve the current hub
+            var hub = _context.Hubs.FirstOrDefault(_ =>
+                          _.IdHub == hubUpdateDto.Id)
+                      ?? throw new UnknownHubException();
+
+            // Assert that the moderator is allowed to delete this hub
+            if (moderator.IdModerator != hub.Moderator.IdModerator)
+            {
+                throw new IllegalHubOperationException();
+            }
+
+            // Assert that the name is unique
+            var moderatorHubs = GetModeratorHubs(moderatorDto);
+
+            if (moderatorHubs.Any(_ => 
+                _.Name == hubUpdateDto.Name
+                && _.Id != hubUpdateDto.Id))
+            {
+                throw new DuplicatedHubNameException();
+            }
+
+            // Update hub information
+            hub.HubDescription = hubUpdateDto.Description;
+            hub.HubName = hubUpdateDto.Name;
+
+            // Deleting the hub
+            _context.Hubs.Update(hub);
+
+            _context.SaveChanges();
         }
     }
 }
