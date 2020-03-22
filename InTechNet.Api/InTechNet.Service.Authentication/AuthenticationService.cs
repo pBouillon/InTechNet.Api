@@ -42,8 +42,8 @@ namespace InTechNet.Service.Authentication
         /// <inheritdoc cref="IAuthenticationService.AreCredentialsAlreadyInUse" />
         public CredentialsCheckDto AreCredentialsAlreadyInUse(CredentialsCheckDto credentials)
         {
-            credentials.AreUnique = _userService.IsNicknameAlreadyInUse(credentials.Nickname)
-                   || _userService.IsEmailAlreadyInUse(credentials.Email);
+            credentials.AreUnique = !_userService.IsNicknameAlreadyInUse(credentials.Nickname)
+                   && !_userService.IsEmailAlreadyInUse(credentials.Email);
 
             return credentials;
         }
