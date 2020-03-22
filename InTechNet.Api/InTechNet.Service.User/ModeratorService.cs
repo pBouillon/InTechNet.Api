@@ -112,18 +112,12 @@ namespace InTechNet.Service.User
         public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
             // Assert that its nickname or email is unique in InTechNet database
-            var isEmailDuplicated = _context.Moderators.Any(_ =>
-                _.ModeratorEmail == newModeratorData.Email);
-
-            var isNicknameDuplicated = _context.Moderators.Any(_ =>
-                _.ModeratorNickname == newModeratorData.Nickname);
-
-            if (isEmailDuplicated)
+            if (IsEmailAlreadyInUse(newModeratorData.Email))
             {
                 throw new DuplicatedEmailException();
             }
 
-            if (isNicknameDuplicated)
+            if (IsNicknameAlreadyInUse(newModeratorData.Nickname))
             {
                 throw new DuplicatedIdentifierException();
             }
@@ -153,19 +147,17 @@ namespace InTechNet.Service.User
         }
 
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
-        public bool IsEmailAlreadyInUse(EmailDuplicationCheckDto emailDto)
+        public bool IsEmailAlreadyInUse(string email)
         {
-            return _context.Moderators
-                .Any(_ =>
-                    _.ModeratorEmail == emailDto.Email);
+            return _context.Moderators.Any(_ =>
+                    _.ModeratorEmail == email);
         }
 
         /// <inheritdoc cref="IModeratorService.IsNicknameAlreadyInUse" />
-        public bool IsNicknameAlreadyInUse(NicknameDuplicationCheckDto nicknameDto)
+        public bool IsNicknameAlreadyInUse(string nickname)
         {
-            return _context.Moderators
-                .Any(_ =>
-                    _.ModeratorNickname == nicknameDto.Nickname);
+            return _context.Moderators.Any(_ =>
+                    _.ModeratorNickname == nickname);
         }
     }
 }
