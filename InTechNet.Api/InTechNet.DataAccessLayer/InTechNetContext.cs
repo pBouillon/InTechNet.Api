@@ -1,4 +1,6 @@
-﻿using InTechNet.DataAccessLayer.Entities;
+﻿using System.Collections.Generic;
+using InTechNet.Common.Utils.SubscriptionPlan;
+using InTechNet.DataAccessLayer.Entities;
 using Microsoft.EntityFrameworkCore;
 
 namespace InTechNet.DataAccessLayer
@@ -72,6 +74,27 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<Hub>()
                 .HasIndex(b => b.HubLink)
                 .HasName("index_hub_link");
+
+            PopulateSubscriptionPlans(modelBuilder);
+        }
+
+        private static void PopulateSubscriptionPlans(ModelBuilder modelBuilder)
+        {
+            var subscriptionPlans = new Queue<SubscriptionPlan>();
+
+            // Free plan
+            var freeSubscriptionPlan = new FreeSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
+                SubscriptionPlanName = freeSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = freeSubscriptionPlan.Price
+            });
+
+            modelBuilder.Entity<Pupil>()
+                .HasData(subscriptionPlans);
         }
     }
 }

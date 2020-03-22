@@ -28,12 +28,12 @@ namespace InTechNet.DataAccessLayer.Entities
         /// <summary>
         /// Price of the subscription
         /// </summary>
-        public Decimal SubscriptionPlanPrice { get; set; }
+        public decimal SubscriptionPlanPrice { get; set; }
 
         /// <summary>
         /// Maximum number of attendee per hub
         /// </summary>
-        public string MaxAttendeesPerHub { get; set; }
+        public int MaxAttendeesPerHub { get; set; }
 
         /// <summary>
         /// Moderators using this subscription

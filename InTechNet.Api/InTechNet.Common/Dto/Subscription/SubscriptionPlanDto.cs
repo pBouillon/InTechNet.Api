@@ -22,11 +22,11 @@ namespace InTechNet.Common.Dto.Subscription
         /// <summary>
         /// Maximum number of attendee per hub
         /// </summary>
-        public string MaxAttendeesPerHub { get; set; }
+        public int MaxAttendeesPerHub { get; set; }
 
         /// <summary>
         /// Price of the subscription plan
         /// </summary>
-        public Decimal SubscriptionPlanPrice { get; set; }
+        public decimal SubscriptionPlanPrice { get; set; }
     }
 }
