@@ -65,7 +65,8 @@ namespace InTechNet.Service.User
         /// <inheritdoc cref="IUserService.IsEmailAlreadyInUse" />
         public bool IsEmailAlreadyInUse(string email)
         {
-            return _moderatorService.IsEmailAlreadyInUse(email);
+            return _moderatorService.IsEmailAlreadyInUse(email)
+                || _pupilService.IsEmailAlreadyInUse(email);
         }
 
         /// <inheritdoc cref="IUserService.IsNicknameAlreadyInUse" />
