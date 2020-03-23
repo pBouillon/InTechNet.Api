@@ -6,11 +6,6 @@
     public class HubUpdateDto
     {
         /// <summary>
-        /// Id of this hub
-        /// </summary>
-        public int Id { get; set; }
-
-        /// <summary>
         /// Hub name, must be unique
         /// </summary>
         public string Name { get; set; }

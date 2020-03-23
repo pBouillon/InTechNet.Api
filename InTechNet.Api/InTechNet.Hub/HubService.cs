@@ -65,7 +65,7 @@ namespace InTechNet.Service.Hub
         }
 
         /// <inheritdoc cref="IHubService.DeleteHub" />
-        public void DeleteHub(ModeratorDto moderatorDto, HubDeletionDto hubDeletionData)
+        public void DeleteHub(ModeratorDto moderatorDto, int hubId)
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(_ =>
@@ -74,7 +74,7 @@ namespace InTechNet.Service.Hub
 
             // Retrieve the current hub
             var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.IdHub == hubDeletionData.Id)
+                          _.IdHub == hubId)
                       ?? throw new UnknownHubException();
 
             // Assert that the moderator is allowed to delete this hub
@@ -136,7 +136,7 @@ namespace InTechNet.Service.Hub
         }
 
         /// <inheritdoc cref="IHubService.UpdateHub" />
-        public void UpdateHub(ModeratorDto moderatorDto, HubUpdateDto hubUpdateDto)
+        public void UpdateHub(ModeratorDto moderatorDto, int hubId, HubUpdateDto hubUpdateDto)
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(_ =>
@@ -145,10 +145,10 @@ namespace InTechNet.Service.Hub
 
             // Retrieve the current hub
             var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.IdHub == hubUpdateDto.Id)
+                          _.IdHub == hubId)
                       ?? throw new UnknownHubException();
 
-            // Assert that the moderator is allowed to delete this hub
+            // Assert that the moderator is allowed to update this hub
             if (moderator.IdModerator != hub.Moderator.IdModerator)
             {
                 throw new IllegalHubOperationException();
@@ -159,7 +159,7 @@ namespace InTechNet.Service.Hub
 
             if (moderatorHubs.Any(_ => 
                 _.Name == hubUpdateDto.Name
-                && _.Id != hubUpdateDto.Id))
+                && _.Id != hubId))
             {
                 throw new DuplicatedHubNameException();
             }
