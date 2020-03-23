@@ -79,8 +79,8 @@ namespace InTechNet.Api.Controllers.Hubs
         /// <summary>
         /// Deletion endpoint to remove an existing hub
         /// </summary>
-        /// <param name="hubDeletion"><see cref="HubDeletionDto" /> holding information on the hub to be deleted</param>
-        [HttpDelete]
+        /// <param name="hubId">Id the hub to be deleted</param>
+        [HttpDelete("{hubId}")]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully deleted")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub deletion failed")]
@@ -92,13 +92,13 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         )]
         public IActionResult DeleteHub(
-            [FromBody, SwaggerParameter("Basic data for hub deletion")] HubDeletionDto hubDeletion)
+            [FromRoute, SwaggerParameter("Basic data for hub deletion")] int hubId)
         {
             try
             {
                 var currentModerator = _authenticationService.GetCurrentModerator();
 
-                _hubService.DeleteHub(currentModerator, hubDeletion);
+                _hubService.DeleteHub(currentModerator, hubId);
 
                 return Ok();
             }
@@ -186,7 +186,7 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         )]
         public IActionResult UpdateHub(
-            [FromBody, SwaggerParameter("Data for hub update")] HubUpdateDto hubUpdate)
+            [FromRoute, SwaggerParameter("Data for hub update")] HubUpdateDto hubUpdate)
         {
             try
             {

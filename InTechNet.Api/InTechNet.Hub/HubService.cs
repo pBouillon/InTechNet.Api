@@ -65,7 +65,7 @@ namespace InTechNet.Service.Hub
         }
 
         /// <inheritdoc cref="IHubService.DeleteHub" />
-        public void DeleteHub(ModeratorDto moderatorDto, HubDeletionDto hubDeletionData)
+        public void DeleteHub(ModeratorDto moderatorDto, int hubId)
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(_ =>
@@ -74,7 +74,7 @@ namespace InTechNet.Service.Hub
 
             // Retrieve the current hub
             var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.IdHub == hubDeletionData.Id)
+                          _.IdHub == hubId)
                       ?? throw new UnknownHubException();
 
             // Assert that the moderator is allowed to delete this hub

@@ -20,8 +20,8 @@ namespace InTechNet.Service.Hub.Interfaces
         /// Delete a hub for a moderator
         /// </summary>
         /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
-        /// <param name="hubDeletionData"><see cref="HubDeletionDto" /> containing the minimal information for the hub to be deleted</param>
-        void DeleteHub(ModeratorDto moderatorDto, HubDeletionDto hubDeletionData);
+        /// <param name="hubId">Id of the hub to be deleted</param>
+        void DeleteHub(ModeratorDto moderatorDto, int hubId);
 
         /// <summary>
         /// Retrieve the information for a specific hub
