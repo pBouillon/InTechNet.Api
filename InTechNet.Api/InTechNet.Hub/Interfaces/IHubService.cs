@@ -42,7 +42,8 @@ namespace InTechNet.Service.Hub.Interfaces
         /// Update the hub general information
         /// </summary>
         /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
+        /// <param name="hubId">Id of the hub to be updated</param>
         /// <param name="hubUpdateDto">The <see cref="HubUpdateDto" /> data for the hub to be updated</param>
-        void UpdateHub(ModeratorDto moderatorDto, HubUpdateDto hubUpdateDto);
+        void UpdateHub(ModeratorDto moderatorDto, int hubId, HubUpdateDto hubUpdateDto);
     }
 }
