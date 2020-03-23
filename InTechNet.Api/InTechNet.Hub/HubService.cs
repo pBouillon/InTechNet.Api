@@ -148,7 +148,7 @@ namespace InTechNet.Service.Hub
                           _.IdHub == hubId)
                       ?? throw new UnknownHubException();
 
-            // Assert that the moderator is allowed to delete this hub
+            // Assert that the moderator is allowed to update this hub
             if (moderator.IdModerator != hub.Moderator.IdModerator)
             {
                 throw new IllegalHubOperationException();
