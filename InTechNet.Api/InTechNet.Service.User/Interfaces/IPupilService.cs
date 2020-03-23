@@ -36,5 +36,12 @@ namespace InTechNet.Service.User.Interfaces
         /// <param name="nickname">The nickname to be checked for duplicates</param>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
         bool IsNicknameAlreadyInUse(string nickname);
+
+        /// <summary>
+        /// Check the email from the EmailDuplicationCheckDto
+        /// </summary>
+        /// <param name="email">The email to be checked for duplicates</param>
+        /// <returns>A bool with value true if email is OK, false otherwise</returns>
+        bool IsEmailAlreadyInUse(string email);
     }
 }

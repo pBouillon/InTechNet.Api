@@ -1,5 +1,4 @@
-﻿using InTechNet.Common.Dto.User.Moderator;
-using InTechNet.Common.Dto.User.Pupil;
+﻿using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
@@ -109,6 +108,13 @@ namespace InTechNet.Service.User
             });
 
             _context.SaveChanges();
+        }
+
+        /// <inheritdoc cref="IPupilService.IsEmailAlreadyInUse" />
+        public bool IsEmailAlreadyInUse(string email)
+        {
+            return _context.Pupils.Any(_ =>
+                    _.PupilEmail == email);
         }
 
         /// <inheritdoc cref="IPupilService.IsNicknameAlreadyInUse" />

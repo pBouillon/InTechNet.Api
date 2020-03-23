@@ -39,6 +39,33 @@ namespace InTechNet.Api.Controllers.Users
             => (_authenticationService, _userService) = (authenticationService, userService);
 
         /// <summary>
+        /// Endpoint for the credentials duplication checks
+        /// </summary>
+        /// <param name="credentials">The credentials to be checked for duplicates</param>
+        /// <returns>
+        /// A <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
+        /// property true if any provided credential is already in use; false otherwise
+        /// </returns>
+        [AllowAnonymous]
+        [HttpGet("identifiers-checks")]
+        [SwaggerResponse(200, "Email not already in use")]
+        [SwaggerResponse(401, "Email already used")]
+        [SwaggerOperation(
+            Summary = "Endpoint for the credential duplicates checks",
+            Tags = new[]
+            {
+                SwaggerTag.Authentication,
+                SwaggerTag.Pupil
+            }
+        )]
+        public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
+            [FromQuery, SwaggerParameter("Credentials to check")] CredentialsCheckDto credentials)
+        {
+            return Ok(
+                _authenticationService.AreCredentialsAlreadyInUse(credentials));
+        }
+
+        /// <summary>
         /// Login end point for a pupil
         /// </summary>
         /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
