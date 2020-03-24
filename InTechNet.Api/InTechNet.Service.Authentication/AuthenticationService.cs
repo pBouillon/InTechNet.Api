@@ -108,14 +108,14 @@ namespace InTechNet.Service.Authentication
         }
 
         /// <inheritdoc cref="IAuthenticationService.IsEmailAlreadyInUse" />
-        public bool IsEmailAlreadyInUse(string email)
+        private bool IsEmailAlreadyInUse(string email)
         {
             return _moderatorService.IsEmailAlreadyInUse(email)
                 || _pupilService.IsEmailAlreadyInUse(email);
         }
 
         /// <inheritdoc cref="IAuthenticationService.IsNicknameAlreadyInUse" />
-        public bool IsNicknameAlreadyInUse(string nickname)
+        private bool IsNicknameAlreadyInUse(string nickname)
         {
             return _moderatorService.IsNicknameAlreadyInUse(nickname)
                 || _pupilService.IsNicknameAlreadyInUse(nickname);
