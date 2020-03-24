@@ -49,7 +49,7 @@ namespace InTechNet.Api.Controllers.Hubs
             Summary = "Creation endpoint to add a new hub to the currently logged moderator",
             Tags = new[]
             {
-                SwaggerTag.Hub
+                SwaggerTag.Hubs
             }
         )]
         public IActionResult CreateHub(
@@ -88,7 +88,7 @@ namespace InTechNet.Api.Controllers.Hubs
             Summary = "Deletion endpoint to remove an existing hub",
             Tags = new[]
             {
-                SwaggerTag.Hub
+                SwaggerTag.Hubs
             }
         )]
         public IActionResult DeleteHub(
@@ -120,7 +120,7 @@ namespace InTechNet.Api.Controllers.Hubs
             Summary = "Get the details of a requested hub",
             Tags = new[]
             {
-                SwaggerTag.Hub,
+                SwaggerTag.Hubs,
             }
         )]
         public ActionResult<HubDto> GetHub(int hubId)
@@ -151,7 +151,7 @@ namespace InTechNet.Api.Controllers.Hubs
             Summary = "Get a list of all hubs owned by the current moderator",
             Tags = new[]
             {
-                SwaggerTag.Hub,
+                SwaggerTag.Hubs,
             }
         )]
         public ActionResult<IEnumerable<LightweightHubDto>> GetHubs()
@@ -182,7 +182,7 @@ namespace InTechNet.Api.Controllers.Hubs
             Summary = "Update hub's data",
             Tags = new[]
             {
-                SwaggerTag.Hub,
+                SwaggerTag.Hubs,
             }
         )]
         public IActionResult UpdateHub(

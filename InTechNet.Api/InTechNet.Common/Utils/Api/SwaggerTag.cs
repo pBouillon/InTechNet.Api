@@ -13,26 +13,26 @@
         /// <summary>
         /// Endpoint relative to the hub's logic
         /// </summary>
-        public const string Hub = "Hubs";
+        public const string Hubs = "Hubs";
 
         /// <summary>
         /// Endpoint relative to the moderator's logic
         /// </summary>
-        public const string Moderator = "Moderators";
+        public const string Moderators = "Moderators";
 
         /// <summary>
         /// Endpoint relative to the pupil's logic
         /// </summary>
-        public const string Pupil = "Pupils";
+        public const string Pupils = "Pupils";
 
         /// <summary>
         /// Endpoint relative to the registration process
         /// </summary>
-        public const string Registration = "Registrations";
+        public const string Registrations = "Registrations";
 
         /// <summary>
         /// Endpoint relative to the subscription plans available and their process
         /// </summary>
-        public const string SubscriptionPlan = "SubscriptionPlans";
+        public const string SubscriptionPlans = "SubscriptionPlans";
     }
 }

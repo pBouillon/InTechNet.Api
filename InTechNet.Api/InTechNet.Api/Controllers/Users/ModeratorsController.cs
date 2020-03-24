@@ -34,7 +34,7 @@ namespace InTechNet.Api.Controllers.Users
         /// Controller for hub endpoints relative to moderators management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
-        /// <param name="moderatorService"></param>
+        /// <param name="moderatorService">Moderator service</param>
         public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService)
             => (_authenticationService, _moderatorService) = (authenticationService, moderatorService);
 
@@ -55,7 +55,7 @@ namespace InTechNet.Api.Controllers.Users
             Tags = new[]
             {
                 SwaggerTag.Authentication,
-                SwaggerTag.Moderator
+                SwaggerTag.Moderators
             }
         )]
         public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
@@ -79,7 +79,7 @@ namespace InTechNet.Api.Controllers.Users
             Tags = new[]
             {
                 SwaggerTag.Authentication,
-                SwaggerTag.Moderator
+                SwaggerTag.Moderators
             }
         )]
         public ActionResult<ModeratorDto> Authenticate(
@@ -110,8 +110,8 @@ namespace InTechNet.Api.Controllers.Users
             Summary = "Registration endpoint to create a new moderator",
             Tags = new[]
             {
-                SwaggerTag.Moderator,
-                SwaggerTag.Registration
+                SwaggerTag.Moderators,
+                SwaggerTag.Registrations
             }
         )]
         public IActionResult Register(

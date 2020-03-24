@@ -43,9 +43,9 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
-        /// <param name="authenticationService"></param>
-        /// <param name="pupilService"></param>
-        /// <param name="hubService"></param>
+        /// <param name="authenticationService">Authentication service</param>
+        /// <param name="pupilService">Pupil service</param>
+        /// <param name="hubService">Hub service</param>
         public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
             => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
 
@@ -66,7 +66,7 @@ namespace InTechNet.Api.Controllers.Users
             Tags = new[]
             {
                 SwaggerTag.Authentication,
-                SwaggerTag.Pupil
+                SwaggerTag.Pupils
             }
         )]
         public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
@@ -90,7 +90,7 @@ namespace InTechNet.Api.Controllers.Users
             Tags = new[]
             {
                 SwaggerTag.Authentication,
-                SwaggerTag.Pupil
+                SwaggerTag.Pupils
             }
         )]
         public ActionResult<string> Authenticate(
@@ -119,7 +119,7 @@ namespace InTechNet.Api.Controllers.Users
             Summary = "Get a list of all hubs owned by the current pupil",
             Tags = new[]
             {
-                SwaggerTag.Pupil
+                SwaggerTag.Pupils
             }
         )]
         public ActionResult<IEnumerable<PupilHubDto>> GetHubs()
@@ -152,8 +152,8 @@ namespace InTechNet.Api.Controllers.Users
             Summary = "Registration endpoint to create a new pupil",
             Tags = new[]
             {
-                SwaggerTag.Pupil,
-                SwaggerTag.Registration
+                SwaggerTag.Pupils,
+                SwaggerTag.Registrations
             }
         )]
         public IActionResult Register(

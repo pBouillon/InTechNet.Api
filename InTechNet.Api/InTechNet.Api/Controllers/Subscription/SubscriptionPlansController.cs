@@ -38,7 +38,7 @@ namespace InTechNet.Api.Controllers
             Summary = "Get a list of all subscriptions available",
             Tags = new[]
             {
-                SwaggerTag.SubscriptionPlan,
+                SwaggerTag.SubscriptionPlans,
             }
         )]
         public ActionResult<IEnumerable<SubscriptionPlanDto>> GetHubs()
