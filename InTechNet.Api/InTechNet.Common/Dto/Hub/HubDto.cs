@@ -38,8 +38,8 @@ namespace InTechNet.Common.Dto.Hub
         public int IdModerator { get; set; }
 
         /// <summary>
-        /// Collection of all <see cref="PupilDto" /> attending this hub
+        /// Collection of all <see cref="LightweightPupilDto" /> attending this hub
         /// </summary>
-        public IEnumerable<PupilDto> Attendees { get; set; }
+        public IEnumerable<LightweightPupilDto> Attendees { get; set; }
     }
 }

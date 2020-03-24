@@ -2,6 +2,9 @@
 
 namespace InTechNet.Common.Dto.User.Pupil
 {
+    /// <summary>
+    /// <see cref="Pupil" /> DTO
+    /// </summary>
     public class PupilDto
     {
         /// <summary>

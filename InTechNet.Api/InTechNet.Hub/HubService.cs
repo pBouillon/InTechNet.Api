@@ -107,12 +107,11 @@ namespace InTechNet.Service.Hub
                     _context.Pupils,
                     attendee => attendee.IdPupil,
                     pupil => pupil.IdPupil,
-                    (_, pupil) => new PupilDto
+                    (_, pupil) => new LightweightPupilDto
                     {
-                        Email = pupil.PupilEmail,
                         Nickname = pupil.PupilNickname,
                         Id = pupil.IdPupil
-                    }).ToList() ?? new List<PupilDto>();
+                    }).ToList() ?? new List<LightweightPupilDto>();
 
                 // Return the agglomerated data
                 return new HubDto
