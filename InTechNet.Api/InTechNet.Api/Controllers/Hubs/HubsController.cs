@@ -17,7 +17,7 @@ namespace InTechNet.Api.Controllers.Hubs
     [Authorize]
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class HubController : ControllerBase
+    public class HubsController : ControllerBase
     {
         /// <summary>
         /// Authentication service
@@ -34,7 +34,7 @@ namespace InTechNet.Api.Controllers.Hubs
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="hubService">Hub service for hub related operations</param>
-        public HubController(IAuthenticationService authenticationService, IHubService hubService)
+        public HubsController(IAuthenticationService authenticationService, IHubService hubService)
             => (_authenticationService, _hubService) = (authenticationService, hubService);
 
         /// <summary>
