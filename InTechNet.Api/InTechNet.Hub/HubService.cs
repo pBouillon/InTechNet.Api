@@ -146,6 +146,23 @@ namespace InTechNet.Service.Hub
             });
         }
 
+        /// <inheritdoc cref="IHubService.GetModeratorHubs" />
+        public IEnumerable<PupilHubDto> GetPupilHubs(PupilDto currentPupil)
+        {
+            var pupilsAttendance = _context.Attendees.Include(_ => _.Hub)
+                .Where(_ =>
+                    _.IdPupil == currentPupil.Id);
+
+            return pupilsAttendance.Select(_ => new PupilHubDto
+            {
+                Id = _.IdHub,
+                Description = _.Hub.HubDescription,
+                Link = _.Hub.HubLink,
+                Name = _.Hub.HubName,
+                ModeratorNickname = _.Hub.Moderator.ModeratorNickname
+            });
+        }
+
         /// <inheritdoc cref="IHubService.UpdateHub" />
         public void UpdateHub(ModeratorDto moderatorDto, int hubId, HubUpdateDto hubUpdateDto)
         {

@@ -1,4 +1,6 @@
-﻿using InTechNet.Api.Errors.Classes;
+﻿using InTechNet.Api.Attributes;
+using InTechNet.Api.Errors.Classes;
+using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
@@ -6,10 +8,13 @@ using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Authentication.Interfaces;
+using InTechNet.Service.Hub.Interfaces;
 using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Net;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -31,12 +36,17 @@ namespace InTechNet.Api.Controllers.Users
         private readonly IUserService _userService;
 
         /// <summary>
+        /// Hub service for hub related operations
+        /// </summary>
+        private readonly IHubService _hubService;
+
+        /// <summary>
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService"></param>
         /// <param name="userService"></param>
-        public PupilController(IAuthenticationService authenticationService, IUserService userService)
-            => (_authenticationService, _userService) = (authenticationService, userService);
+        public PupilController(IAuthenticationService authenticationService, IUserService userService, IHubService hubService)
+            => (_authenticationService, _userService, _hubService) = (authenticationService, userService, hubService);
 
         /// <summary>
         /// Endpoint for the credentials duplication checks
@@ -89,6 +99,37 @@ namespace InTechNet.Api.Controllers.Users
             {
                 return Ok(
                     _authenticationService.GetAuthenticatedPupil(authenticationDto));
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        /// <summary>
+        /// Get a list of all hubs owned by the current pupil
+        /// </summary>
+        [HttpGet("me/Hubs")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Hubs successfully fetched")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Hubs fetching failed")]
+        [SwaggerOperation(
+            Summary = "Get a list of all hubs owned by the current pupil",
+            Tags = new[]
+            {
+                SwaggerTag.Pupil
+            }
+        )]
+        public ActionResult<IEnumerable<PupilHubDto>> GetHubs()
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var hubs = _hubService.GetPupilHubs(currentPupil);
+
+                return Ok(hubs);
             }
             catch (BaseException ex)
             {
