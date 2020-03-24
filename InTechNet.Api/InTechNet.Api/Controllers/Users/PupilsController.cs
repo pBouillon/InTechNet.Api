@@ -33,7 +33,7 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// User service for user related operations
         /// </summary>
-        private readonly IUserService _userService;
+        private readonly IPupilService _pupilService;
 
         /// <summary>
         /// Hub service for hub related operations
@@ -44,9 +44,10 @@ namespace InTechNet.Api.Controllers.Users
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService"></param>
-        /// <param name="userService"></param>
-        public PupilsController(IAuthenticationService authenticationService, IUserService userService, IHubService hubService)
-            => (_authenticationService, _userService, _hubService) = (authenticationService, userService, hubService);
+        /// <param name="pupilService"></param>
+        /// <param name="hubService"></param>
+        public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
+            => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
 
         /// <summary>
         /// Endpoint for the credentials duplication checks
@@ -160,7 +161,7 @@ namespace InTechNet.Api.Controllers.Users
         {
             try
             {
-                _userService.RegisterPupil(newPupilData);
+                _pupilService.RegisterPupil(newPupilData);
 
                 var authenticatedPupil = _authenticationService.GetAuthenticatedPupil(new AuthenticationDto
                 {

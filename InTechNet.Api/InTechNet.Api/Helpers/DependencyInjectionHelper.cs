@@ -73,8 +73,6 @@ namespace InTechNet.Api.Helpers
 
             _services.AddTransient<IPupilService, PupilService>();
 
-            _services.AddTransient<IUserService, UserService>();
-
             _services.AddTransient<IHubService, HubService>();
 
             _services.AddTransient<ISubscriptionPlanService, SubscriptionPlanService>();

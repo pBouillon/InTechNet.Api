@@ -28,15 +28,15 @@ namespace InTechNet.Api.Controllers.Users
         /// <summary>
         /// User service for user related operations
         /// </summary>
-        private readonly IUserService _userService;
+        private readonly IModeratorService _moderatorService;
 
         /// <summary>
         /// Controller for hub endpoints relative to moderators management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
-        /// <param name="userService">User service for user related operations</param>
-        public ModeratorsController(IAuthenticationService authenticationService, IUserService userService)
-            => (_authenticationService, _userService) = (authenticationService, userService);
+        /// <param name="moderatorService"></param>
+        public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService)
+            => (_authenticationService, _moderatorService) = (authenticationService, moderatorService);
 
         /// <summary>
         /// Endpoint for the credentials duplication checks
@@ -119,7 +119,7 @@ namespace InTechNet.Api.Controllers.Users
         {
             try
             {
-                _userService.RegisterModerator(newModeratorData);
+                _moderatorService.RegisterModerator(newModeratorData);
 
                 var authenticatedModerator = _authenticationService.GetAuthenticatedModerator(new AuthenticationDto
                 {
