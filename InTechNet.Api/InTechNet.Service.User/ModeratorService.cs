@@ -131,14 +131,12 @@ namespace InTechNet.Service.User
             // Generate a random salt for this moderator
             var salt = InTechNetSecurity.GetSalt();
 
-            FreeSubscriptionPlan freeSubscriptionPlan = new FreeSubscriptionPlan();
-
             // Salting the password
             var saltedPassword = newModeratorData.Password.HashedWith(salt);
 
             // Getting the free subscription
             var subscription = _context.SubscriptionPlans.First(_ =>
-                _.SubscriptionPlanName == freeSubscriptionPlan.SubscriptionPlanName);
+                _.SubscriptionPlanName == new FreeSubscriptionPlan().SubscriptionPlanName);
 
             // Record the new moderator
             _context.Moderators.Add(new Moderator
