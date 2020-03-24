@@ -1,5 +1,4 @@
 ﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
@@ -9,9 +8,9 @@ using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
 using InTechNet.Service.Hub.Helpers;
 using InTechNet.Service.Hub.Interfaces;
+using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
-using System.Data.Entity;
 using System.Linq;
 
 namespace InTechNet.Service.Hub
@@ -96,16 +95,11 @@ namespace InTechNet.Service.Hub
         {
             try
             {
-                var hub = _context.Hubs.Include(_ => _.Attendees)
-                    .FirstOrDefault(_ =>
-                        _.IdHub == hubId);
-
-                var test = _context.Attendees.Include(_ => _.Pupil).Single(_ => _.IdHub == hubId);
-
-
                 // Retrieve the requested hub
-                var hub2 = _context.Hubs.Include(_ => _.Attendees)
-                    .FirstOrDefault(_ =>
+                var hub = _context.Hubs
+                    .Include(_ => _.Attendees)
+                    .ThenInclude(_ => _.Pupil)
+                    .Single(_ =>
                         _.IdHub == hubId);
 
                 // Retrieve the attending pupils from the junction table `Attendee`
