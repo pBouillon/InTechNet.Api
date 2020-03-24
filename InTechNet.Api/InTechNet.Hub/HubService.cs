@@ -1,6 +1,7 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
@@ -10,6 +11,7 @@ using InTechNet.Service.Hub.Helpers;
 using InTechNet.Service.Hub.Interfaces;
 using System;
 using System.Collections.Generic;
+using System.Data.Entity;
 using System.Linq;
 
 namespace InTechNet.Service.Hub
@@ -94,19 +96,35 @@ namespace InTechNet.Service.Hub
         {
             try
             {
-                var hub = _context.Hubs.Single(_ =>
-                    _.Moderator.IdModerator == moderatorDto.Id
-                    && _.IdHub == hubId);
+                var hub = _context.Hubs.Include(_ => _.Attendees)
+                    .FirstOrDefault(_ =>
+                        _.IdHub == hubId);
 
+                var test = _context.Attendees.Include(_ => _.Pupil).Single(_ => _.IdHub == hubId);
+
+
+                // Retrieve the requested hub
+                var hub2 = _context.Hubs.Include(_ => _.Attendees)
+                    .FirstOrDefault(_ =>
+                        _.IdHub == hubId);
+
+                // Retrieve the attending pupils from the junction table `Attendee`
+                var hubAttendees = hub.Attendees?.Join(
+                    _context.Pupils,
+                    attendee => attendee.IdPupil,
+                    pupil => pupil.IdPupil,
+                    (_, pupil) => new PupilDto
+                    {
+                        Email = pupil.PupilEmail,
+                        Nickname = pupil.PupilNickname,
+                        Id = pupil.IdPupil
+                    }).ToList() ?? new List<PupilDto>();
+
+                // Return the agglomerated data
                 return new HubDto
                 {
                     IdModerator = hub.IdHub,
-                    Attendees = hub.Attendees?.Select(_ => new AttendeeDto
-                    {
-                        IdHub = _.IdHub,
-                        Id = _.IdAttendee,
-                        IdPupil = _.IdPupil
-                    }) ?? new List<AttendeeDto>(),
+                    Attendees = hubAttendees,
                     Description = hub.HubDescription,
                     Id = hub.IdHub,
                     Name = hub.HubName,

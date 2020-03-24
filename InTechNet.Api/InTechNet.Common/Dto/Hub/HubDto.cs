@@ -1,4 +1,4 @@
-﻿using InTechNet.Common.Dto.User.Attendee;
+﻿using InTechNet.Common.Dto.User.Pupil;
 using System.Collections.Generic;
 
 namespace InTechNet.Common.Dto.Hub
@@ -38,8 +38,8 @@ namespace InTechNet.Common.Dto.Hub
         public int IdModerator { get; set; }
 
         /// <summary>
-        /// Collection of all <see cref="AttendeeDto" /> attending this hub
+        /// Collection of all <see cref="PupilDto" /> attending this hub
         /// </summary>
-        public IEnumerable<AttendeeDto> Attendees { get; set; }
+        public IEnumerable<PupilDto> Attendees { get; set; }
     }
 }

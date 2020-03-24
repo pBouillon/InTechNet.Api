@@ -47,13 +47,17 @@ namespace InTechNet.DataAccessLayer
                 .HasMany(_ => _.Moderators)
                 .WithOne(_ => _.ModeratorSubscriptionPlan);
 
-            modelBuilder.Entity<Hub>()
-                .HasMany(_ => _.Attendees)
-                .WithOne(_ => _.Hub);
-
             modelBuilder.Entity<Moderator>()
                 .HasMany(_ => _.Hubs)
                 .WithOne(_ => _.Moderator);
+
+            modelBuilder.Entity<Attendee>()
+                .HasOne(_ => _.Hub)
+                .WithMany(_ => _.Attendees);
+
+            modelBuilder.Entity<Attendee>()
+                .HasOne(_ => _.Pupil)
+                .WithMany(_ => _.Attendees);
 
             modelBuilder.Entity<Moderator>()
                 .HasIndex(b => b.ModeratorNickname)
