@@ -13,7 +13,7 @@ namespace InTechNet.Api.Controllers
 {
     [Route("api/v1/[controller]")]
     [ApiController]
-    public class SubscriptionPlanController : ControllerBase
+    public class SubscriptionPlansController : ControllerBase
     {
         /// <summary>
         /// Subscription service for subscription related operations
@@ -24,7 +24,7 @@ namespace InTechNet.Api.Controllers
         /// Constructor for subscription related endpoints
         /// </summary>
         /// <param name="subscriptionPlanService">Subscription service for subscription related operations</param>
-        public SubscriptionPlanController(ISubscriptionPlanService subscriptionPlanService)
+        public SubscriptionPlansController(ISubscriptionPlanService subscriptionPlanService)
             => _subscriptionPlanService = subscriptionPlanService;
 
         /// <summary>
@@ -38,7 +38,7 @@ namespace InTechNet.Api.Controllers
             Summary = "Get a list of all subscriptions available",
             Tags = new[]
             {
-                SwaggerTag.SubscriptionPlan,
+                SwaggerTag.SubscriptionPlans,
             }
         )]
         public ActionResult<IEnumerable<SubscriptionPlanDto>> GetHubs()

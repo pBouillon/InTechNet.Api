@@ -1,6 +1,7 @@
 ﻿using InTechNet.Common.Dto.Hub;
 using System.Collections.Generic;
 using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 
 namespace InTechNet.Service.Hub.Interfaces
 {
@@ -37,6 +38,13 @@ namespace InTechNet.Service.Hub.Interfaces
         /// <param name="moderatorDto">Current <see cref="ModeratorDto" /> data</param>
         /// <returns>An <see cref="IEnumerable&lt;LightweightHubDto&gt;" /> of its owned hubs</returns>
         IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto);
+
+        /// <summary>
+        /// Retrieve all hubs owned by the pupil matching the provided pupil's id
+        /// </summary>
+        /// <param name="currentPupil">Current <see cref="Pupil" /> data</param>
+        /// <returns>An <see cref="IEnumerable&lt;PupilHubDto&gt;" /> of its owned hubs</returns>
+        IEnumerable<PupilHubDto> GetPupilHubs(PupilDto currentPupil);
 
         /// <summary>
         /// Update the hub general information

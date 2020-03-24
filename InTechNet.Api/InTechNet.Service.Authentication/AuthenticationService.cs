@@ -1,6 +1,4 @@
-﻿using System;
-using System.Security.Claims;
-using InTechNet.Common.Dto.User;
+﻿using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
@@ -9,6 +7,8 @@ using InTechNet.Exception.Authentication;
 using InTechNet.Service.Authentication.Interfaces;
 using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Http;
+using System;
+using System.Security.Claims;
 
 namespace InTechNet.Service.Authentication
 {
@@ -23,7 +23,12 @@ namespace InTechNet.Service.Authentication
         /// <summary>
         /// The <see cref="IUserService" /> to be used for authentication checks and data retrieval
         /// </summary>
-        private readonly IUserService _userService;
+        private readonly IModeratorService _moderatorService;
+
+        /// <summary>
+        /// The <see cref="IUserService" /> to be used for authentication checks and data retrieval
+        /// </summary>
+        private readonly IPupilService _pupilService;
 
         /// <summary>
         /// The current HTTP context accessor
@@ -36,14 +41,14 @@ namespace InTechNet.Service.Authentication
         /// <param name="userService">The <see cref="IUserService" /> to be used for authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
         /// <param name="httpContextAccessor">The current HTTP context accessor</param>
-        public AuthenticationService(IUserService userService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
-            => (_userService, _jwtService, _httpContextAccessor) = (userService, jwtService, httpContextAccessor);
+        public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+            => (_moderatorService, _pupilService, _jwtService, _httpContextAccessor) = (moderatorService, pupilService, jwtService, httpContextAccessor);
 
         /// <inheritdoc cref="IAuthenticationService.AreCredentialsAlreadyInUse" />
         public CredentialsCheckDto AreCredentialsAlreadyInUse(CredentialsCheckDto credentials)
         {
-            credentials.AreUnique = !_userService.IsNicknameAlreadyInUse(credentials.Nickname)
-                   && !_userService.IsEmailAlreadyInUse(credentials.Email);
+            credentials.AreUnique = !IsNicknameAlreadyInUse(credentials.Nickname)
+                   && !IsEmailAlreadyInUse(credentials.Email);
 
             return credentials;
         }
@@ -51,7 +56,7 @@ namespace InTechNet.Service.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetAuthenticatedModerator" />
         public ModeratorDto GetAuthenticatedModerator(AuthenticationDto authenticationDto)
         {
-            var moderator = _userService.AuthenticateModerator(authenticationDto);
+            var moderator = _moderatorService.AuthenticateModerator(authenticationDto);
 
             moderator.Token = _jwtService.GetModeratorToken(moderator);
 
@@ -61,7 +66,7 @@ namespace InTechNet.Service.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetAuthenticatedPupil" />
         public PupilDto GetAuthenticatedPupil(AuthenticationDto authenticationDto)
         {
-            var pupil = _userService.AuthenticatePupil(authenticationDto);
+            var pupil = _pupilService.AuthenticatePupil(authenticationDto);
 
             pupil.Token = _jwtService.GetPupilToken(pupil);
 
@@ -82,7 +87,7 @@ namespace InTechNet.Service.Authentication
                 .FindFirstValue(ClaimTypes.NameIdentifier)
                 ?? throw new UnknownUserException();
 
-            return _userService.GetModerator(Convert.ToInt32(moderatorId));
+            return _moderatorService.GetModerator(Convert.ToInt32(moderatorId));
         }
 
         /// <inheritdoc cref="IAuthenticationService.GetCurrentPupil" />
@@ -99,7 +104,21 @@ namespace InTechNet.Service.Authentication
                                   .FindFirstValue(ClaimTypes.NameIdentifier)
                               ?? throw new UnknownUserException();
 
-            return _userService.GetPupil(Convert.ToInt32(moderatorId));
+            return _pupilService.GetPupil(Convert.ToInt32(moderatorId));
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.IsEmailAlreadyInUse" />
+        private bool IsEmailAlreadyInUse(string email)
+        {
+            return _moderatorService.IsEmailAlreadyInUse(email)
+                || _pupilService.IsEmailAlreadyInUse(email);
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.IsNicknameAlreadyInUse" />
+        private bool IsNicknameAlreadyInUse(string nickname)
+        {
+            return _moderatorService.IsNicknameAlreadyInUse(nickname)
+                || _pupilService.IsNicknameAlreadyInUse(nickname);
         }
     }
 }
