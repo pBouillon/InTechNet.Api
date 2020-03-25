@@ -15,6 +15,7 @@ using System.Net;
 using InTechNet.Services.Authentication.Interfaces;
 using InTechNet.Services.Hub.Interfaces;
 using InTechNet.Services.User.Interfaces;
+using InTechNet.Common.Dto.User.Attendee;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -161,6 +162,43 @@ namespace InTechNet.Api.Controllers.Users
 
                 return BadRequest(
                     new BadRequestError(ex));
+            }
+        }
+
+
+        [PupilClaimRequired]
+        [HttpDelete("me/Hubs/{hubId}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Attendee successfully removed")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Invalid payload")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "The provided data does not correspond")]
+        [SwaggerOperation(
+            Summary = "Remove the logged in pupil from the specified hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult RemoveAttendee(
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int hubId,
+            [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
+        {
+            var currentPupil = _authenticationService.GetCurrentPupil();
+
+            if (attendeeDto.IdHub != hubId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _hubService.RemoveAttendance(currentPupil, attendeeDto);
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
     }

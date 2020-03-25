@@ -143,7 +143,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid payload")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
         [SwaggerOperation(
-            Summary = "Remove a pupil attending of a hub",
+            Summary = "Remove a pupil attending the hub",
             Tags = new[]
             {
                 SwaggerTag.Hubs,
@@ -151,7 +151,7 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult RemoveAttendee(
-            [FromRoute, SwaggerParameter("Id of the hub from which removing the attendance")] int hubId,
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int hubId,
             [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")] int pupilId,
             [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
         {

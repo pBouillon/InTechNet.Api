@@ -175,16 +175,9 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.RemoveAttendance" />
         public void RemoveAttendance(ModeratorDto currentModerator, AttendeeDto attendeeDto)
         {
-            // Fetch the related hub owned by the current moderator
-            var hub = _context.Hubs.Include(_ => _.Moderator)
-                          .FirstOrDefault(_ => 
-                    _.IdHub == attendeeDto.IdHub
-                    && _.Moderator.IdModerator == currentModerator.Id)
-                      ?? throw new UnknownHubException();
-
             // Fetching the exact record to be removed
             var attendee = _context.Attendees.FirstOrDefault(_ => 
-                    _.IdHub == hub.IdHub && _.IdPupil == attendeeDto.IdPupil)
+                    _.IdHub == attendeeDto.IdHub && _.IdPupil == attendeeDto.IdPupil)
                 ?? throw new UnknownAttendeeException();
 
             attendeeDto.Id = attendee.IdAttendee;
@@ -197,6 +190,11 @@ namespace InTechNet.Services.Hub
         public void RemoveAttendance(PupilDto currentPupil, AttendeeDto attendeeDto)
         {
             // Fetch the related hub attended by the current moderator
+            var attendee = _context.Attendees.FirstOrDefault(_ =>
+                    _.IdHub == attendeeDto.IdHub && _.IdPupil == attendeeDto.IdPupil)
+                ?? throw new UnknownAttendeeException();
+
+            attendeeDto.Id = attendee.IdAttendee;
 
             // Remove the attendance
             _attendeeService.RemoveAttendance(attendeeDto);
