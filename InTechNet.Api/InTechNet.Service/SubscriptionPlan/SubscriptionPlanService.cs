@@ -2,9 +2,9 @@
 using System.Linq;
 using InTechNet.Common.Dto.Subscription;
 using InTechNet.DataAccessLayer;
-using InTechNet.Services.Subscription.Interfaces;
+using InTechNet.Services.SubscriptionPlan.Interfaces;
 
-namespace InTechNet.Services.Subscription
+namespace InTechNet.Services.SubscriptionPlan
 {
     /// <inheritdoc cref="ISubscriptionPlanService" />
     public class SubscriptionPlanService : ISubscriptionPlanService

@@ -1,12 +1,13 @@
 ﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.DataAccessLayer;
+using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Authentication;
 using InTechNet.Services.Authentication.Interfaces;
 using InTechNet.Services.Authentication.Jwt;
 using InTechNet.Services.Hub;
 using InTechNet.Services.Hub.Interfaces;
-using InTechNet.Services.Subscription;
-using InTechNet.Services.Subscription.Interfaces;
+using InTechNet.Services.SubscriptionPlan;
+using InTechNet.Services.SubscriptionPlan.Interfaces;
 using InTechNet.Services.User;
 using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Http;
@@ -73,8 +74,13 @@ namespace InTechNet.Api.Helpers
 
             _services.AddTransient<IPupilService, PupilService>();
 
+            // Hub service
             _services.AddTransient<IHubService, HubService>();
 
+            // Attendee service
+            _services.AddTransient<IAttendeeService, IAttendeeService>();
+
+            // Subscription plan
             _services.AddTransient<ISubscriptionPlanService, SubscriptionPlanService>();
         }
 

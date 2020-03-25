@@ -1,17 +1,16 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using InTechNet.Common.Dto.Hub;
+﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.Hub.Helpers;
 using InTechNet.Services.Hub.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InTechNet.Services.Hub
 {

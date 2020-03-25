@@ -3,7 +3,7 @@ using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
-using InTechNet.Services.Subscription.Interfaces;
+using InTechNet.Services.SubscriptionPlan.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
