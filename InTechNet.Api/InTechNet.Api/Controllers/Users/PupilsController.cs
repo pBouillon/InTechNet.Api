@@ -52,8 +52,7 @@ namespace InTechNet.Api.Controllers.Users
 
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
-        [SwaggerResponse(200, "Email not already in use")]
-        [SwaggerResponse(401, "Email already used")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Status of the provided credentials successfully fetched")]
         [SwaggerOperation(
             Summary = "Endpoint for the credential duplicates checks",
             Tags = new[]
@@ -71,8 +70,8 @@ namespace InTechNet.Api.Controllers.Users
 
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        [SwaggerResponse(200, "Successful authentication")]
-        [SwaggerResponse(401, "Invalid credentials")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Successful authentication")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid credentials")]
         [SwaggerOperation(
             Summary = "Login endpoint for a pupil",
             Tags = new[]
@@ -98,8 +97,8 @@ namespace InTechNet.Api.Controllers.Users
 
         [HttpGet("me/Hubs")]
         [PupilClaimRequired]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Hubs successfully fetched")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Hubs fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hubs fetching failed")]
         [SwaggerOperation(
             Summary = "Get a list of all hubs owned by the current pupil",
             Tags = new[]
@@ -126,8 +125,8 @@ namespace InTechNet.Api.Controllers.Users
 
         [AllowAnonymous]
         [HttpPost]
-        [SwaggerResponse(200, "New pupil successfully added")]
-        [SwaggerResponse(404, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "New pupil successfully added")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new pupil",
             Tags = new[]
@@ -168,9 +167,9 @@ namespace InTechNet.Api.Controllers.Users
 
         [PupilClaimRequired]
         [HttpDelete("me/Hubs/{hubId}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Attendee successfully removed")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Invalid payload")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "The provided data does not correspond")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
         [SwaggerOperation(
             Summary = "Remove the logged in pupil from the specified hub",
             Tags = new[]
