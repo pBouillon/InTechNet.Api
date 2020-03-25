@@ -1,16 +1,20 @@
 ﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
+using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Hub.Helpers;
 using InTechNet.Services.Hub.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Exception.Attendee;
 
 namespace InTechNet.Services.Hub
 {
@@ -23,11 +27,17 @@ namespace InTechNet.Services.Hub
         private readonly InTechNetContext _context;
 
         /// <summary>
+        /// Attendee service
+        /// </summary>
+        private readonly IAttendeeService _attendeeService;
+
+        /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public HubService(InTechNetContext context)
-            => _context = context;
+        /// <param name="attendeeService">Attendee service</param>
+        public HubService(InTechNetContext context, IAttendeeService attendeeService)
+            => (_context, _attendeeService) = (context, attendeeService);
 
         /// <inheritdoc cref="IHubService.CreateHub" />
         public void CreateHub(ModeratorDto moderatorDto, HubCreationDto newHubDto)
@@ -58,7 +68,7 @@ namespace InTechNet.Services.Hub
                 HubCreationDate = DateTime.Now,
                 Moderator = moderator,
                 HubDescription = newHubDto.Description,
-                Attendees = new List<Attendee>()
+                Attendees = new List<DataAccessLayer.Entities.Attendee>()
             });
 
             _context.SaveChanges();
@@ -160,6 +170,36 @@ namespace InTechNet.Services.Hub
                 Name = _.Hub.HubName,
                 ModeratorNickname = _.Hub.Moderator.ModeratorNickname
             });
+        }
+
+        /// <inheritdoc cref="IHubService.RemoveAttendance" />
+        public void RemoveAttendance(ModeratorDto currentModerator, AttendeeDto attendeeDto)
+        {
+            // Fetch the related hub owned by the current moderator
+            var hub = _context.Hubs.Include(_ => _.Moderator)
+                          .FirstOrDefault(_ => 
+                    _.IdHub == attendeeDto.IdHub
+                    && _.Moderator.IdModerator == currentModerator.Id)
+                      ?? throw new UnknownHubException();
+
+            // Fetching the exact record to be removed
+            var attendee = _context.Attendees.FirstOrDefault(_ => 
+                    _.IdHub == hub.IdHub && _.IdPupil == attendeeDto.IdPupil)
+                ?? throw new UnknownAttendeeException();
+
+            attendeeDto.Id = attendee.IdAttendee;
+
+            // Remove the attendance
+            _attendeeService.RemoveAttendance(attendeeDto);
+        }
+
+        /// <inheritdoc cref="IHubService.RemoveAttendance" />
+        public void RemoveAttendance(PupilDto currentPupil, AttendeeDto attendeeDto)
+        {
+            // Fetch the related hub attended by the current moderator
+
+            // Remove the attendance
+            _attendeeService.RemoveAttendance(attendeeDto);
         }
 
         /// <inheritdoc cref="IHubService.UpdateHub" />

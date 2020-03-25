@@ -1,5 +1,6 @@
 ﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.DataAccessLayer;
+using InTechNet.Services.Attendee;
 using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Authentication;
 using InTechNet.Services.Authentication.Interfaces;
@@ -78,7 +79,7 @@ namespace InTechNet.Api.Helpers
             _services.AddTransient<IHubService, HubService>();
 
             // Attendee service
-            _services.AddTransient<IAttendeeService, IAttendeeService>();
+            _services.AddTransient<IAttendeeService, AttendeeService>();
 
             // Subscription plan
             _services.AddTransient<ISubscriptionPlanService, SubscriptionPlanService>();

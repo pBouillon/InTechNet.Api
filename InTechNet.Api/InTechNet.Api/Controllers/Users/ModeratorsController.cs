@@ -1,5 +1,7 @@
-﻿using InTechNet.Api.Errors.Classes;
+﻿using InTechNet.Api.Attributes;
+using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
@@ -10,6 +12,9 @@ using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Net;
+using InTechNet.Services.Attendee.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -26,6 +31,11 @@ namespace InTechNet.Api.Controllers.Users
         private readonly IAuthenticationService _authenticationService;
 
         /// <summary>
+        /// Hub service
+        /// </summary>
+        private readonly IHubService _hubService;
+
+        /// <summary>
         /// User service for user related operations
         /// </summary>
         private readonly IModeratorService _moderatorService;
@@ -35,21 +45,14 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="moderatorService">Moderator service</param>
-        public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService)
-            => (_authenticationService, _moderatorService) = (authenticationService, moderatorService);
+        /// <param name="hubService">Hub service</param>
+        public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService, IHubService hubService)
+            => (_authenticationService, _moderatorService, _hubService) = (authenticationService, moderatorService, hubService);
 
-        /// <summary>
-        /// Endpoint for the credentials duplication checks
-        /// </summary>
-        /// <param name="credentials">The credentials to be checked for duplicates</param>
-        /// <returns>
-        /// A <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
-        /// property true if any provided credential is already in use; false otherwise
-        /// </returns>
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
-        [SwaggerResponse(200, "Email not already in use")]
-        [SwaggerResponse(401, "Email already used")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Email not already in use")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Email already used")]
         [SwaggerOperation(
             Summary = "Endpoint for the credential duplicates checks",
             Tags = new[]
@@ -65,15 +68,10 @@ namespace InTechNet.Api.Controllers.Users
                 _authenticationService.AreCredentialsAlreadyInUse(credentials));
         }
 
-        /// <summary>
-        /// Login end point for a moderator
-        /// </summary>
-        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
-        /// <returns>A <see cref="ModeratorDto" /> holding the authenticated moderator's data</returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        [SwaggerResponse(200, "Successful authentication")]
-        [SwaggerResponse(401, "Invalid credentials")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Successful authentication")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid credentials")]
         [SwaggerOperation(
             Summary = "Login endpoint for a moderator",
             Tags = new[]
@@ -97,14 +95,9 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        /// <summary>
-        /// Registration endpoint to create a new moderator
-        /// </summary>
-        /// <param name="newModeratorData">A <see cref="ModeratorDto" /> holding the new moderator's data</param>
-        /// <returns>A <see cref="ModeratorDto" /> holding the authenticated moderator's data</returns>
         [AllowAnonymous]
         [HttpPost]
-        [SwaggerResponse(200, "New moderator successfully added")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "New moderator successfully added")]
         [SwaggerResponse(404, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new moderator",
@@ -140,6 +133,45 @@ namespace InTechNet.Api.Controllers.Users
 
                 return BadRequest(
                     new BadRequestError(ex));
+            }
+        }
+
+
+        [ModeratorClaimRequired]
+        [HttpDelete("me/Hubs/{hubId}/Pupils/{pupilId}")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
+        [SwaggerOperation(
+            Summary = "Remove a pupil attending of a hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Moderators,
+            }
+        )]
+        public IActionResult RemoveAttendee(
+            [FromRoute, SwaggerParameter("Id of the hub from which removing the attendance")] int hubId,
+            [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")] int pupilId,
+            [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
+        {
+            var currentModerator = _authenticationService.GetCurrentModerator();
+
+            if (attendeeDto.IdHub != hubId
+                || attendeeDto.IdPupil != pupilId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _hubService.RemoveAttendance(currentModerator, attendeeDto);
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
     }

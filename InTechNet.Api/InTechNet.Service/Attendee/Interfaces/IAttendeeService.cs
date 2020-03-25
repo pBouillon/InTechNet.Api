@@ -1,4 +1,4 @@
-﻿using InTechNet.Common.Dto.Attendee;
+﻿using InTechNet.Common.Dto.User.Attendee;
 
 namespace InTechNet.Services.Attendee.Interfaces
 {
@@ -10,7 +10,7 @@ namespace InTechNet.Services.Attendee.Interfaces
         /// <summary>
         /// Remove the pupil's attendance to a hub
         /// </summary>
-        /// <param name="attendee"></param>
-        void RemoveAttendance(AttendeeDto attendee);
+        /// <param name="attendeeDto">The attendee connection to remove</param>
+        void RemoveAttendance(AttendeeDto attendeeDto);
     }
 }

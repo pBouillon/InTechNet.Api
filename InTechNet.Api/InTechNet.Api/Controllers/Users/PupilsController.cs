@@ -49,14 +49,6 @@ namespace InTechNet.Api.Controllers.Users
         public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
             => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
 
-        /// <summary>
-        /// Endpoint for the credentials duplication checks
-        /// </summary>
-        /// <param name="credentials">The credentials to be checked for duplicates</param>
-        /// <returns>
-        /// A <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
-        /// property true if any provided credential is already in use; false otherwise
-        /// </returns>
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
         [SwaggerResponse(200, "Email not already in use")]
@@ -76,11 +68,6 @@ namespace InTechNet.Api.Controllers.Users
                 _authenticationService.AreCredentialsAlreadyInUse(credentials));
         }
 
-        /// <summary>
-        /// Login end point for a pupil
-        /// </summary>
-        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
-        /// <returns>A valid JWT on success</returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
         [SwaggerResponse(200, "Successful authentication")]
@@ -108,9 +95,6 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        /// <summary>
-        /// Get a list of all hubs owned by the current pupil
-        /// </summary>
         [HttpGet("me/Hubs")]
         [PupilClaimRequired]
         [SwaggerResponse((int)HttpStatusCode.OK, "Hubs successfully fetched")]
@@ -139,11 +123,6 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        /// <summary>
-        /// Registration endpoint to create a new pupil
-        /// </summary>
-        /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>
-        /// <returns>A JWT for the newly created user on success</returns>
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse(200, "New pupil successfully added")]

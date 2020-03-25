@@ -100,7 +100,7 @@ namespace InTechNet.Services.User
             // Record the new moderator
             _context.Pupils.Add(new Pupil
             {
-                Attendees = new List<Attendee>(),
+                Attendees = new List<DataAccessLayer.Entities.Attendee>(),
                 PupilEmail = newPupilData.Email,
                 PupilNickname = newPupilData.Nickname,
                 PupilPassword = saltedPassword,

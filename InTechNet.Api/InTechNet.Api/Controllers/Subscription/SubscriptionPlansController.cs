@@ -26,9 +26,6 @@ namespace InTechNet.Api.Controllers.Subscription
         public SubscriptionPlansController(ISubscriptionPlanService subscriptionPlanService)
             => _subscriptionPlanService = subscriptionPlanService;
 
-        /// <summary>
-        /// Get a list of all hubs owned by the current moderator
-        /// </summary>
         [HttpGet]
         [AllowAnonymous]
         [SwaggerResponse(200, "Subscriptions successfully fetched")]

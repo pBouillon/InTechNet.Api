@@ -1,7 +1,8 @@
-﻿using InTechNet.Common.Dto.Attendee;
-using InTechNet.Services.Attendee.Interfaces;
-using System;
+﻿using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.DataAccessLayer;
+using InTechNet.Exception.Attendee;
+using InTechNet.Services.Attendee.Interfaces;
+using System.Linq;
 
 namespace InTechNet.Services.Attendee
 {
@@ -21,9 +22,16 @@ namespace InTechNet.Services.Attendee
             => _context = context;
 
         /// <inheritdoc cref="IAttendeeService.RemoveAttendance"/>
-        public void RemoveAttendance(AttendeeDto attendee)
+        public void RemoveAttendance(AttendeeDto attendeeDto)
         {
-            throw new NotImplementedException();
+            // Retrieve the connection
+            var attendee = _context.Attendees
+                .FirstOrDefault(_ => _.IdAttendee == attendeeDto.Id)
+                ?? throw new UnknownAttendeeException();
+
+            // Remove the connection
+            _context.Attendees.Remove(attendee);
+            _context.SaveChanges();
         }
     }
 }
