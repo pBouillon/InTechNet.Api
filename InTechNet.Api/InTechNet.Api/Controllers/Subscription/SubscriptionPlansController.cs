@@ -1,15 +1,14 @@
-﻿using InTechNet.Api.Attributes;
+﻿using System.Collections.Generic;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
-using InTechNet.Service.Subscription.Interfaces;
+using InTechNet.Services.Subscription.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
-using System.Collections.Generic;
 
-namespace InTechNet.Api.Controllers
+namespace InTechNet.Api.Controllers.Subscription
 {
     [Route("api/v1/[controller]")]
     [ApiController]

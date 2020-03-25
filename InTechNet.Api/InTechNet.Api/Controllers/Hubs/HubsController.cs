@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Hub.Interfaces;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Net;
 
 namespace InTechNet.Api.Controllers.Hubs
 {

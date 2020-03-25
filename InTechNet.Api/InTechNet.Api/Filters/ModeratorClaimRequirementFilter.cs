@@ -1,8 +1,8 @@
-﻿using System.Linq;
-using System.Security.Claims;
-using InTechNet.Common.Utils.Authentication.Jwt;
+﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.Mvc.Filters;
+using System.Linq;
+using System.Security.Claims;
 
 namespace InTechNet.Api.Filters
 {

@@ -7,14 +7,14 @@ using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Hub.Interfaces;
-using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.User.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {

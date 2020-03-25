@@ -1,15 +1,14 @@
-﻿using InTechNet.Common.Utils.Authentication.Jwt;
-using InTechNet.Common.Utils.Security;
-using InTechNet.Service.Authentication.Interfaces;
-using Microsoft.IdentityModel.Tokens;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
-using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
+using InTechNet.Common.Utils.Authentication.Jwt;
+using InTechNet.Common.Utils.Security;
+using InTechNet.Services.Authentication.Interfaces;
+using Microsoft.IdentityModel.Tokens;
 
-namespace InTechNet.Service.Authentication.Jwt
+namespace InTechNet.Services.Authentication.Jwt
 {
     /// <inheritdoc cref="IJwtService" />
     public class JwtService : IJwtService

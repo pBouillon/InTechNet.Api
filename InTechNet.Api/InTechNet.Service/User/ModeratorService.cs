@@ -1,20 +1,20 @@
-﻿using InTechNet.Common.Dto.Subscription;
+﻿using System.Collections.Generic;
+using System.Linq;
+using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
+using InTechNet.Common.Utils.SubscriptionPlan;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.Hub.Interfaces;
-using InTechNet.Service.User.Helpers;
-using InTechNet.Service.User.Interfaces;
-using InTechNet.Common.Utils.SubscriptionPlan;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.User.Helpers;
+using InTechNet.Services.User.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
-namespace InTechNet.Service.User
+namespace InTechNet.Services.User
 {
     /// <inheritdoc cref="IModeratorService" />
     public class ModeratorService : IModeratorService

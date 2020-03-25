@@ -1,16 +1,16 @@
-﻿using InTechNet.Common.Dto.User;
+﻿using System;
+using System.Security.Claims;
+using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.Exception.Authentication;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.User.Interfaces;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Http;
-using System;
-using System.Security.Claims;
 
-namespace InTechNet.Service.Authentication
+namespace InTechNet.Services.Authentication
 {
     /// <inheritdoc cref="IAuthenticationService" />
     public class AuthenticationService : IAuthenticationService
