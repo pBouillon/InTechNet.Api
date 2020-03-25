@@ -13,7 +13,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
-using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Hub.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
@@ -135,7 +134,6 @@ namespace InTechNet.Api.Controllers.Users
                     new BadRequestError(ex));
             }
         }
-
 
         [ModeratorClaimRequired]
         [HttpDelete("me/Hubs/{hubId}/Pupils/{pupilId}")]
