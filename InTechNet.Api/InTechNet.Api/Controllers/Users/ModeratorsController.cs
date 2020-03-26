@@ -97,7 +97,8 @@ namespace InTechNet.Api.Controllers.Users
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New moderator successfully added")]
-        [SwaggerResponse(404, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "The moderator has a duplicated credential (login / email)")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new moderator",
             Tags = new[]

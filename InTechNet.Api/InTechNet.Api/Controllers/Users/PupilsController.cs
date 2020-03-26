@@ -126,6 +126,7 @@ namespace InTechNet.Api.Controllers.Users
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New pupil successfully added")]
+        [SwaggerResponse((int)HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new pupil",
