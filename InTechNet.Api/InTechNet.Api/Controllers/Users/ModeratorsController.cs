@@ -137,7 +137,7 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [ModeratorClaimRequired]
-        [HttpDelete("me/Hubs/{hubId}/Pupils/{pupilId}")]
+        [HttpDelete("me/Hubs/{idHub}/Pupils/{idPupil}")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid payload")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
@@ -150,14 +150,14 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult RemoveAttendee(
-            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int hubId,
-            [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")] int pupilId,
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub,
+            [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")] int idPupil,
             [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
         {
             var currentModerator = _authenticationService.GetCurrentModerator();
 
-            if (attendeeDto.IdHub != hubId
-                || attendeeDto.IdPupil != pupilId)
+            if (attendeeDto.IdHub != idHub
+                || attendeeDto.IdPupil != idPupil)
             {
                 return BadRequest();
             }
