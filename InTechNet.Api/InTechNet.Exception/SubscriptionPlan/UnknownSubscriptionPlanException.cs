@@ -1,8 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
-
-namespace InTechNet.Exception.SubscriptionPlan
+﻿namespace InTechNet.Exception.SubscriptionPlan
 {
     /// <summary>
     /// Exception to be thrown when attempting to query an unknown subscription plan

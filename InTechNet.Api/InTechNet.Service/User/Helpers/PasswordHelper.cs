@@ -2,7 +2,7 @@
 using System.Security.Cryptography;
 using System.Text;
 
-namespace InTechNet.Service.User.Helpers
+namespace InTechNet.Services.User.Helpers
 {
     /// <summary>
     /// Toolbox for the user password

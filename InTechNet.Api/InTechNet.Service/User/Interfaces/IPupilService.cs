@@ -1,9 +1,7 @@
-﻿using InTechNet.Common.Dto.User;
-using InTechNet.Common.Dto.User.Moderator;
-using InTechNet.Common.Dto.User.Pupil;
+﻿using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
-namespace InTechNet.Service.User.Interfaces
+namespace InTechNet.Services.User.Interfaces
 {
     /// <summary>
     /// Service for pupil's operations

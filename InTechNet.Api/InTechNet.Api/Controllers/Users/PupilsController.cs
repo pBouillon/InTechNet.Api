@@ -7,14 +7,15 @@ using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Hub.Interfaces;
-using InTechNet.Service.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.User.Interfaces;
+using InTechNet.Common.Dto.User.Attendee;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -49,18 +50,9 @@ namespace InTechNet.Api.Controllers.Users
         public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
             => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
 
-        /// <summary>
-        /// Endpoint for the credentials duplication checks
-        /// </summary>
-        /// <param name="credentials">The credentials to be checked for duplicates</param>
-        /// <returns>
-        /// A <see cref="CredentialsCheckDto" /> with the <see cref="CredentialsCheckDto.AreUnique"/>
-        /// property true if any provided credential is already in use; false otherwise
-        /// </returns>
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
-        [SwaggerResponse(200, "Email not already in use")]
-        [SwaggerResponse(401, "Email already used")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Status of the provided credentials successfully fetched")]
         [SwaggerOperation(
             Summary = "Endpoint for the credential duplicates checks",
             Tags = new[]
@@ -76,15 +68,10 @@ namespace InTechNet.Api.Controllers.Users
                 _authenticationService.AreCredentialsAlreadyInUse(credentials));
         }
 
-        /// <summary>
-        /// Login end point for a pupil
-        /// </summary>
-        /// <param name="authenticationDto">The login parameters as <see cref="AuthenticationDto" /></param>
-        /// <returns>A valid JWT on success</returns>
         [AllowAnonymous]
         [HttpPost("authenticate")]
-        [SwaggerResponse(200, "Successful authentication")]
-        [SwaggerResponse(401, "Invalid credentials")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Successful authentication")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid credentials")]
         [SwaggerOperation(
             Summary = "Login endpoint for a pupil",
             Tags = new[]
@@ -108,13 +95,10 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        /// <summary>
-        /// Get a list of all hubs owned by the current pupil
-        /// </summary>
         [HttpGet("me/Hubs")]
         [PupilClaimRequired]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Hubs successfully fetched")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Hubs fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hubs fetching failed")]
         [SwaggerOperation(
             Summary = "Get a list of all hubs owned by the current pupil",
             Tags = new[]
@@ -139,15 +123,11 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        /// <summary>
-        /// Registration endpoint to create a new pupil
-        /// </summary>
-        /// <param name="newPupilData">A <see cref="PupilDto" /> holding the new pupil's data</param>
-        /// <returns>A JWT for the newly created user on success</returns>
         [AllowAnonymous]
         [HttpPost]
-        [SwaggerResponse(200, "New pupil successfully added")]
-        [SwaggerResponse(404, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "New pupil successfully added")]
+        [SwaggerResponse((int)HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new pupil",
             Tags = new[]
@@ -182,6 +162,43 @@ namespace InTechNet.Api.Controllers.Users
 
                 return BadRequest(
                     new BadRequestError(ex));
+            }
+        }
+
+
+        [PupilClaimRequired]
+        [HttpDelete("me/Hubs/{hubId}")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
+        [SwaggerOperation(
+            Summary = "Remove the logged in pupil from the specified hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult RemoveAttendee(
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int hubId,
+            [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
+        {
+            var currentPupil = _authenticationService.GetCurrentPupil();
+
+            if (attendeeDto.IdHub != hubId)
+            {
+                return BadRequest();
+            }
+
+            try
+            {
+                _hubService.RemoveAttendance(currentPupil, attendeeDto);
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
     }

@@ -1,10 +1,10 @@
-﻿using InTechNet.Common.Dto.Subscription;
-using InTechNet.DataAccessLayer;
-using InTechNet.Service.Subscription.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.Subscription;
+using InTechNet.DataAccessLayer;
+using InTechNet.Services.SubscriptionPlan.Interfaces;
 
-namespace InTechNet.Service.Subscription
+namespace InTechNet.Services.SubscriptionPlan
 {
     /// <inheritdoc cref="ISubscriptionPlanService" />
     public class SubscriptionPlanService : ISubscriptionPlanService

@@ -1,7 +1,7 @@
-﻿using InTechNet.Common.Dto.Subscription;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
+using InTechNet.Common.Dto.Subscription;
 
-namespace InTechNet.Service.Subscription.Interfaces
+namespace InTechNet.Services.SubscriptionPlan.Interfaces
 {
     /// <summary>
     /// Service for subscription plan's operations

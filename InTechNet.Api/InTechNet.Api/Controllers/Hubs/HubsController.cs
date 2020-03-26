@@ -1,16 +1,16 @@
-﻿using System.Collections.Generic;
-using System.Net;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
-using InTechNet.Service.Authentication.Interfaces;
-using InTechNet.Service.Hub.Interfaces;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
+using System.Net;
 
 namespace InTechNet.Api.Controllers.Hubs
 {
@@ -37,10 +37,6 @@ namespace InTechNet.Api.Controllers.Hubs
         public HubsController(IAuthenticationService authenticationService, IHubService hubService)
             => (_authenticationService, _hubService) = (authenticationService, hubService);
 
-        /// <summary>
-        /// Creation endpoint to add a new hub to the currently logged moderator
-        /// </summary>
-        /// <param name="hubCreation"><see cref="HubCreationDto" /> holding information on the hub to be created</param>
         [HttpPost]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully created")]
@@ -76,10 +72,6 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         }
 
-        /// <summary>
-        /// Deletion endpoint to remove an existing hub
-        /// </summary>
-        /// <param name="hubId">Id the hub to be deleted</param>
         [HttpDelete("{hubId}")]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully deleted")]
@@ -109,9 +101,6 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         }
 
-        /// <summary>
-        /// Get the details of a requested hub
-        /// </summary>
         [HttpGet("{hubId}")]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully fetched")]
@@ -140,9 +129,6 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         }
 
-        /// <summary>
-        /// Get a list of all hubs owned by the current moderator
-        /// </summary>
         [HttpGet]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
@@ -171,9 +157,6 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         }
 
-        /// <summary>
-        /// Update a specific hub
-        /// </summary>
         [HttpPut("{hubId}")]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully updated")]

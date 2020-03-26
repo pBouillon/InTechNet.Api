@@ -3,7 +3,7 @@ using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
-namespace InTechNet.Service.Authentication.Interfaces
+namespace InTechNet.Services.Authentication.Interfaces
 {
     /// <summary>
     /// Authentication service providing helpers and utils for the authentication process
