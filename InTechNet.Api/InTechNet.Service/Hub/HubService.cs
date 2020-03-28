@@ -166,7 +166,6 @@ namespace InTechNet.Services.Hub
             {
                 Id = _.IdHub,
                 Description = _.Hub.HubDescription,
-                Link = _.Hub.HubLink,
                 Name = _.Hub.HubName,
                 ModeratorNickname = _.Hub.Moderator.ModeratorNickname
             });

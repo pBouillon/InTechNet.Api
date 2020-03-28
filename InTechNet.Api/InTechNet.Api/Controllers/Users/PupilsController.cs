@@ -16,6 +16,7 @@ using InTechNet.Services.Authentication.Interfaces;
 using InTechNet.Services.Hub.Interfaces;
 using InTechNet.Services.User.Interfaces;
 using InTechNet.Common.Dto.User.Attendee;
+using InTechNet.Services.Attendee.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -41,14 +42,17 @@ namespace InTechNet.Api.Controllers.Users
         /// </summary>
         private readonly IHubService _hubService;
 
+        private readonly IAttendeeService _attendeeService;
+
         /// <summary>
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="pupilService">Pupil service</param>
         /// <param name="hubService">Hub service</param>
-        public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
-            => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
+        /// <param name="attendeeService">Attendee service</param>
+        public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService, IAttendeeService attendeeService)
+            => (_authenticationService, _pupilService, _hubService, _attendeeService) = (authenticationService, pupilService, hubService, attendeeService);
 
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
@@ -115,6 +119,36 @@ namespace InTechNet.Api.Controllers.Users
                 var hubs = _hubService.GetPupilHubs(currentPupil);
 
                 return Ok(hubs);
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        [HttpGet("me/Hubs/join")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Hub successfully joined")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Could not join hub")]
+        [SwaggerOperation(
+            Summary = "Join a hub, returns the hubs info",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public ActionResult<PupilHubDto> JoinHub(
+            [FromQuery, SwaggerParameter("Link of the hub the pupil is joining")] string link)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var hub = _attendeeService.AddAttendee(currentPupil, link);
+
+                return Ok(hub);
             }
             catch (BaseException ex)
             {

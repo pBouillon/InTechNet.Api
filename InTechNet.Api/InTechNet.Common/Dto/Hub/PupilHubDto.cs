@@ -16,15 +16,6 @@
         public string Name { get; set; }
 
         /// <summary>
-        /// Link of the hub, must be unique
-        /// </summary>
-        /// <remarks>
-        /// This will only be the last part of the URI as:
-        /// https://[api_url]/hub/[Link]
-        /// </remarks>
-        public string Link { get; set; }
-
-        /// <summary>
         /// Description of the hub
         /// </summary>
         public string Description { get; set; }
