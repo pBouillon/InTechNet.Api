@@ -7,6 +7,8 @@ using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
+using InTechNet.Exception.Attendee;
+using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Authentication.Interfaces;
@@ -135,10 +137,12 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        [HttpGet("me/Hubs/join")]
+        [HttpPost("me/Hubs/join")]
         [PupilClaimRequired]
-        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully joined")]
-        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Unable to join hub")]
+        [SwaggerResponse((int) HttpStatusCode.Created, "Hub successfully joined")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Pupil already joined the hub")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "Hub already at maximum capacity")]
         [SwaggerOperation(
             Summary = "Register the current pupil as an attendee of the hub associated to the provided link",
             Tags = new[]
@@ -147,28 +151,38 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Pupils,
             }
         )]
-        public ActionResult<PupilHubDto> JoinHub(
+        public ActionResult JoinHub(
             [FromQuery, SwaggerParameter("Link of the hub the pupil is joining")] string link)
         {
             try
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                var hub = _attendeeService.AddAttendee(currentPupil, link);
+                _attendeeService.AddAttendee(currentPupil, link);
 
-                return Ok(hub);
+                return Created("Pupil added to hub", true);
             }
-            catch (BaseException ex)
+            catch (AttendeeAlreadyRegisteredException ex)
             {
                 return Unauthorized(
                     new UnauthorizedError(ex));
+            }
+            catch (HubMaxAttendeeCountReachedException ex)
+            {
+                return Conflict(
+                    new ConflictError(ex));
+            }
+            catch (UnknownHubException ex)
+            {
+                return BadRequest(
+                    new BadRequestError(ex));
             }
         }
 
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New pupil successfully added")]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new pupil",

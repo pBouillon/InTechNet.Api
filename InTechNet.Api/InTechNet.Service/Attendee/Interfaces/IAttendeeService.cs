@@ -15,7 +15,7 @@ namespace InTechNet.Services.Attendee.Interfaces
         /// </summary>
         /// <param name="pupilDto">The pupil that wil be added</param>
         /// <param name="link">The link of the hub</param>
-        PupilHubDto AddAttendee(PupilDto pupilDto, string link);
+        void AddAttendee(PupilDto pupilDto, string link);
 
         /// <summary>
         /// Remove the pupil's attendance to a hub

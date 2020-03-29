@@ -28,7 +28,7 @@ namespace InTechNet.Services.Attendee
             => _context = context;
 
         /// <inheritdoc cref="IAttendeeService.AddAttendee"/>
-        public PupilHubDto AddAttendee(PupilDto pupilDto, string link)
+        public void AddAttendee(PupilDto pupilDto, string link)
         {
             // Get the hub from its link
             var hub = _context.Hubs.Include(_ => _.Attendees)
@@ -75,14 +75,6 @@ namespace InTechNet.Services.Attendee
             });
 
             _context.SaveChanges();
-
-            return new PupilHubDto
-            {
-                Id = hub.IdHub,
-                Description = hub.HubDescription,
-                ModeratorNickname = hub.Moderator.ModeratorNickname,
-                Name = hub.HubName,
-            };
         }
 
         /// <inheritdoc cref="IAttendeeService.RemoveAttendance"/>
