@@ -2,20 +2,23 @@
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
+using InTechNet.Exception.Attendee;
+using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
+using InTechNet.Services.Attendee.Interfaces;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
-using InTechNet.Services.Authentication.Interfaces;
-using InTechNet.Services.Hub.Interfaces;
-using InTechNet.Services.User.Interfaces;
-using InTechNet.Common.Dto.User.Attendee;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -27,14 +30,14 @@ namespace InTechNet.Api.Controllers.Users
     public class PupilsController : ControllerBase
     {
         /// <summary>
+        /// Attendee service for attendee related operations
+        /// </summary>
+        private readonly IAttendeeService _attendeeService;
+
+        /// <summary>
         /// Authentication service
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
-
-        /// <summary>
-        /// User service for user related operations
-        /// </summary>
-        private readonly IPupilService _pupilService;
 
         /// <summary>
         /// Hub service for hub related operations
@@ -42,13 +45,25 @@ namespace InTechNet.Api.Controllers.Users
         private readonly IHubService _hubService;
 
         /// <summary>
+        /// User service for user related operations
+        /// </summary>
+        private readonly IPupilService _pupilService;
+
+        /// <summary>
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
         /// <param name="pupilService">Pupil service</param>
         /// <param name="hubService">Hub service</param>
-        public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService)
-            => (_authenticationService, _pupilService, _hubService) = (authenticationService, pupilService, hubService);
+        /// <param name="attendeeService">Attendee service</param>
+        public PupilsController(IAttendeeService attendeeService, IAuthenticationService authenticationService,
+            IHubService hubService, IPupilService pupilService)
+        {
+            _attendeeService = attendeeService;
+            _authenticationService = authenticationService;
+            _hubService = hubService;
+            _pupilService = pupilService;
+        }
 
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
@@ -123,10 +138,52 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [HttpPost("me/Hubs/join")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.Created, "Hub successfully joined")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Pupil already joined the hub")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "Hub already at its maximum capacity")]
+        [SwaggerOperation(
+            Summary = "Register the current pupil as an attendee of the hub associated to the provided link",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public ActionResult JoinHub(
+            [FromQuery, SwaggerParameter("Link of the hub the pupil is joining")] string link)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _attendeeService.AddAttendee(currentPupil, link);
+
+                return Created("Pupil added to hub", true);
+            }
+            catch (AttendeeAlreadyRegisteredException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+            catch (HubMaxAttendeeCountReachedException ex)
+            {
+                return Conflict(
+                    new ConflictError(ex));
+            }
+            catch (UnknownHubException ex)
+            {
+                return BadRequest(
+                    new BadRequestError(ex));
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New pupil successfully added")]
-        [SwaggerResponse((int)HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "The pupil has a duplicated credential (login / email)")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerOperation(
             Summary = "Registration endpoint to create a new pupil",
