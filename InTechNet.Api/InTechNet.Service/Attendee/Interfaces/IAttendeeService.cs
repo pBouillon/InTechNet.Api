@@ -4,7 +4,6 @@ using InTechNet.Common.Dto.User.Pupil;
 
 namespace InTechNet.Services.Attendee.Interfaces
 {
-
     /// <summary>
     /// Service for attendee's operations
     /// </summary>

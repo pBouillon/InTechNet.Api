@@ -56,7 +56,8 @@ namespace InTechNet.Api.Controllers.Users
         /// <param name="pupilService">Pupil service</param>
         /// <param name="hubService">Hub service</param>
         /// <param name="attendeeService">Attendee service</param>
-        public PupilsController(IAttendeeService attendeeService, IAuthenticationService authenticationService, IHubService hubService, IPupilService pupilService)
+        public PupilsController(IAttendeeService attendeeService, IAuthenticationService authenticationService,
+            IHubService hubService, IPupilService pupilService)
         {
             _attendeeService = attendeeService;
             _authenticationService = authenticationService;
@@ -142,7 +143,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.Created, "Hub successfully joined")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Pupil already joined the hub")]
-        [SwaggerResponse((int) HttpStatusCode.Conflict, "Hub already at maximum capacity")]
+        [SwaggerResponse((int) HttpStatusCode.Conflict, "Hub already at its maximum capacity")]
         [SwaggerOperation(
             Summary = "Register the current pupil as an attendee of the hub associated to the provided link",
             Tags = new[]
