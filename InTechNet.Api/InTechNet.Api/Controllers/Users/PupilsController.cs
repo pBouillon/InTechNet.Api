@@ -2,21 +2,21 @@
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
+using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Api;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
+using InTechNet.Services.Attendee.Interfaces;
+using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
-using InTechNet.Services.Authentication.Interfaces;
-using InTechNet.Services.Hub.Interfaces;
-using InTechNet.Services.User.Interfaces;
-using InTechNet.Common.Dto.User.Attendee;
-using InTechNet.Services.Attendee.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -28,21 +28,24 @@ namespace InTechNet.Api.Controllers.Users
     public class PupilsController : ControllerBase
     {
         /// <summary>
+        /// Attendee service for attendee related operations
+        /// </summary>
+        private readonly IAttendeeService _attendeeService;
+
+        /// <summary>
         /// Authentication service
         /// </summary>
         private readonly IAuthenticationService _authenticationService;
-
-        /// <summary>
-        /// User service for user related operations
-        /// </summary>
-        private readonly IPupilService _pupilService;
 
         /// <summary>
         /// Hub service for hub related operations
         /// </summary>
         private readonly IHubService _hubService;
 
-        private readonly IAttendeeService _attendeeService;
+        /// <summary>
+        /// User service for user related operations
+        /// </summary>
+        private readonly IPupilService _pupilService;
 
         /// <summary>
         /// Controller for hub endpoints relative to pupils management
@@ -51,8 +54,13 @@ namespace InTechNet.Api.Controllers.Users
         /// <param name="pupilService">Pupil service</param>
         /// <param name="hubService">Hub service</param>
         /// <param name="attendeeService">Attendee service</param>
-        public PupilsController(IAuthenticationService authenticationService, IPupilService pupilService, IHubService hubService, IAttendeeService attendeeService)
-            => (_authenticationService, _pupilService, _hubService, _attendeeService) = (authenticationService, pupilService, hubService, attendeeService);
+        public PupilsController(IAttendeeService attendeeService, IAuthenticationService authenticationService, IHubService hubService, IPupilService pupilService)
+        {
+            _attendeeService = attendeeService;
+            _authenticationService = authenticationService;
+            _hubService = hubService;
+            _pupilService = pupilService;
+        }
 
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
@@ -129,10 +137,10 @@ namespace InTechNet.Api.Controllers.Users
 
         [HttpGet("me/Hubs/join")]
         [PupilClaimRequired]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Hub successfully joined")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Could not join hub")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully joined")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Unable to join hub")]
         [SwaggerOperation(
-            Summary = "Join a hub, returns the hubs info",
+            Summary = "Register the current pupil as an attendee of the hub associated to the provided link",
             Tags = new[]
             {
                 SwaggerTag.Hubs,

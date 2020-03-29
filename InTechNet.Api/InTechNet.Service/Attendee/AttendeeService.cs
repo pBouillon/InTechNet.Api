@@ -27,6 +27,7 @@ namespace InTechNet.Services.Attendee
         public AttendeeService(InTechNetContext context)
             => _context = context;
 
+        /// <inheritdoc cref="IAttendeeService.AddAttendee"/>
         public PupilHubDto AddAttendee(PupilDto pupilDto, string link)
         {
             // Get the hub from its link
@@ -37,16 +38,17 @@ namespace InTechNet.Services.Attendee
                         _.HubLink == link)
                 ?? throw new UnknownHubException();
 
+            // Ensure that the hub has not reached its full capacity
             var capacityMax = hub.Moderator.ModeratorSubscriptionPlan.MaxAttendeesPerHub;
 
             var isCapacityMaxReached = (hub.Attendees.Count() >= capacityMax);
 
             if (isCapacityMaxReached)
             {
-                throw new MaxAttendeeCountReachedException();
+                throw new HubMaxAttendeeCountReachedException();
             }
-            
-            // Check if the pupil is already an attendee
+
+            // Check if the pupil is already an attendee of this hub
             var attendeeAlreadyExists = _context.Attendees.Any(_ =>
                     _.IdHub == hub.IdHub && _.IdPupil == pupilDto.Id);
 
@@ -55,6 +57,7 @@ namespace InTechNet.Services.Attendee
                 throw new AttendeeAlreadyRegisteredException();
             }
 
+            // Create the attendee to be added to this hub
             var pupil = _context.Pupils.First(_ =>
                 _.IdPupil == pupilDto.Id);
 
