@@ -110,7 +110,7 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        [HttpDelete("{pupilId}")]
+        [HttpDelete]
         [PupilClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.NoContent, "Pupil successfully deleted")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Pupil deletion failed")]
@@ -121,8 +121,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Pupils
             }
         )]
-        public IActionResult DeleteHub(
-            [FromRoute, SwaggerParameter("Id of the pupil to be deleted")] int hubId)
+        public IActionResult DeleteHub()
         {
             try
             {

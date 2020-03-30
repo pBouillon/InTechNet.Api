@@ -94,7 +94,7 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-        [HttpDelete("{moderatorId}")]
+        [HttpDelete]
         [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.NoContent, "Moderator successfully deleted")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Moderator deletion failed")]
@@ -105,8 +105,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Moderators
             }
         )]
-        public IActionResult DeleteHub(
-            [FromRoute, SwaggerParameter("Id of the moderator to be deleted")] int hubId)
+        public IActionResult DeleteHub()
         {
             try
             {
