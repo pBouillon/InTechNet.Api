@@ -84,6 +84,17 @@ namespace InTechNet.Services.User
             };
         }
 
+        /// <inheritdoc cref="IModeratorService.DeleteModerator" />
+        public void DeleteModerator(ModeratorDto moderatorDto)
+        {
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                _.IdModerator == moderatorDto.Id)
+                    ?? throw new UnknownUserException();
+
+            _context.Moderators.Remove(moderator);
+            _context.SaveChanges();
+        }
+
         /// <inheritdoc cref="IModeratorService.GetModerator" />
         public ModeratorDto GetModerator(int moderatorId)
         {

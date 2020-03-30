@@ -16,6 +16,12 @@ namespace InTechNet.Services.User.Interfaces
         ModeratorDto AuthenticateModerator(AuthenticationDto authenticationData);
 
         /// <summary>
+        /// Delete the current pupil
+        /// </summary>
+        /// <param name="currentModerator">Current <see cref="ModeratorDto" /> data</param>
+        void DeleteModerator(ModeratorDto moderatorDto);
+
+        /// <summary>
         /// Get the moderator's data based on its identifier
         /// </summary>
         /// <param name="moderatorId">The moderator's identifier</param>

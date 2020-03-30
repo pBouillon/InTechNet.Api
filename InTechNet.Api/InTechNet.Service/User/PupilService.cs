@@ -56,6 +56,17 @@ namespace InTechNet.Services.User
             };
         }
 
+        /// <inheritdoc cref="IPupilService.De" />
+        public void DeletePupil(PupilDto pupilDto)
+        {
+            var pupil = _context.Pupils.FirstOrDefault(_ =>
+                _.IdPupil == pupilDto.Id)
+                    ?? throw new UnknownUserException();
+
+            _context.Pupils.Remove(pupil);
+            _context.SaveChanges();
+        }
+
         /// <inheritdoc cref="IPupilService.GetPupil" />
         public PupilDto GetPupil(int pupilId)
         {

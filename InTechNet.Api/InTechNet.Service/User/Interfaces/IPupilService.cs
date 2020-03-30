@@ -16,6 +16,12 @@ namespace InTechNet.Services.User.Interfaces
         PupilDto AuthenticatePupil(AuthenticationDto authenticationData);
 
         /// <summary>
+        /// Delete the current pupil
+        /// </summary>
+        /// <param name="pupilDto">Current <see cref="PupilDto" /> data</param>
+        void DeletePupil(PupilDto pupilDto);
+
+        /// <summary>
         /// Get the pupil's data based on its identifier
         /// </summary>
         /// <param name="pupilId">The pupil's identifier</param>

@@ -110,6 +110,35 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [HttpDelete("{pupilId}")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.NoContent, "Pupil successfully deleted")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Pupil deletion failed")]
+        [SwaggerOperation(
+            Summary = "Deletion endpoint to remove an existing pupil",
+            Tags = new[]
+            {
+                SwaggerTag.Pupils
+            }
+        )]
+        public IActionResult DeleteHub(
+            [FromRoute, SwaggerParameter("Id of the pupil to be deleted")] int hubId)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _pupilService.DeletePupil(currentPupil);
+
+                return NoContent();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
         [HttpGet("me/Hubs")]
         [PupilClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
