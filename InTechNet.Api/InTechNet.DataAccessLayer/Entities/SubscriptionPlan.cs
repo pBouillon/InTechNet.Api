@@ -26,6 +26,11 @@ namespace InTechNet.DataAccessLayer.Entities
         public int MaxHubPerModeratorAccount { get; set; }
 
         /// <summary>
+        /// Maximum number of module per hub
+        /// </summary>
+        public int MaxModulePerHub { get; set; }
+
+        /// <summary>
         /// Price of the subscription
         /// </summary>
         public decimal SubscriptionPlanPrice { get; set; }

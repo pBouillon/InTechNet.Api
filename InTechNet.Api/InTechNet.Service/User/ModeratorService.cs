@@ -70,7 +70,8 @@ namespace InTechNet.Services.User
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
-                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub,
+                MaxModulePerHub = moderatorSubscriptionPlan.MaxModulePerHub,
             };
 
             // Return the DTO associated to the moderator without its password
@@ -112,7 +113,8 @@ namespace InTechNet.Services.User
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
-                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub,
+                MaxModulePerHub = moderatorSubscriptionPlan.MaxModulePerHub,
             };
 
             return new ModeratorDto

@@ -16,6 +16,11 @@
         public abstract int MaxHubsCount { get; }
 
         /// <summary>
+        ///  Maximum number of module allowed
+        /// </summary>
+        public abstract int MaxModulePerHub { get; }
+
+        /// <summary>
         /// Monthly price of the subscription plan
         /// </summary>
         public abstract decimal Price { get; }

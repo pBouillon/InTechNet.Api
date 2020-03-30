@@ -18,6 +18,11 @@ namespace InTechNet.Common.Dto.Subscription
         /// Maximum number of hub
         /// </summary>
         public int MaxHubPerModeratorAccount { get; set; }
+        
+        /// <summary>
+        /// Maximum module per hub
+        /// </summary>
+        public int MaxModulePerHub { get; set; }
 
         /// <summary>
         /// Maximum number of attendee per hub

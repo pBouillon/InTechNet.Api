@@ -13,6 +13,10 @@
         public override int MaxHubsCount
             => 3;
 
+        /// <inheritdoc cref="BaseSubscriptionPlan.MaxModulePerHub"/>
+        public override int MaxModulePerHub
+            => 3;
+
         /// <inheritdoc cref="BaseSubscriptionPlan.Price"/>
         public override decimal Price
             => 0.0M;

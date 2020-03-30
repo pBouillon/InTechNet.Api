@@ -161,6 +161,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MaxModulePerHub")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SubscriptionPlanName")
                         .HasColumnType("text");
 
@@ -177,6 +180,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                             IdSubscriptionPlan = 1,
                             MaxAttendeesPerHub = 32,
                             MaxHubPerModeratorAccount = 3,
+                            MaxModulePerHub = 0,
                             SubscriptionPlanName = "Standard",
                             SubscriptionPlanPrice = 0.0m
                         });
@@ -186,25 +190,29 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hub", "Hub")
                         .WithMany("Attendees")
-                        .HasForeignKey("HubIdHub");
+                        .HasForeignKey("HubIdHub")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Pupil", "Pupil")
                         .WithMany("Attendees")
-                        .HasForeignKey("PupilIdPupil");
+                        .HasForeignKey("PupilIdPupil")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Moderator", "Moderator")
                         .WithMany("Hubs")
-                        .HasForeignKey("ModeratorIdModerator");
+                        .HasForeignKey("ModeratorIdModerator")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscriptionPlan")
                         .WithMany("Moderators")
-                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan");
+                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }
