@@ -70,7 +70,8 @@ namespace InTechNet.Services.User
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
-                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub,
+                MaxModulePerHub = moderatorSubscriptionPlan.MaxModulePerHub,
             };
 
             // Return the DTO associated to the moderator without its password
@@ -82,6 +83,17 @@ namespace InTechNet.Services.User
                 NumberOfHub = moderator.Hubs.Count(),
                 SubscriptionPlanDto = subscriptionPlanDtoForCurrentModerator
             };
+        }
+
+        /// <inheritdoc cref="IModeratorService.DeleteModerator" />
+        public void DeleteModerator(ModeratorDto moderatorDto)
+        {
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                    _.IdModerator == moderatorDto.Id)
+                ?? throw new UnknownUserException();
+
+            _context.Moderators.Remove(moderator);
+            _context.SaveChanges();
         }
 
         /// <inheritdoc cref="IModeratorService.GetModerator" />
@@ -101,7 +113,8 @@ namespace InTechNet.Services.User
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
-                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub
+                MaxAttendeesPerHub = moderatorSubscriptionPlan.MaxAttendeesPerHub,
+                MaxModulePerHub = moderatorSubscriptionPlan.MaxModulePerHub,
             };
 
             return new ModeratorDto

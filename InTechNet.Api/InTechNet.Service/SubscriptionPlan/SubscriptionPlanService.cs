@@ -27,10 +27,11 @@ namespace InTechNet.Services.SubscriptionPlan
             return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
             {
                 IdSubscriptionPlan = _.IdSubscriptionPlan,
+                MaxAttendeesPerHub = _.MaxAttendeesPerHub,
                 MaxHubPerModeratorAccount = _.MaxHubPerModeratorAccount,
+                MaxModulePerHub = _.MaxModulePerHub,
                 SubscriptionPlanName = _.SubscriptionPlanName,
                 SubscriptionPlanPrice = _.SubscriptionPlanPrice,
-                MaxAttendeesPerHub = _.MaxAttendeesPerHub
             });
         }
     }

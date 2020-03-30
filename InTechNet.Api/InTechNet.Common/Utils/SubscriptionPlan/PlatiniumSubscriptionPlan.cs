@@ -1,28 +1,28 @@
 ﻿namespace InTechNet.Common.Utils.SubscriptionPlan
 {
     /// <summary>
-    /// Class for the free subscription plan
+    /// Class for the platinium subscription plan
     /// </summary>
-    public class FreeSubscriptionPlan : BaseSubscriptionPlan
+    public class PlatiniumSubscriptionPlan : BaseSubscriptionPlan
     {
         /// <inheritdoc cref="BaseSubscriptionPlan.MaxAttendeesPerHubCount"/>
         public override int MaxAttendeesPerHubCount
-            => 32;
+            => 60;
 
         /// <inheritdoc cref="BaseSubscriptionPlan.MaxHubsCount"/>
         public override int MaxHubsCount
-            => 3;
+            => 10;
 
         /// <inheritdoc cref="BaseSubscriptionPlan.MaxModulePerHub"/>
         public override int MaxModulePerHub
-            => 3;
+            => 15;
 
         /// <inheritdoc cref="BaseSubscriptionPlan.Price"/>
         public override decimal Price
-            => 0.0M;
+            => 10.0M;
 
         /// <inheritdoc cref="BaseSubscriptionPlan.SubscriptionPlanName"/>
         public override string SubscriptionPlanName
-            => "Standard";
+            => "Platinium";
     }
 }

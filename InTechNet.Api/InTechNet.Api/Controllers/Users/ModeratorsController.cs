@@ -94,6 +94,34 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [HttpDelete]
+        [ModeratorClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.NoContent, "Moderator successfully deleted")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Moderator deletion failed")]
+        [SwaggerOperation(
+            Summary = "Deletion endpoint to remove an existing moderator",
+            Tags = new[]
+            {
+                SwaggerTag.Moderators
+            }
+        )]
+        public IActionResult DeleteHub()
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+
+                _moderatorService.DeleteModerator(currentModerator);
+
+                return NoContent();
+            }
+            catch (BaseException ex)
+            {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New moderator successfully added")]

@@ -45,19 +45,24 @@ namespace InTechNet.DataAccessLayer
         {
             modelBuilder.Entity<SubscriptionPlan>()
                 .HasMany(_ => _.Moderators)
-                .WithOne(_ => _.ModeratorSubscriptionPlan);
+                .WithOne(_ => _.ModeratorSubscriptionPlan)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Moderator>()
                 .HasMany(_ => _.Hubs)
-                .WithOne(_ => _.Moderator);
+                .WithOne(_ => _.Moderator)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Attendee>()
                 .HasOne(_ => _.Hub)
-                .WithMany(_ => _.Attendees);
+                .WithMany(_ => _.Attendees)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Attendee>()
                 .HasOne(_ => _.Pupil)
-                .WithMany(_ => _.Attendees);
+                .WithMany(_ => _.Attendees)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Moderator>()
                 .HasIndex(b => b.ModeratorNickname)
@@ -95,9 +100,40 @@ namespace InTechNet.DataAccessLayer
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = freeSubscriptionPlan.MaxModulePerHub,
                 SubscriptionPlanName = freeSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = freeSubscriptionPlan.Price
             });
+
+            // Premium plan
+            var premiumSubscriptionPlan = new PremiumSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                IdSubscriptionPlan = ++subscriptionId,
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = premiumSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = premiumSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = premiumSubscriptionPlan.MaxModulePerHub,
+                SubscriptionPlanName = premiumSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = premiumSubscriptionPlan.Price
+            });
+
+
+
+            // Platinium plan
+            var platiniumSubscriptionPlan = new PlatiniumSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                IdSubscriptionPlan = ++subscriptionId,
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = platiniumSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = platiniumSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = platiniumSubscriptionPlan.MaxModulePerHub,
+                SubscriptionPlanName = platiniumSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = platiniumSubscriptionPlan.Price
+            });
+
+
 
             modelBuilder.Entity<SubscriptionPlan>()
                 .HasData(subscriptionPlans);
