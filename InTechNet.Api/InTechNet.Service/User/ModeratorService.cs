@@ -89,8 +89,8 @@ namespace InTechNet.Services.User
         public void DeleteModerator(ModeratorDto moderatorDto)
         {
             var moderator = _context.Moderators.FirstOrDefault(_ =>
-                _.IdModerator == moderatorDto.Id)
-                    ?? throw new UnknownUserException();
+                    _.IdModerator == moderatorDto.Id)
+                ?? throw new UnknownUserException();
 
             _context.Moderators.Remove(moderator);
             _context.SaveChanges();

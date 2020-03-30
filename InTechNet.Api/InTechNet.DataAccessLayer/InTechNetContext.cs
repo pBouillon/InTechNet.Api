@@ -105,6 +105,36 @@ namespace InTechNet.DataAccessLayer
                 SubscriptionPlanPrice = freeSubscriptionPlan.Price
             });
 
+            // Premium plan
+            var premiumSubscriptionPlan = new PremiumSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                IdSubscriptionPlan = ++subscriptionId,
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = premiumSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = premiumSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = premiumSubscriptionPlan.MaxModulePerHub,
+                SubscriptionPlanName = premiumSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = premiumSubscriptionPlan.Price
+            });
+
+
+
+            // Platinium plan
+            var platiniumSubscriptionPlan = new PlatiniumSubscriptionPlan();
+            subscriptionPlans.Enqueue(new SubscriptionPlan
+            {
+                IdSubscriptionPlan = ++subscriptionId,
+                Moderators = new List<Moderator>(),
+                MaxAttendeesPerHub = platiniumSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = platiniumSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = platiniumSubscriptionPlan.MaxModulePerHub,
+                SubscriptionPlanName = platiniumSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = platiniumSubscriptionPlan.Price
+            });
+
+
+
             modelBuilder.Entity<SubscriptionPlan>()
                 .HasData(subscriptionPlans);
         }

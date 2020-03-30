@@ -180,9 +180,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                             IdSubscriptionPlan = 1,
                             MaxAttendeesPerHub = 32,
                             MaxHubPerModeratorAccount = 3,
-                            MaxModulePerHub = 0,
+                            MaxModulePerHub = 3,
                             SubscriptionPlanName = "Standard",
                             SubscriptionPlanPrice = 0.0m
+                        },
+                        new
+                        {
+                            IdSubscriptionPlan = 2,
+                            MaxAttendeesPerHub = 50,
+                            MaxHubPerModeratorAccount = 5,
+                            MaxModulePerHub = 5,
+                            SubscriptionPlanName = "Premium",
+                            SubscriptionPlanPrice = 5.0m
+                        },
+                        new
+                        {
+                            IdSubscriptionPlan = 3,
+                            MaxAttendeesPerHub = 60,
+                            MaxHubPerModeratorAccount = 10,
+                            MaxModulePerHub = 15,
+                            SubscriptionPlanName = "Platinium",
+                            SubscriptionPlanPrice = 10.0m
                         });
                 });
 

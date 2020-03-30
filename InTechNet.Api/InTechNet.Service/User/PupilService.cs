@@ -60,8 +60,8 @@ namespace InTechNet.Services.User
         public void DeletePupil(PupilDto pupilDto)
         {
             var pupil = _context.Pupils.FirstOrDefault(_ =>
-                _.IdPupil == pupilDto.Id)
-                    ?? throw new UnknownUserException();
+                    _.IdPupil == pupilDto.Id)
+                ?? throw new UnknownUserException();
 
             _context.Pupils.Remove(pupil);
             _context.SaveChanges();

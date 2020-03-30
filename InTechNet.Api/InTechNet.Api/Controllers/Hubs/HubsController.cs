@@ -74,7 +74,7 @@ namespace InTechNet.Api.Controllers.Hubs
 
         [HttpDelete("{hubId}")]
         [ModeratorClaimRequired]
-        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully deleted")]
+        [SwaggerResponse((int) HttpStatusCode.NoContent, "Hub successfully deleted")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub deletion failed")]
         [SwaggerOperation(
             Summary = "Deletion endpoint to remove an existing hub",
@@ -92,7 +92,7 @@ namespace InTechNet.Api.Controllers.Hubs
 
                 _hubService.DeleteHub(currentModerator, hubId);
 
-                return Ok();
+                return NoContent();
             }
             catch (BaseException ex)
             {
