@@ -138,6 +138,34 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [HttpGet("me/Hubs/{hubLink}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Hub successfully fetched")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Invalid payload")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Hub fetching failed")]
+        [SwaggerOperation(
+            Summary = "Get the details of a requested hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+            }
+        )]
+        public ActionResult<HubDto> GetHubByLink(string hubLink)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var hub = _pupilService.GetHubByLink(hubLink);
+
+                return Ok(hub);
+            }
+            catch (UnknownHubException ex)
+            {
+                return BadRequest(
+                    new BadRequestError(ex));
+            }
+        }
+
         [HttpGet("me/Hubs")]
         [PupilClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs successfully fetched")]
