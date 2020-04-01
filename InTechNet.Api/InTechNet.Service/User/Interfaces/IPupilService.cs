@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.User.Pupil;
+﻿using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 
 namespace InTechNet.Services.User.Interfaces
@@ -29,10 +30,11 @@ namespace InTechNet.Services.User.Interfaces
         PupilDto GetPupil(int pupilId);
 
         /// <summary>
-        /// Create a new pupil in the database
+        /// Get the hub corresponding to the link given
         /// </summary>
-        /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
-        void RegisterPupil(PupilRegistrationDto newPupilData);
+        /// <param name="hubLink"></param>
+        /// <returns></returns>
+        PupilHubDto GetHubByLink(string hubLink);
 
         /// <summary>
         /// Check the nickname from the NicknameDuplicationCheckDto
@@ -47,5 +49,11 @@ namespace InTechNet.Services.User.Interfaces
         /// <param name="email">The email to be checked for duplicates</param>
         /// <returns>A bool with value true if email is OK, false otherwise</returns>
         bool IsEmailAlreadyInUse(string email);
+
+        /// <summary>
+        /// Create a new pupil in the database
+        /// </summary>
+        /// <param name="newPupilData">A <see cref="PupilRegistrationDto" /> holding the new pupil's data</param>
+        void RegisterPupil(PupilRegistrationDto newPupilData);
     }
 }

@@ -1,14 +1,17 @@
 ﻿using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
 using InTechNet.Exception.Authentication;
+using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.User.Helpers;
 using InTechNet.Services.User.Interfaces;
+using Microsoft.EntityFrameworkCore;
 
 namespace InTechNet.Services.User
 {
@@ -79,6 +82,24 @@ namespace InTechNet.Services.User
                 Nickname = pupil.PupilNickname,
                 Email = pupil.PupilEmail,
                 Id = pupilId
+            };
+        }
+
+        /// <inheritdoc cref="IPupilService.GetHubByLink"/>
+        public PupilHubDto GetHubByLink(string hubLink)
+        {
+            // Get the hub identified by the link
+            var hub = _context.Hubs.Include(_ => _.Moderator)
+                .FirstOrDefault(_ =>
+                    _.HubLink == hubLink)
+                ?? throw new UnknownHubException();
+
+            return new PupilHubDto
+            {
+                Id = hub.IdHub,
+                Description = hub.HubDescription,
+                ModeratorNickname = hub.Moderator.ModeratorNickname,
+                Name = hub.HubName,
             };
         }
 
