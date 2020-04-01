@@ -139,11 +139,11 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [HttpGet("me/Hubs/{hubLink}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Hub successfully fetched")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Invalid payload")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Hub fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub fetching failed")]
         [SwaggerOperation(
-            Summary = "Get the details of a requested hub",
+            Summary = "Get the details of a requested hub by its link",
             Tags = new[]
             {
                 SwaggerTag.Hubs,
