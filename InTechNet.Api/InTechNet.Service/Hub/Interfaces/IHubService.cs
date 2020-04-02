@@ -42,6 +42,14 @@ namespace InTechNet.Services.Hub.Interfaces
         IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto);
 
         /// <summary>
+        /// Retrieve the information for a specific hub
+        /// </summary>
+        /// <param name="currentPupil">Current <see cref="PupilDto" /> data</param>
+        /// <param name="hubId">The id of the hub to retriever</param>
+        /// <returns>The <see cref="HubDto"/> containing the hub details</returns>
+        HubDto GetPupilHub(PupilDto currentPupil, int hubId);
+
+        /// <summary>
         /// Retrieve all hubs owned by the pupil matching the provided pupil's id
         /// </summary>
         /// <param name="currentPupil">Current <see cref="Pupil" /> data</param>

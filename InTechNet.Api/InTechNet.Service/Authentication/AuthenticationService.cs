@@ -120,5 +120,37 @@ namespace InTechNet.Services.Authentication
             return _moderatorService.IsNicknameAlreadyInUse(nickname)
                 || _pupilService.IsNicknameAlreadyInUse(nickname);
         }
+
+        /// <inheritdoc cref="IAuthenticationService.TryGetCurrentModerator" />
+        public bool TryGetCurrentModerator(out ModeratorDto moderatorDto)
+        {
+            moderatorDto = null;
+
+            try
+            {
+                moderatorDto = GetCurrentModerator();
+            }
+            // On exception, moderator will be null
+            // Since this is a TryX method, errors are silenced
+            catch { }
+
+            return moderatorDto != null;
+        }
+
+        /// <inheritdoc cref="IAuthenticationService.TryGetCurrentPupil" />
+        public bool TryGetCurrentPupil(out PupilDto pupilDto)
+        {
+            pupilDto = null;
+
+            try
+            {
+                pupilDto = GetCurrentPupil();
+            }
+            // On exception, pupil will be null
+            // Since this is a TryX method, errors are silenced
+            catch { }
+
+            return pupilDto != null;
+        }
     }
 }

@@ -11,6 +11,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
+using InTechNet.Common.Dto.User.Moderator;
 
 namespace InTechNet.Api.Controllers.Hubs
 {
@@ -102,7 +103,6 @@ namespace InTechNet.Api.Controllers.Hubs
         }
 
         [HttpGet("{hubId}")]
-        [ModeratorClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Hub fetching failed")]
         [SwaggerOperation(
@@ -114,13 +114,28 @@ namespace InTechNet.Api.Controllers.Hubs
         )]
         public ActionResult<HubDto> GetHub(int hubId)
         {
+            HubDto hub;
+
             try
             {
-                var currentModerator = _authenticationService.GetCurrentModerator();
+                // Fetch the hub from the moderator
+                if (_authenticationService.TryGetCurrentModerator(out var currentModerator))
+                {
+                    hub = _hubService.GetModeratorHub(currentModerator, hubId);
 
-                var hub =_hubService.GetModeratorHub(currentModerator, hubId);
+                    return Ok(hub);
+                }
 
-                return Ok(hub);
+                // If the request came from the pupil, fetch the request from the pupil
+                if (_authenticationService.TryGetCurrentPupil(out var currentPupil))
+                {
+                    hub = _hubService.GetPupilHub(currentPupil, hubId);
+
+                    return Ok(hub);
+                }
+
+                // If the request does not come from any of the previous roles, return Unauthorized
+                return Unauthorized();
             }
             catch (BaseException ex)
             {
