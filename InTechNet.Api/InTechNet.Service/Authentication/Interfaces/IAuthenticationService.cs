@@ -45,7 +45,7 @@ namespace InTechNet.Services.Authentication.Interfaces
         PupilDto GetCurrentPupil();
 
         /// <summary>
-        /// Try get the current moderator
+        /// Try to get the current moderator
         /// </summary>
         /// <param name="moderatorDto">The current <see cref="ModeratorDto"/> object to be filled</param>
         /// <returns>True if found; false otherwise</returns>
@@ -53,7 +53,7 @@ namespace InTechNet.Services.Authentication.Interfaces
         bool TryGetCurrentModerator(out ModeratorDto moderatorDto);
 
         /// <summary>
-        /// Try get the current pupil
+        /// Try to get the current pupil
         /// </summary>
         /// <param name="pupilDto">The current <see cref="PupilDto"/> object to be filled</param>
         /// <returns>True if found; false otherwise</returns>
