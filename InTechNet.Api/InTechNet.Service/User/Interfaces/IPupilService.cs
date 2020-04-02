@@ -34,7 +34,7 @@ namespace InTechNet.Services.User.Interfaces
         /// </summary>
         /// <param name="hubLink"></param>
         /// <returns></returns>
-        PupilHubDto GetHubByLink(string hubLink);
+        PupilHubDto GetHubByLink(PupilDto pupilDto, string hubLink);
 
         /// <summary>
         /// Check the nickname from the NicknameDuplicationCheckDto

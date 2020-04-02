@@ -155,7 +155,7 @@ namespace InTechNet.Api.Controllers.Users
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                var hub = _pupilService.GetHubByLink(hubLink);
+                var hub = _pupilService.GetHubByLink(currentPupil, hubLink);
 
                 return Ok(hub);
             }
