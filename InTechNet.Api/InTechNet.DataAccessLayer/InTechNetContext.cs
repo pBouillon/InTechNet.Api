@@ -41,6 +41,45 @@ namespace InTechNet.DataAccessLayer
         /// </summary>
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<Module> Modules { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<SelectedModule> SelectedModules { get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<Tag> Tags{ get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<Topic> Topics{ get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<Resource> Resources{ get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<State> States{ get; set; }
+
+        /// <summary>
+        /// 
+        /// </summary>
+        public DbSet<CurrentModule> CurrentModules { get; set; }
+
+        /// <summary>
+        /// Build the model
+        /// </summary>
+        /// <param name="modelBuilder"></param>
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<SubscriptionPlan>()
@@ -83,6 +122,8 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<Hub>()
                 .HasIndex(b => b.HubLink)
                 .HasName("index_hub_link");
+
+            // TODO relationships
 
             PopulateSubscriptionPlans(modelBuilder);
         }

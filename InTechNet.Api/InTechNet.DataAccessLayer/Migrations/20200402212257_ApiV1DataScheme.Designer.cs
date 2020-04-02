@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200322123759_InTechNetMigrationBaseAndBilling")]
-    partial class InTechNetMigrationBaseAndBilling
+    [Migration("20200402212257_ApiV1DataScheme")]
+    partial class ApiV1DataScheme
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -163,6 +163,9 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<int>("MaxHubPerModeratorAccount")
                         .HasColumnType("integer");
 
+                    b.Property<int>("MaxModulePerHub")
+                        .HasColumnType("integer");
+
                     b.Property<string>("SubscriptionPlanName")
                         .HasColumnType("text");
 
@@ -179,8 +182,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                             IdSubscriptionPlan = 1,
                             MaxAttendeesPerHub = 32,
                             MaxHubPerModeratorAccount = 3,
+                            MaxModulePerHub = 3,
                             SubscriptionPlanName = "Standard",
                             SubscriptionPlanPrice = 0.0m
+                        },
+                        new
+                        {
+                            IdSubscriptionPlan = 2,
+                            MaxAttendeesPerHub = 50,
+                            MaxHubPerModeratorAccount = 5,
+                            MaxModulePerHub = 5,
+                            SubscriptionPlanName = "Premium",
+                            SubscriptionPlanPrice = 5.0m
+                        },
+                        new
+                        {
+                            IdSubscriptionPlan = 3,
+                            MaxAttendeesPerHub = 60,
+                            MaxHubPerModeratorAccount = 10,
+                            MaxModulePerHub = 15,
+                            SubscriptionPlanName = "Platinium",
+                            SubscriptionPlanPrice = 10.0m
                         });
                 });
 
@@ -188,25 +210,29 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hub", "Hub")
                         .WithMany("Attendees")
-                        .HasForeignKey("HubIdHub");
+                        .HasForeignKey("HubIdHub")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Pupil", "Pupil")
                         .WithMany("Attendees")
-                        .HasForeignKey("PupilIdPupil");
+                        .HasForeignKey("PupilIdPupil")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Moderator", "Moderator")
                         .WithMany("Hubs")
-                        .HasForeignKey("ModeratorIdModerator");
+                        .HasForeignKey("ModeratorIdModerator")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Moderator", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", "ModeratorSubscriptionPlan")
                         .WithMany("Moderators")
-                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan");
+                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618
         }
