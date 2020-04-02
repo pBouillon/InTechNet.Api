@@ -86,12 +86,15 @@ namespace InTechNet.Services.User
         }
 
         /// <inheritdoc cref="IPupilService.GetHubByLink"/>
-        public PupilHubDto GetHubByLink(string hubLink)
+        public PupilHubDto GetHubByLink(PupilDto pupilDto, string hubLink)
         {
             // Get the hub identified by the link
             var hub = _context.Hubs.Include(_ => _.Moderator)
+                .Include(_ => _.Attendees)
                 .FirstOrDefault(_ =>
-                    _.HubLink == hubLink)
+                    _.HubLink == hubLink
+                    && _.Attendees.Any(_ =>
+                        _.IdPupil == pupilDto.Id))
                 ?? throw new UnknownHubException();
 
             return new PupilHubDto

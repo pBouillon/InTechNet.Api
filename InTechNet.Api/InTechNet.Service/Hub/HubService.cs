@@ -102,16 +102,16 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.GetModeratorHub" />
         public HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId)
         {
-            // FIXME (#44): test on current user ID 
-
             try
             {
                 // Retrieve the requested hub
                 var hub = _context.Hubs
+                    .Include(_ => _.Moderator)
                     .Include(_ => _.Attendees)
                         .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
-                        _.IdHub == hubId);
+                        _.IdHub == hubId 
+                        && _.Moderator.IdModerator == moderatorDto.Id);
 
                 // Retrieve the attending pupils from the junction table `Attendee`
                 var hubAttendees = hub.Attendees?.Join(
@@ -127,8 +127,7 @@ namespace InTechNet.Services.Hub
                 // Return the agglomerated data
                 return new HubDto
                 {
-                    // FIXME (#44): id moderator != hub.idHub
-                    IdModerator = hub.IdHub,
+                    IdModerator = hub.Moderator.IdModerator,
                     Attendees = hubAttendees,
                     Description = hub.HubDescription,
                     Id = hub.IdHub,
@@ -161,16 +160,18 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.GetPupilHub" />
         public HubDto GetPupilHub(PupilDto currentPupil, int hubId)
         {
-            // FIXME (#44): test on current user ID
-
             try
             {
                 // Retrieve the requested hub
                 var hub = _context.Hubs
+                    .Include(_ => _.Moderator)
                     .Include(_ => _.Attendees)
                         .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
-                        _.IdHub == hubId);
+                        _.IdHub == hubId
+                        && _.Attendees.Any(_ => 
+                            _.IdHub == hubId 
+                            && _.IdPupil == currentPupil.Id));
 
                 // Retrieve the attending pupils from the junction table `Attendee`
                 var hubAttendees = hub.Attendees?.Join(
@@ -186,8 +187,7 @@ namespace InTechNet.Services.Hub
                 // Return the agglomerated data
                 return new HubDto
                 {
-                    // FIXME (#44): id moderator != hub.IdHub
-                    IdModerator = hub.IdHub,
+                    IdModerator = hub.Moderator.IdModerator,
                     Attendees = hubAttendees,
                     Description = hub.HubDescription,
                     Id = hub.IdHub,
