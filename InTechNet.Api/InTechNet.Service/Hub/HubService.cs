@@ -102,12 +102,14 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.GetModeratorHub" />
         public HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId)
         {
+            // FIXME (#44): test on current user ID 
+
             try
             {
                 // Retrieve the requested hub
                 var hub = _context.Hubs
                     .Include(_ => _.Attendees)
-                    .ThenInclude(_ => _.Pupil)
+                        .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
                         _.IdHub == hubId);
 
@@ -125,6 +127,7 @@ namespace InTechNet.Services.Hub
                 // Return the agglomerated data
                 return new HubDto
                 {
+                    // FIXME (#44): id moderator != hub.idHub
                     IdModerator = hub.IdHub,
                     Attendees = hubAttendees,
                     Description = hub.HubDescription,
@@ -155,7 +158,50 @@ namespace InTechNet.Services.Hub
             });
         }
 
-        /// <inheritdoc cref="IHubService.GetModeratorHubs" />
+        /// <inheritdoc cref="IHubService.GetPupilHub" />
+        public HubDto GetPupilHub(PupilDto currentPupil, int hubId)
+        {
+            // FIXME (#44): test on current user ID
+
+            try
+            {
+                // Retrieve the requested hub
+                var hub = _context.Hubs
+                    .Include(_ => _.Attendees)
+                        .ThenInclude(_ => _.Pupil)
+                    .Single(_ =>
+                        _.IdHub == hubId);
+
+                // Retrieve the attending pupils from the junction table `Attendee`
+                var hubAttendees = hub.Attendees?.Join(
+                    _context.Pupils,
+                    attendee => attendee.IdPupil,
+                    pupil => pupil.IdPupil,
+                    (_, pupil) => new LightweightPupilDto
+                    {
+                        Nickname = pupil.PupilNickname,
+                        Id = pupil.IdPupil
+                    }).ToList() ?? new List<LightweightPupilDto>();
+
+                // Return the agglomerated data
+                return new HubDto
+                {
+                    // FIXME (#44): id moderator != hub.IdHub
+                    IdModerator = hub.IdHub,
+                    Attendees = hubAttendees,
+                    Description = hub.HubDescription,
+                    Id = hub.IdHub,
+                    Name = hub.HubName,
+                    Link = hub.HubLink,
+                };
+            }
+            catch (InvalidOperationException ex)
+            {
+                throw new UnknownHubException(ex);
+            }
+        }
+
+        /// <inheritdoc cref="IHubService.GetPupilHubs" />
         public IEnumerable<PupilHubDto> GetPupilHubs(PupilDto currentPupil)
         {
             var pupilsAttendance = _context.Attendees.Include(_ => _.Hub)

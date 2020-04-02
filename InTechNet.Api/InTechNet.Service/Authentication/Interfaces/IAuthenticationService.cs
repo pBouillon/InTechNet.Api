@@ -43,5 +43,21 @@ namespace InTechNet.Services.Authentication.Interfaces
         /// </summary>
         /// <returns>The <see cref="PupilDto" /> holding the data associated with the pupil</returns>
         PupilDto GetCurrentPupil();
+
+        /// <summary>
+        /// Try to get the current moderator
+        /// </summary>
+        /// <param name="moderatorDto">The current <see cref="ModeratorDto"/> object to be filled</param>
+        /// <returns>True if found; false otherwise</returns>
+        /// <remarks>moderatorDto will be null if the operation fails</remarks>
+        bool TryGetCurrentModerator(out ModeratorDto moderatorDto);
+
+        /// <summary>
+        /// Try to get the current pupil
+        /// </summary>
+        /// <param name="pupilDto">The current <see cref="PupilDto"/> object to be filled</param>
+        /// <returns>True if found; false otherwise</returns>
+        /// <remarks>pupilDto will be null if the operation fails</remarks>
+        bool TryGetCurrentPupil(out PupilDto pupilDto);
     }
 }
