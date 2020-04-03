@@ -42,37 +42,37 @@ namespace InTechNet.DataAccessLayer
         public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the Module Entity
         /// </summary>
         public DbSet<Module> Modules { get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the SelectedModule Entity
         /// </summary>
         public DbSet<SelectedModule> SelectedModules { get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the Tag Entity
         /// </summary>
         public DbSet<Tag> Tags{ get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the Topic Entity
         /// </summary>
         public DbSet<Topic> Topics{ get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the Resource Entity
         /// </summary>
         public DbSet<Resource> Resources{ get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the State Entity
         /// </summary>
         public DbSet<State> States{ get; set; }
 
         /// <summary>
-        /// 
+        /// DbSet for the CurrentModule Entity
         /// </summary>
         public DbSet<CurrentModule> CurrentModules { get; set; }
 
