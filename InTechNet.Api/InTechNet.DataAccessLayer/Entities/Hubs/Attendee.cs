@@ -1,8 +1,10 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using InTechNet.DataAccessLayer.Entities.Resources;
+using InTechNet.DataAccessLayer.Entities.Users;
 
-namespace InTechNet.DataAccessLayer.Entities
+namespace InTechNet.DataAccessLayer.Entities.Hubs
 {
     [Table("attendee", Schema = "public")]
     public class Attendee

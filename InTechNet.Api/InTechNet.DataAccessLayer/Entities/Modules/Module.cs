@@ -1,8 +1,9 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using InTechNet.DataAccessLayer.Entities.Resources;
 
-namespace InTechNet.DataAccessLayer.Entities
+namespace InTechNet.DataAccessLayer.Entities.Modules
 {
     [Table("module", Schema = "public")]
     public class Module

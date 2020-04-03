@@ -1,9 +1,8 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InTechNet.DataAccessLayer.Entities
+namespace InTechNet.DataAccessLayer.Entities.Users
 {
     [Table("subscription_plan", Schema = "public")]
     public class SubscriptionPlan
