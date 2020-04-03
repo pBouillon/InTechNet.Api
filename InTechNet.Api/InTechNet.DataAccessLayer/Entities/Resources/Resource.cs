@@ -34,13 +34,14 @@ namespace InTechNet.DataAccessLayer.Entities.Resources
         /// Id of the resource to display after this one
         /// Null if it is the last resource of a module
         /// </summary>
-        public int IdNextResource { get; set; }
+        public int? IdNextResource { get; set; }
 
         /// <summary>
         /// The resource to display after this one
         /// Null if it is the last resource of a module
         /// </summary>
-        public Resource NextResource { get; set; }
+        [ForeignKey("fk_next_resource")]
+        public virtual Resource NextResource { get; set; }
 
         /// <summary>
         /// References the states where this resource is used
