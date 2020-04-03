@@ -426,7 +426,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Resource", "NextResource")
                         .WithOne()
                         .HasForeignKey("InTechNet.DataAccessLayer.Entities.Resource", "IdResource")
-                        .OnDelete(DeleteBehavior.Restrict);
+                        .OnDelete(DeleteBehavior.SetNull);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Module", "Module")
                         .WithMany("Resources")
