@@ -134,7 +134,7 @@ namespace InTechNet.DataAccessLayer
                 .WithOne()
                 .HasForeignKey<Resource>(_ => _.IdResource)
                 .IsRequired(false)
-                .OnDelete(DeleteBehavior.Restrict);
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<State>()
                 .HasOne(_ => _.Resource)
