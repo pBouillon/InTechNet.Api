@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entities
@@ -32,5 +33,7 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Hub for the pupil
         /// </summary>
         public Hub Hub { get; set; }
+
+        public IEnumerable<State> States { get; set; }
     }
 }

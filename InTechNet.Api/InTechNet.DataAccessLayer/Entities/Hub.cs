@@ -45,5 +45,10 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Attendees of the Hub
         /// </summary>
         public IEnumerable<Attendee> Attendees { get; set; }
+
+        /// <summary>
+        /// Selected modules of the hub
+        /// </summary>
+        public IEnumerable<SelectedModule> SelectedModules { get; set; }
     }
 }

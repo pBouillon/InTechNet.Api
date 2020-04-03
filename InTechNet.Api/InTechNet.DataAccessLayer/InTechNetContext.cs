@@ -103,6 +103,49 @@ namespace InTechNet.DataAccessLayer
                 .WithMany(_ => _.Attendees)
                 .OnDelete(DeleteBehavior.Cascade);
 
+            modelBuilder.Entity<SelectedModule>()
+                .HasOne(_ => _.Hub)
+                .WithMany(_ => _.SelectedModules)
+                .OnDelete(DeleteBehavior.Cascade);
+
+
+            modelBuilder.Entity<SelectedModule>()
+                .HasOne(_ => _.Module)
+                .WithMany(_ => _.SelectedModules)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Topic>()
+                .HasOne(_ => _.Tag)
+                .WithMany(_ => _.Topics)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Topic>()
+                .HasOne(_ => _.Module)
+                .WithMany(_ => _.Topics)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Resource>()
+                .HasOne(_ => _.Module)
+                .WithMany(_ => _.Resources)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<Resource>()
+                .HasOne(_ => _.NextResource)
+                .WithOne()
+                .HasForeignKey<Resource>(_ => _.IdResource)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.Restrict);
+
+            modelBuilder.Entity<State>()
+                .HasOne(_ => _.Resource)
+                .WithMany(_ => _.States)
+                .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<State>()
+                .HasOne(_ => _.Attendee)
+                .WithMany(_ => _.States)
+                .OnDelete(DeleteBehavior.Cascade);
+
             modelBuilder.Entity<Moderator>()
                 .HasIndex(b => b.ModeratorNickname)
                 .HasName("index_moderator_nickname");
@@ -122,8 +165,6 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<Hub>()
                 .HasIndex(b => b.HubLink)
                 .HasName("index_hub_link");
-
-            // TODO relationships
 
             PopulateSubscriptionPlans(modelBuilder);
         }

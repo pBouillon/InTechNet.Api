@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entities
@@ -39,5 +40,10 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Null if it is the last resource of a module
         /// </summary>
         public Resource NextResource { get; set; }
+
+        /// <summary>
+        /// References the states where this resource is used
+        /// </summary>
+        public IEnumerable<State> States { get; set; }
     }
 }

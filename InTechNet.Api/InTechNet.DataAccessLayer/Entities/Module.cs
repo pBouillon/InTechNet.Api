@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entities
@@ -25,5 +26,20 @@ namespace InTechNet.DataAccessLayer.Entities
         /// </summary>
         [MaxLength(32)]
         public string ModuleName { get; set; }
+
+        /// <summary>
+        /// References hubs where this module is selected
+        /// </summary>
+        public IEnumerable<SelectedModule> SelectedModules { get; set; }
+
+        /// <summary>
+        /// The topics of this hub
+        /// </summary>
+        public IEnumerable<Topic> Topics { get; set; }
+
+        /// <summary>
+        /// The resources of this hub
+        /// </summary>
+        public IEnumerable<Resource> Resources { get; set; }
     }
 }

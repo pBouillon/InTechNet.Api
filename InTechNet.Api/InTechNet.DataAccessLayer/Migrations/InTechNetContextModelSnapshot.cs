@@ -47,6 +47,34 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("attendee","public");
                 });
 
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.CurrentModule", b =>
+                {
+                    b.Property<int>("IdCurrentModule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AttendeeIdAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ModuleIdModule")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdCurrentModule");
+
+                    b.HasIndex("AttendeeIdAttendee");
+
+                    b.HasIndex("ModuleIdModule");
+
+                    b.ToTable("CurrentModules");
+                });
+
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
                 {
                     b.Property<int>("IdHub")
@@ -116,6 +144,26 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("moderator","public");
                 });
 
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Module", b =>
+                {
+                    b.Property<int>("IdModule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ModuleName")
+                        .HasColumnType("character varying(32)")
+                        .HasMaxLength(32);
+
+                    b.Property<string>("ModuleType")
+                        .HasColumnType("character varying(64)")
+                        .HasMaxLength(64);
+
+                    b.HasKey("IdModule");
+
+                    b.ToTable("module","public");
+                });
+
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Pupil", b =>
                 {
                     b.Property<int>("IdPupil")
@@ -146,6 +194,91 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasName("index_pupil_nickname");
 
                     b.ToTable("pupil","public");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Resource", b =>
+                {
+                    b.Property<int>("IdResource")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Content")
+                        .HasColumnType("text");
+
+                    b.Property<int>("IdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdNextResource")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ModuleIdModule")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdResource");
+
+                    b.HasIndex("ModuleIdModule");
+
+                    b.ToTable("resource","public");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SelectedModule", b =>
+                {
+                    b.Property<int>("IdSelectedModule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("HubIdHub")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdHub")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<bool>("IsSelected")
+                        .HasColumnType("boolean");
+
+                    b.Property<int?>("ModuleIdModule")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdSelectedModule");
+
+                    b.HasIndex("HubIdHub");
+
+                    b.HasIndex("ModuleIdModule");
+
+                    b.ToTable("selected_module","public");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.State", b =>
+                {
+                    b.Property<int>("IdState")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("AttendeeIdAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdAttendee")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdResource")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ResourceIdResource")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdState");
+
+                    b.HasIndex("AttendeeIdAttendee");
+
+                    b.HasIndex("ResourceIdResource");
+
+                    b.ToTable("state","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SubscriptionPlan", b =>
@@ -204,6 +337,50 @@ namespace InTechNet.DataAccessLayer.Migrations
                         });
                 });
 
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Tag", b =>
+                {
+                    b.Property<int>("IdTag")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Name")
+                        .HasColumnType("character varying(32)")
+                        .HasMaxLength(32);
+
+                    b.HasKey("IdTag");
+
+                    b.ToTable("tag","public");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Topic", b =>
+                {
+                    b.Property<int>("IdTopic")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int>("IdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdTag")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ModuleIdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("TagIdTag")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdTopic");
+
+                    b.HasIndex("ModuleIdModule");
+
+                    b.HasIndex("TagIdTag");
+
+                    b.ToTable("topic","public");
+                });
+
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Attendee", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hub", "Hub")
@@ -215,6 +392,17 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .WithMany("Attendees")
                         .HasForeignKey("PupilIdPupil")
                         .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.CurrentModule", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Attendee", "Attendee")
+                        .WithMany()
+                        .HasForeignKey("AttendeeIdAttendee");
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Module", "Module")
+                        .WithMany()
+                        .HasForeignKey("ModuleIdModule");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hub", b =>
@@ -231,6 +419,58 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .WithMany("Moderators")
                         .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan")
                         .OnDelete(DeleteBehavior.SetNull);
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Resource", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Resource", "NextResource")
+                        .WithOne()
+                        .HasForeignKey("InTechNet.DataAccessLayer.Entities.Resource", "IdResource")
+                        .OnDelete(DeleteBehavior.Restrict);
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Module", "Module")
+                        .WithMany("Resources")
+                        .HasForeignKey("ModuleIdModule")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.SelectedModule", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Hub", "Hub")
+                        .WithMany("SelectedModules")
+                        .HasForeignKey("HubIdHub")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Module", "Module")
+                        .WithMany("SelectedModules")
+                        .HasForeignKey("ModuleIdModule")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.State", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Attendee", "Attendee")
+                        .WithMany("States")
+                        .HasForeignKey("AttendeeIdAttendee")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Resource", "Resource")
+                        .WithMany("States")
+                        .HasForeignKey("ResourceIdResource")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Topic", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Module", "Module")
+                        .WithMany("Topics")
+                        .HasForeignKey("ModuleIdModule")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Tag", "Tag")
+                        .WithMany("Topics")
+                        .HasForeignKey("TagIdTag")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 #pragma warning restore 612, 618
         }
