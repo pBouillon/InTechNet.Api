@@ -61,14 +61,14 @@ namespace InTechNet.Services.Hub
             var hubLinkGenerated = HubLinkHelper.GenerateLink(newHubDto, moderatorDto);
 
             // Record the new hub
-            _context.Hubs.Add(new DataAccessLayer.Entities.Hub
+            _context.Hubs.Add(new DataAccessLayer.Entities.Hubs.Hub
             {
                 HubName = newHubDto.Name,
                 HubLink = hubLinkGenerated,
                 HubCreationDate = DateTime.Now,
                 Moderator = moderator,
                 HubDescription = newHubDto.Description,
-                Attendees = new List<DataAccessLayer.Entities.Attendee>()
+                Attendees = new List<DataAccessLayer.Entities.Hubs.Attendee>()
             });
 
             _context.SaveChanges();

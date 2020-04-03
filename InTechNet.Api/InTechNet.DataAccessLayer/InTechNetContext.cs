@@ -1,6 +1,10 @@
 ﻿using System.Collections.Generic;
 using InTechNet.Common.Utils.SubscriptionPlan;
 using InTechNet.DataAccessLayer.Entities;
+using InTechNet.DataAccessLayer.Entities.Hubs;
+using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Resources;
+using InTechNet.DataAccessLayer.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 
 namespace InTechNet.DataAccessLayer
