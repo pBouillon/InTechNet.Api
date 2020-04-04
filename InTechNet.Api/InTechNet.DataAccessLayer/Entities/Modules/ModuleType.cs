@@ -8,11 +8,11 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
     public class ModuleType
     {
         /// <summary>
-        /// Unique ID of the type fo module
+        /// Unique ID of the type of the module
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdModule { get; set; }
+        public int IdModuleType { get; set; }
 
         /// <summary>
         /// Type of the module
