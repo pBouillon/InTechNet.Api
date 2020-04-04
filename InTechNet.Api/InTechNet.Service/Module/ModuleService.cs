@@ -46,6 +46,7 @@ namespace InTechNet.Services.Module
 
             // Filter all hub to be displayed
             var modules = _context.Modules
+                .Include(_ => _.SubscriptionPlan)
                 .Include(_ => _.SelectedModules)
                 .Where(_ => _.SelectedModules.Any(_ => _.IdHub == idHub))
                 .Where(_ =>
@@ -54,13 +55,38 @@ namespace InTechNet.Services.Module
                 .Select(_ => new ModuleDto
                 {
                     Id = _.IdModule,
-                    Tags = new List<TagDto>(),  // TODO: GetTagList(module)
-                    IsActive = false,  // _.SelectedModules.FirstOrDefault(selected => selected.IdModule == _.IdModule),  // TODO: IsActive(module, selectedModules)
+                    Tags = GetTagList(_.IdModule, _context),
+                    IsActive = _.SelectedModules.Any(selected => selected.IdModule == _.IdModule),
+                    ModuleName = _.ModuleName,
+                    ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
+                    {
+                        IdSubscriptionPlan = _.SubscriptionPlan.IdSubscriptionPlan,
+                        SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
+                    }
 
                 }).ToList();
 
             // Retrieve the associated modules
             return modules;
+        }
+
+        // TODO: check static / dbcontext in parameter thing, too late for this
+        // If the method is not static -> exception at run time: possible memory leak
+        // If the method is static -> can not access _context field directly
+        // Context passed in method parameters.. don't if this is OK, but it works, so yay?
+        private static IEnumerable<TagDto> GetTagList(int idModule, InTechNetContext context)
+        {
+           return context.Topics
+                .Include(_ => _.Tag)
+                .Where(_ =>
+                    _.IdModule == idModule)
+                .Select(_ => new TagDto
+                {
+                    Id = _.Tag.IdTag,
+                    Name = _.Tag.Name,
+                });
+
+            
         }
     }
 }

@@ -17,6 +17,7 @@ using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
 using InTechNet.Common.Dto.Modules;
 using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.Module.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -43,13 +44,25 @@ namespace InTechNet.Api.Controllers.Users
         private readonly IModeratorService _moderatorService;
 
         /// <summary>
+        /// Module service for module related operations
+        /// </summary>
+        private readonly IModuleService _moduleService;
+
+        /// <summary>
         /// Controller for hub endpoints relative to moderators management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
-        /// <param name="moderatorService">Moderator service</param>
         /// <param name="hubService">Hub service</param>
-        public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService, IHubService hubService)
-            => (_authenticationService, _moderatorService, _hubService) = (authenticationService, moderatorService, hubService);
+        /// <param name="moderatorService">Moderator service</param>
+        /// <param name="moduleService">Module service</param>
+        public ModeratorsController(IAuthenticationService authenticationService, IModeratorService moderatorService,
+            IModuleService moduleService, IHubService hubService)
+        {
+            _authenticationService = authenticationService;
+            _hubService = hubService;
+            _moderatorService = moderatorService;
+            _moduleService = moduleService;
+        }
 
         [AllowAnonymous]
         [HttpGet("identifiers-checks")]
@@ -125,6 +138,36 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [ModeratorClaimRequired]
+        [HttpGet("me/Hubs/{idHub}/Modules")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Hubs modules successfully fetched")]
+        [SwaggerOperation(
+            Summary = "Fetch the modules of the specified hub for the current moderator",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Moderators,
+                SwaggerTag.Modules,
+            }
+        )]
+        public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+
+                var modules = _moduleService.GetModulesForHub(currentModerator.Id, idHub);
+
+                return Ok(modules);
+            }
+            //TODO better exception handling
+            catch(BaseException e)
+            {
+                return Unauthorized(e);
+            }
+        }
+
         [AllowAnonymous]
         [HttpPost]
         [SwaggerResponse((int) HttpStatusCode.OK, "New moderator successfully added")]
@@ -165,24 +208,6 @@ namespace InTechNet.Api.Controllers.Users
                 return BadRequest(
                     new BadRequestError(ex));
             }
-        }
-
-        [ModeratorClaimRequired]
-        [HttpGet("me/Hubs/{idHub}/Modules")]
-        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
-        [SwaggerOperation(
-            Summary = "Remove a pupil attending the hub",
-            Tags = new[]
-            {
-                SwaggerTag.Hubs,
-                SwaggerTag.Moderators,
-                SwaggerTag.Modules,
-            }
-        )]
-        public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
-            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
-        {
-            throw new NotImplementedException();
         }
 
         [ModeratorClaimRequired]
