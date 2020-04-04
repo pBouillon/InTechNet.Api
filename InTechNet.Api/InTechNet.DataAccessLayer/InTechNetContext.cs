@@ -127,22 +127,18 @@ namespace InTechNet.DataAccessLayer
                 SubscriptionPlanPrice = premiumSubscriptionPlan.Price
             });
 
-
-
-            // Platinium plan
-            var platiniumSubscriptionPlan = new PlatiniumSubscriptionPlan();
+            // Platinum plan
+            var platinumSubscriptionPlan = new PlatinumSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
                 IdSubscriptionPlan = ++subscriptionId,
                 Moderators = new List<Moderator>(),
-                MaxAttendeesPerHub = platiniumSubscriptionPlan.MaxAttendeesPerHubCount,
-                MaxHubPerModeratorAccount = platiniumSubscriptionPlan.MaxHubsCount,
-                MaxModulePerHub = platiniumSubscriptionPlan.MaxModulePerHub,
-                SubscriptionPlanName = platiniumSubscriptionPlan.SubscriptionPlanName,
-                SubscriptionPlanPrice = platiniumSubscriptionPlan.Price
+                MaxAttendeesPerHub = platinumSubscriptionPlan.MaxAttendeesPerHubCount,
+                MaxHubPerModeratorAccount = platinumSubscriptionPlan.MaxHubsCount,
+                MaxModulePerHub = platinumSubscriptionPlan.MaxModulePerHub,
+                SubscriptionPlanName = platinumSubscriptionPlan.SubscriptionPlanName,
+                SubscriptionPlanPrice = platinumSubscriptionPlan.Price
             });
-
-
 
             modelBuilder.Entity<SubscriptionPlan>()
                 .HasData(subscriptionPlans);
@@ -209,6 +205,14 @@ namespace InTechNet.DataAccessLayer
                 .HasOne(_ => _.Attendee)
                 .WithMany(_ => _.States)
                 .OnDelete(DeleteBehavior.Cascade);
+
+            modelBuilder.Entity<CurrentModule>()
+                .HasOne(_ => _.Attendee)
+                .WithMany(_ => _.CurrentModules);
+
+            modelBuilder.Entity<CurrentModule>()
+                .HasOne(_ => _.Module)
+                .WithMany(_ => _.CurrentModules);
         }
 
         /// <summary>

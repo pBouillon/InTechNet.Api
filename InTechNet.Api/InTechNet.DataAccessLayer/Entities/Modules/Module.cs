@@ -1,14 +1,13 @@
-﻿using System.Collections.Generic;
+﻿using InTechNet.DataAccessLayer.Entities.Resources;
+using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using InTechNet.DataAccessLayer.Entities.Resources;
 
 namespace InTechNet.DataAccessLayer.Entities.Modules
 {
     [Table("module", Schema = "public")]
     public class Module
     {
-
         /// <summary>
         /// Unique ID of the module
         /// </summary>
@@ -42,5 +41,10 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// The resources of this hub
         /// </summary>
         public IEnumerable<Resource> Resources { get; set; }
+
+        /// <summary>
+        /// The current module of this hub for a pupil
+        /// </summary>
+        public IEnumerable<CurrentModule> CurrentModules { get; set; }
     }
 }

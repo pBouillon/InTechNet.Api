@@ -1,9 +1,9 @@
-﻿using System;
+﻿using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using InTechNet.DataAccessLayer.Entities.Modules;
-using InTechNet.DataAccessLayer.Entities.Users;
 
 namespace InTechNet.DataAccessLayer.Entities.Hubs
 {

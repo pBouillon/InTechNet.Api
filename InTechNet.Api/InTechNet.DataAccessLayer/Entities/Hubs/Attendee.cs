@@ -1,8 +1,9 @@
-﻿using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
+﻿using InTechNet.DataAccessLayer.Entities.Modules;
 using InTechNet.DataAccessLayer.Entities.Resources;
 using InTechNet.DataAccessLayer.Entities.Users;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 
 namespace InTechNet.DataAccessLayer.Entities.Hubs
 {
@@ -36,6 +37,14 @@ namespace InTechNet.DataAccessLayer.Entities.Hubs
         /// </summary>
         public Hub Hub { get; set; }
 
+        /// <summary>
+        /// The states of this attendee in a module
+        /// </summary>
         public IEnumerable<State> States { get; set; }
+
+        /// <summary>
+        /// The current module of this attendee in a hub
+        /// </summary>
+        public IEnumerable<CurrentModule> CurrentModules{ get; set; }
     }
 }

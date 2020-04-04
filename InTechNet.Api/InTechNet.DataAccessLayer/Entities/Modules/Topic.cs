@@ -32,6 +32,5 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// The tag this module has
         /// </summary>
         public Tag Tag { get; set; }
-
     }
 }

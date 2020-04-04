@@ -4,6 +4,7 @@ using InTechNet.DataAccessLayer.Entities.Hubs;
 
 namespace InTechNet.DataAccessLayer.Entities.Modules
 {
+    [Table("current_module", Schema = "public")]
     public class CurrentModule
     {
         /// <summary>
