@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using InTechNet.DataAccessLayer.Entities.Users;
 
 namespace InTechNet.DataAccessLayer.Entities.Modules
 {
@@ -21,9 +22,9 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         public int IdType { get; set; }
 
         /// <summary>
-        /// Type of this module
+        /// Subscription plan required to see this module
         /// </summary>
-        public ModuleType ModuleType { get; set; }
+        public SubscriptionPlan SubscriptionPlan { get; set; }
 
         /// <summary>
         /// Name of the module

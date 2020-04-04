@@ -80,11 +80,6 @@ namespace InTechNet.DataAccessLayer
         public DbSet<CurrentModule> CurrentModules { get; set; }
 
         /// <summary>
-        /// DbSet for the ModuleType Entity
-        /// </summary>
-        public DbSet<ModuleType> ModuleTypes { get; set; }
-
-        /// <summary>
         /// Build the model
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -218,12 +213,6 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<CurrentModule>()
                 .HasOne(_ => _.Module)
                 .WithMany(_ => _.CurrentModules);
-
-            modelBuilder.Entity<ModuleType>()
-                .HasMany(_ => _.Modules)
-                .WithOne(_ => _.ModuleType)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
         }
 
         /// <summary>

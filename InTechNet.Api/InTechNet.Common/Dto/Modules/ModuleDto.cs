@@ -1,4 +1,5 @@
 ﻿using System.Collections.Generic;
+using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Dto.Topic;
 
 namespace InTechNet.Common.Dto.Modules
@@ -19,9 +20,9 @@ namespace InTechNet.Common.Dto.Modules
         public string ModuleName { get; set; }
 
         /// <summary>
-        /// <see cref="ModuleTypeDto"/> of the current module
+        /// <see cref="LightweightSubscriptionPlanDto"/> of the current module
         /// </summary>
-        public ModuleTypeDto ModuleType { get; set; }
+        public LightweightSubscriptionPlanDto ModuleSubscriptionPlanDto { get; set; }
 
         /// <summary>
         /// Collections of the current module <see cref="TagDto"/>
