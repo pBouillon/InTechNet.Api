@@ -7,6 +7,8 @@
   <ItemGroup>
     <Compile Remove="Migrations\20200403191515_ModuleLogic.cs" />
     <Compile Remove="Migrations\20200403191515_ModuleLogic.Designer.cs" />
+    <Compile Remove="Migrations\20200404124236_AddModuleType.cs" />
+    <Compile Remove="Migrations\20200404124236_AddModuleType.Designer.cs" />
   </ItemGroup>
 
   <ItemGroup>

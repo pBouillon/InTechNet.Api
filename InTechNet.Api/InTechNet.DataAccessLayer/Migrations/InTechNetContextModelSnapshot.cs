@@ -114,17 +114,37 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<int>("IdType")
+                        .HasColumnType("integer");
+
                     b.Property<string>("ModuleName")
                         .HasColumnType("character varying(32)")
                         .HasMaxLength(32);
 
-                    b.Property<string>("ModuleType")
+                    b.Property<int?>("ModuleTypeIdModule")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdModule");
+
+                    b.HasIndex("ModuleTypeIdModule");
+
+                    b.ToTable("module","public");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.ModuleType", b =>
+                {
+                    b.Property<int>("IdModule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("Type")
                         .HasColumnType("character varying(64)")
                         .HasMaxLength(64);
 
                     b.HasKey("IdModule");
 
-                    b.ToTable("module","public");
+                    b.ToTable("module_type","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.SelectedModule", b =>
@@ -416,6 +436,14 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("CurrentModules")
                         .HasForeignKey("ModuleIdModule");
+                });
+
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.ModuleType", "ModuleType")
+                        .WithMany("Modules")
+                        .HasForeignKey("ModuleTypeIdModule")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.SelectedModule", b =>

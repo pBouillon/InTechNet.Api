@@ -16,10 +16,14 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         public int IdModule { get; set; }
 
         /// <summary>
-        /// Type of the module
+        /// Id of the type of the module
         /// </summary>
-        [MaxLength(64)]
-        public string ModuleType { get; set; }
+        public int IdType { get; set; }
+
+        /// <summary>
+        /// Type of this module
+        /// </summary>
+        public ModuleType ModuleType { get; set; }
 
         /// <summary>
         /// Name of the module
