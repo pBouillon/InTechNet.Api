@@ -1,13 +1,10 @@
-﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User.Attendee;
-using InTechNet.Common.Dto.User.Moderator;
+﻿using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
 using InTechNet.Services.Attendee.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 
 namespace InTechNet.Services.Attendee

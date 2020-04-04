@@ -1,5 +1,4 @@
-﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User.Attendee;
+﻿using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
 
 namespace InTechNet.Services.Attendee.Interfaces
