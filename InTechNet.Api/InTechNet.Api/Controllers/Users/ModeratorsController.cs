@@ -1,4 +1,5 @@
-﻿using InTechNet.Api.Attributes;
+﻿using System;
+using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Attendee;
@@ -162,6 +163,24 @@ namespace InTechNet.Api.Controllers.Users
                 return BadRequest(
                     new BadRequestError(ex));
             }
+        }
+
+        [ModeratorClaimRequired]
+        [HttpGet("me/Hubs/{idHub}/Modules")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
+        [SwaggerOperation(
+            Summary = "Remove a pupil attending the hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Moderators,
+                SwaggerTag.Modules,
+            }
+        )]
+        public IActionResult GetHubsModules(
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
+        {
+            throw new NotImplementedException();
         }
 
         [ModeratorClaimRequired]
