@@ -104,7 +104,7 @@ namespace InTechNet.DataAccessLayer.Migrations
 
                     b.HasIndex("ModuleIdModule");
 
-                    b.ToTable("CurrentModules");
+                    b.ToTable("current_module","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
@@ -381,7 +381,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                             MaxAttendeesPerHub = 60,
                             MaxHubPerModeratorAccount = 10,
                             MaxModulePerHub = 15,
-                            SubscriptionPlanName = "Platinium",
+                            SubscriptionPlanName = "Platinum",
                             SubscriptionPlanPrice = 10.0m
                         });
                 });
@@ -410,11 +410,11 @@ namespace InTechNet.DataAccessLayer.Migrations
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.CurrentModule", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", "Attendee")
-                        .WithMany()
+                        .WithMany("CurrentModules")
                         .HasForeignKey("AttendeeIdAttendee");
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
-                        .WithMany()
+                        .WithMany("CurrentModules")
                         .HasForeignKey("ModuleIdModule");
                 });
 
