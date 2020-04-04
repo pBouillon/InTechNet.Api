@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.User;
@@ -14,6 +15,7 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Net;
+using InTechNet.Common.Dto.Modules;
 using InTechNet.Services.Hub.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
@@ -177,7 +179,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Modules,
             }
         )]
-        public IActionResult GetHubsModules(
+        public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
             [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
         {
             throw new NotImplementedException();
