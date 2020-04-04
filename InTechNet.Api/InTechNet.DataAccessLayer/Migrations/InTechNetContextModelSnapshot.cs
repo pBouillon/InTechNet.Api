@@ -79,6 +79,34 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.ToTable("hub","public");
                 });
 
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.AvailableModule", b =>
+                {
+                    b.Property<int>("IdAvailableModule")
+                        .ValueGeneratedOnAdd()
+                        .HasColumnType("integer")
+                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<int?>("HubIdHub")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdHub")
+                        .HasColumnType("integer");
+
+                    b.Property<int>("IdModule")
+                        .HasColumnType("integer");
+
+                    b.Property<int?>("ModuleIdModule")
+                        .HasColumnType("integer");
+
+                    b.HasKey("IdAvailableModule");
+
+                    b.HasIndex("HubIdHub");
+
+                    b.HasIndex("ModuleIdModule");
+
+                    b.ToTable("available_module","public");
+                });
+
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.CurrentModule", b =>
                 {
                     b.Property<int>("IdCurrentModule")
@@ -145,37 +173,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasKey("IdModuleType");
 
                     b.ToTable("module_type","public");
-                });
-
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.SelectedModule", b =>
-                {
-                    b.Property<int>("IdSelectedModule")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("integer")
-                        .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int?>("HubIdHub")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdHub")
-                        .HasColumnType("integer");
-
-                    b.Property<int>("IdModule")
-                        .HasColumnType("integer");
-
-                    b.Property<bool>("IsSelected")
-                        .HasColumnType("boolean");
-
-                    b.Property<int?>("ModuleIdModule")
-                        .HasColumnType("integer");
-
-                    b.HasKey("IdSelectedModule");
-
-                    b.HasIndex("HubIdHub");
-
-                    b.HasIndex("ModuleIdModule");
-
-                    b.ToTable("selected_module","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Tag", b =>
@@ -430,6 +427,19 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
+            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.AvailableModule", b =>
+                {
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Hub", "Hub")
+                        .WithMany("SelectedModules")
+                        .HasForeignKey("HubIdHub")
+                        .OnDelete(DeleteBehavior.Cascade);
+
+                    b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
+                        .WithMany("SelectedModules")
+                        .HasForeignKey("ModuleIdModule")
+                        .OnDelete(DeleteBehavior.Cascade);
+                });
+
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.CurrentModule", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", "Attendee")
@@ -447,19 +457,6 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .WithMany("Modules")
                         .HasForeignKey("ModuleTypeIdModuleType")
                         .OnDelete(DeleteBehavior.SetNull);
-                });
-
-            modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.SelectedModule", b =>
-                {
-                    b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Hub", "Hub")
-                        .WithMany("SelectedModules")
-                        .HasForeignKey("HubIdHub")
-                        .OnDelete(DeleteBehavior.Cascade);
-
-                    b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
-                        .WithMany("SelectedModules")
-                        .HasForeignKey("ModuleIdModule")
-                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Topic", b =>

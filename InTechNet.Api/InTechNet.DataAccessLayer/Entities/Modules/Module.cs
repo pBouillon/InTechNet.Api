@@ -34,7 +34,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// <summary>
         /// References hubs where this module is selected
         /// </summary>
-        public IEnumerable<SelectedModule> SelectedModules { get; set; }
+        public IEnumerable<AvailableModule> SelectedModules { get; set; }
 
         /// <summary>
         /// The topics of this hub

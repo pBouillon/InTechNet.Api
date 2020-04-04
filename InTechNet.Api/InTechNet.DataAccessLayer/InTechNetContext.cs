@@ -50,9 +50,9 @@ namespace InTechNet.DataAccessLayer
         public DbSet<Module> Modules { get; set; }
 
         /// <summary>
-        /// DbSet for the SelectedModule Entity
+        /// DbSet for the AvailableModule Entity
         /// </summary>
-        public DbSet<SelectedModule> SelectedModules { get; set; }
+        public DbSet<AvailableModule> AvailableModules { get; set; }
 
         /// <summary>
         /// DbSet for the Tag Entity
@@ -176,12 +176,12 @@ namespace InTechNet.DataAccessLayer
                 .WithMany(_ => _.Attendees)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SelectedModule>()
+            modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Hub)
                 .WithMany(_ => _.SelectedModules)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SelectedModule>()
+            modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Module)
                 .WithMany(_ => _.SelectedModules)
                 .OnDelete(DeleteBehavior.Cascade);

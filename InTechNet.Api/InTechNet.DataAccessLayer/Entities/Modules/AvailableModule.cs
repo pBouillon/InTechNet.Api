@@ -4,15 +4,18 @@ using InTechNet.DataAccessLayer.Entities.Hubs;
 
 namespace InTechNet.DataAccessLayer.Entities.Modules
 {
-    [Table("selected_module", Schema = "public")]
-    public class SelectedModule
+    /// <summary>
+    /// Represent a module selected by the moderator of a hub; which will be available for its attendees
+    /// </summary>
+    [Table("available_module", Schema = "public")]
+    public class AvailableModule
     {
         /// <summary>
         /// Unique ID of the selected module
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdSelectedModule { get; set; }
+        public int IdAvailableModule { get; set; }
 
         /// <summary>
         /// Id of the hub the module is selected in
@@ -33,11 +36,5 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// Module selected
         /// </summary>
         public Module Module { get; set; }
-
-        /// <summary>
-        /// The state of the module, wether it is selected or not
-        /// True if the module is selected, false otherwise
-        /// </summary>
-        public bool IsSelected { get; set; }
     }
 }
