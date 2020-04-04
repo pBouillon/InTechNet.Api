@@ -10,7 +10,6 @@ using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Hub.Helpers;
 using InTechNet.Services.Hub.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
