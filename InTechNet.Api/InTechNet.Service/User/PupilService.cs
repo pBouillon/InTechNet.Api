@@ -6,6 +6,7 @@ using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
+using InTechNet.DataAccessLayer.Entities.Users;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
@@ -135,7 +136,7 @@ namespace InTechNet.Services.User
             // Record the new moderator
             _context.Pupils.Add(new Pupil
             {
-                Attendees = new List<DataAccessLayer.Entities.Attendee>(),
+                Attendees = new List<DataAccessLayer.Entities.Hubs.Attendee>(),
                 PupilEmail = newPupilData.Email,
                 PupilNickname = newPupilData.Nickname,
                 PupilPassword = saltedPassword,

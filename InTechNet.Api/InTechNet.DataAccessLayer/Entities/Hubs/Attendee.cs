@@ -1,7 +1,11 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Resources;
+using InTechNet.DataAccessLayer.Entities.Users;
+using System.Collections.Generic;
+using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InTechNet.DataAccessLayer.Entities
+namespace InTechNet.DataAccessLayer.Entities.Hubs
 {
     [Table("attendee", Schema = "public")]
     public class Attendee
@@ -32,5 +36,15 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Hub for the pupil
         /// </summary>
         public Hub Hub { get; set; }
+
+        /// <summary>
+        /// The states of this attendee in a module
+        /// </summary>
+        public IEnumerable<State> States { get; set; }
+
+        /// <summary>
+        /// The current module of this attendee in a hub
+        /// </summary>
+        public IEnumerable<CurrentModule> CurrentModules{ get; set; }
     }
 }

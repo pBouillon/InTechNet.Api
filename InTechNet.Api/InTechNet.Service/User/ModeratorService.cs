@@ -7,6 +7,7 @@ using InTechNet.Common.Utils.Security;
 using InTechNet.Common.Utils.SubscriptionPlan;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities;
+using InTechNet.DataAccessLayer.Entities.Users;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.Hub.Interfaces;
@@ -154,7 +155,7 @@ namespace InTechNet.Services.User
             // Record the new moderator
             _context.Moderators.Add(new Moderator
             {
-                Hubs = new List<DataAccessLayer.Entities.Hub>(),
+                Hubs = new List<DataAccessLayer.Entities.Hubs.Hub>(),
                 ModeratorEmail = newModeratorData.Email,
                 ModeratorNickname = newModeratorData.Nickname,
                 ModeratorPassword = saltedPassword,

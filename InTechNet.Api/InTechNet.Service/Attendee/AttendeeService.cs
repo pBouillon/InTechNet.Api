@@ -61,7 +61,7 @@ namespace InTechNet.Services.Attendee
             var pupil = _context.Pupils.First(_ =>
                 _.IdPupil == pupilDto.Id);
 
-            _context.Attendees.Add(new DataAccessLayer.Entities.Attendee
+            _context.Attendees.Add(new DataAccessLayer.Entities.Hubs.Attendee
             {
                 Hub = hub,
                 IdHub = hub.IdHub,

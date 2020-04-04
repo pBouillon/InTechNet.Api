@@ -4,6 +4,7 @@ using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer.Entities;
 using System.Collections.Generic;
+using InTechNet.DataAccessLayer.Entities.Users;
 
 namespace InTechNet.Services.Hub.Interfaces
 {

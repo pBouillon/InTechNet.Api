@@ -1,9 +1,11 @@
-﻿using System;
+﻿using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Users;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
 
-namespace InTechNet.DataAccessLayer.Entities
+namespace InTechNet.DataAccessLayer.Entities.Hubs
 {
     [Table("hub", Schema = "public")]
     public class Hub
@@ -45,5 +47,10 @@ namespace InTechNet.DataAccessLayer.Entities
         /// Attendees of the Hub
         /// </summary>
         public IEnumerable<Attendee> Attendees { get; set; }
+
+        /// <summary>
+        /// Selected modules of the hub
+        /// </summary>
+        public IEnumerable<SelectedModule> SelectedModules { get; set; }
     }
 }

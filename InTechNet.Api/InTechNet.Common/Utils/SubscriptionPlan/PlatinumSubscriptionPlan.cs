@@ -3,7 +3,7 @@
     /// <summary>
     /// Class for the platinium subscription plan
     /// </summary>
-    public class PlatiniumSubscriptionPlan : BaseSubscriptionPlan
+    public class PlatinumSubscriptionPlan : BaseSubscriptionPlan
     {
         /// <inheritdoc cref="BaseSubscriptionPlan.MaxAttendeesPerHubCount"/>
         public override int MaxAttendeesPerHubCount
@@ -23,6 +23,6 @@
 
         /// <inheritdoc cref="BaseSubscriptionPlan.SubscriptionPlanName"/>
         public override string SubscriptionPlanName
-            => "Platinium";
+            => "Platinum";
     }
 }
