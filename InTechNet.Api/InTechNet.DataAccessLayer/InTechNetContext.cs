@@ -233,24 +233,28 @@ namespace InTechNet.DataAccessLayer
         private static void CreateIndexes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Moderator>()
-                .HasIndex(b => b.ModeratorNickname)
+                .HasIndex(_ => _.ModeratorNickname)
                 .HasName("index_moderator_nickname");
 
             modelBuilder.Entity<Moderator>()
-                .HasIndex(b => b.ModeratorEmail)
+                .HasIndex(_ => _.ModeratorEmail)
                 .HasName("index_moderator_email");
 
             modelBuilder.Entity<Pupil>()
-                .HasIndex(b => b.PupilNickname)
+                .HasIndex(_ => _.PupilNickname)
                 .HasName("index_pupil_nickname");
 
             modelBuilder.Entity<Pupil>()
-                .HasIndex(b => b.PupilEmail)
+                .HasIndex(_ => _.PupilEmail)
                 .HasName("index_pupil_email");
 
             modelBuilder.Entity<Hub>()
-                .HasIndex(b => b.HubLink)
+                .HasIndex(_ => _.HubLink)
                 .HasName("index_hub_link");
+
+            modelBuilder.Entity<Tag>()
+                .HasIndex(_ => _.Name)
+                .HasName("index_tag_name");
         }
     }
 }
