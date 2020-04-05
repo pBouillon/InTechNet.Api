@@ -1,7 +1,6 @@
-﻿using System;
-using System.Collections.Generic;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
+using InTechNet.Common.Dto.Modules;
 using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
@@ -10,14 +9,14 @@ using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.Authentication.Interfaces;
+using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.Module.Interfaces;
 using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System.Collections.Generic;
 using System.Net;
-using InTechNet.Common.Dto.Modules;
-using InTechNet.Services.Hub.Interfaces;
-using InTechNet.Services.Module.Interfaces;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -140,7 +139,7 @@ namespace InTechNet.Api.Controllers.Users
 
         [ModeratorClaimRequired]
         [HttpGet("me/Hubs/{idHub}/Modules")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Hubs modules successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
         [SwaggerOperation(
             Summary = "Fetch the modules of the specified hub for the current moderator",
             Tags = new[]
@@ -153,19 +152,20 @@ namespace InTechNet.Api.Controllers.Users
         public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
             [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
         {
+            ModeratorDto currentModerator;
+            
             try
             {
-                var currentModerator = _authenticationService.GetCurrentModerator();
-
-                var modules = _moduleService.GetModulesForHub(currentModerator.Id, idHub);
-
-                return Ok(modules);
+                currentModerator = _authenticationService.GetCurrentModerator();
             }
-            //TODO better exception handling
-            catch(BaseException e)
+            catch (BaseException ex)
             {
-                return Unauthorized(e);
+                return Unauthorized (ex);
             }
+
+            var modules = _moduleService.GetModulesForHub(currentModerator.Id, idHub);
+
+            return Ok(modules);
         }
 
         [AllowAnonymous]
