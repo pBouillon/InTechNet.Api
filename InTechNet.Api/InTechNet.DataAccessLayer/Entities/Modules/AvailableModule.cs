@@ -15,22 +15,12 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdAvailableModule { get; set; }
-
-        /// <summary>
-        /// Id of the hub the module is selected in
-        /// </summary>
-        public int IdHub { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Hub the module is selected in
         /// </summary>
         public Hub Hub { get; set; }
-
-        /// <summary>
-        /// Id of the selected module
-        /// </summary>
-        public int IdModule { get; set; }
 
         /// <summary>
         /// Module selected

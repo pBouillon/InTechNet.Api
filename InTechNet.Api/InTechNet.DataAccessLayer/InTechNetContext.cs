@@ -105,7 +105,7 @@ namespace InTechNet.DataAccessLayer
             var freeSubscriptionPlan = new FreeSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
@@ -118,7 +118,7 @@ namespace InTechNet.DataAccessLayer
             var premiumSubscriptionPlan = new PremiumSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = premiumSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = premiumSubscriptionPlan.MaxHubsCount,
@@ -131,7 +131,7 @@ namespace InTechNet.DataAccessLayer
             var platinumSubscriptionPlan = new PlatinumSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = platinumSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = platinumSubscriptionPlan.MaxHubsCount,

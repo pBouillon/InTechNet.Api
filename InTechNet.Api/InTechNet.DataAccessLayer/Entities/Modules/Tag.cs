@@ -12,7 +12,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdTag { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The name of the tag

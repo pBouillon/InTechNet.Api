@@ -13,12 +13,7 @@ namespace InTechNet.DataAccessLayer.Entities.Resources
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdResource { get; set; }
-
-        /// <summary>
-        /// Id of the module this is resource is in
-        /// </summary>
-        public int IdModule { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// The module this is resource is in
@@ -31,16 +26,9 @@ namespace InTechNet.DataAccessLayer.Entities.Resources
         public string Content { get; set; }
 
         /// <summary>
-        /// Id of the resource to display after this one
-        /// Null if it is the last resource of a module
-        /// </summary>
-        public int? IdNextResource { get; set; }
-
-        /// <summary>
         /// The resource to display after this one
         /// Null if it is the last resource of a module
         /// </summary>
-        [ForeignKey("fk_next_resource")]
         public virtual Resource NextResource { get; set; }
 
         /// <summary>

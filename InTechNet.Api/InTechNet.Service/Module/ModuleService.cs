@@ -35,13 +35,13 @@ namespace InTechNet.Services.Module
                           .Include(_ => _.Moderator)
                               .ThenInclude(_ => _.ModeratorSubscriptionPlan)
                           .SingleOrDefault(_ =>
-                            _.IdHub == idHub)
+                            _.Id == idHub)
                       ?? throw new UnknownHubException();
 
             // Assert the current moderator can query this hub
             var hubModerator = hub.Moderator;
 
-            if (hubModerator.IdModerator != idModerator)
+            if (hubModerator.Id != idModerator)
             {
                 throw new UnauthorizedAccessException();
             }
@@ -53,25 +53,25 @@ namespace InTechNet.Services.Module
                 // Only select the modules with the same subscription plan as the moderator
                 // FIXME: "lower" subscription plans should be visible for higher subscription plans
                 .Where(_ =>
-                    _.SubscriptionPlan.IdSubscriptionPlan
-                        == hubModerator.ModeratorSubscriptionPlan.IdSubscriptionPlan)
+                    _.SubscriptionPlan.Id
+                        == hubModerator.ModeratorSubscriptionPlan.Id)
                 // Mapping the result to List<ModuleDto>
                 .Select(_ => new ModuleDto
                 {
-                    Id = _.IdModule,
+                    Id = _.Id,
                     // Retrieving all tags of the current module's topic to IEnumerable<TagDto>
                     Tags = _.Topics.Select(topic => new TagDto
                     {
-                        Id = topic.Tag.IdTag,
+                        Id = topic.Tag.Id,
                         Name = topic.Tag.Name
                     }),
                     // A module is active if its ID also belong to the SelectedModule table
                     IsActive = _.AvailableModules.Any(availableModules
-                        => availableModules.IdModule == _.IdModule),
+                        => availableModules.Module.Id == _.Id),
                     ModuleName = _.ModuleName,
                     ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
                     {
-                        IdSubscriptionPlan = _.SubscriptionPlan.IdSubscriptionPlan,
+                        IdSubscriptionPlan = _.SubscriptionPlan.Id,
                         SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
                     }
                 }).ToList();
@@ -84,27 +84,25 @@ namespace InTechNet.Services.Module
             var hub = _context.Hubs.Include(_ => _.Moderator)
                           .Include(_ => _.AvailableModules)
                           .FirstOrDefault(_ =>
-                              _.IdHub == idHub
-                                && _.Moderator.IdModerator == idModerator)
+                              _.Id == idHub
+                                && _.Moderator.Id == idModerator)
                       ?? throw new UnknownHubException();
 
             // Get the related module
             var module = _context.Modules.SingleOrDefault(_ =>
-                    _.IdModule == idModule)
+                    _.Id == idModule)
                 ?? throw new UnknownModuleException();
 
             // Retrieve the available module record
             var selectedModule = hub.AvailableModules.SingleOrDefault(_ =>
-                _.IdModule == module.IdModule);
+                _.Module.Id == module.Id);
 
             // Add the current module to the selected ones if not tracked as available
             if (selectedModule == null)
             {
                 _context.AvailableModules.Add(new AvailableModule
                 {
-                    IdHub = hub.IdHub,
                     Hub = hub,
-                    IdModule = module.IdModule,
                     Module = module,
                 });
             }

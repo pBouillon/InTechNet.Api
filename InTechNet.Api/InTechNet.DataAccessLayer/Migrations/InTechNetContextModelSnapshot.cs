@@ -21,35 +21,29 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", b =>
                 {
-                    b.Property<int>("IdAttendee")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("HubIdHub")
+                    b.Property<int?>("HubId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdHub")
+                    b.Property<int?>("PupilId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdPupil")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("PupilIdPupil")
-                        .HasColumnType("integer");
+                    b.HasIndex("HubId");
 
-                    b.HasKey("IdAttendee");
-
-                    b.HasIndex("HubIdHub");
-
-                    b.HasIndex("PupilIdPupil");
+                    b.HasIndex("PupilId");
 
                     b.ToTable("attendee","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hubs.Hub", b =>
                 {
-                    b.Property<int>("IdHub")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -66,102 +60,87 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("HubName")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ModeratorIdModerator")
+                    b.Property<int?>("ModeratorId")
                         .HasColumnType("integer");
 
-                    b.HasKey("IdHub");
+                    b.HasKey("Id");
 
                     b.HasIndex("HubLink")
                         .HasName("index_hub_link");
 
-                    b.HasIndex("ModeratorIdModerator");
+                    b.HasIndex("ModeratorId");
 
                     b.ToTable("hub","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.AvailableModule", b =>
                 {
-                    b.Property<int>("IdAvailableModule")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("HubIdHub")
+                    b.Property<int?>("HubId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdHub")
+                    b.Property<int?>("ModuleId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdModule")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("ModuleIdModule")
-                        .HasColumnType("integer");
+                    b.HasIndex("HubId");
 
-                    b.HasKey("IdAvailableModule");
-
-                    b.HasIndex("HubIdHub");
-
-                    b.HasIndex("ModuleIdModule");
+                    b.HasIndex("ModuleId");
 
                     b.ToTable("available_module","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.CurrentModule", b =>
                 {
-                    b.Property<int>("IdCurrentModule")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("AttendeeIdAttendee")
+                    b.Property<int?>("AttendeeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdAttendee")
+                    b.Property<int?>("ModuleId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdModule")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("ModuleIdModule")
-                        .HasColumnType("integer");
+                    b.HasIndex("AttendeeId");
 
-                    b.HasKey("IdCurrentModule");
-
-                    b.HasIndex("AttendeeIdAttendee");
-
-                    b.HasIndex("ModuleIdModule");
+                    b.HasIndex("ModuleId");
 
                     b.ToTable("current_module","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
                 {
-                    b.Property<int>("IdModule")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
-
-                    b.Property<int>("IdSubscriptionPlan")
-                        .HasColumnType("integer");
 
                     b.Property<string>("ModuleName")
                         .HasColumnType("character varying(32)")
                         .HasMaxLength(32);
 
-                    b.Property<int?>("SubscriptionPlanIdSubscriptionPlan")
+                    b.Property<int?>("SubscriptionPlanId")
                         .HasColumnType("integer");
 
-                    b.HasKey("IdModule");
+                    b.HasKey("Id");
 
-                    b.HasIndex("SubscriptionPlanIdSubscriptionPlan");
+                    b.HasIndex("SubscriptionPlanId");
 
                     b.ToTable("module","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Tag", b =>
                 {
-                    b.Property<int>("IdTag")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -170,7 +149,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("character varying(32)")
                         .HasMaxLength(32);
 
-                    b.HasKey("IdTag");
+                    b.HasKey("Id");
 
                     b.HasIndex("Name")
                         .HasName("index_tag_name");
@@ -180,35 +159,29 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Topic", b =>
                 {
-                    b.Property<int>("IdTopic")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("IdModule")
+                    b.Property<int?>("ModuleId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdTag")
+                    b.Property<int?>("TagId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ModuleIdModule")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("TagIdTag")
-                        .HasColumnType("integer");
+                    b.HasIndex("ModuleId");
 
-                    b.HasKey("IdTopic");
-
-                    b.HasIndex("ModuleIdModule");
-
-                    b.HasIndex("TagIdTag");
+                    b.HasIndex("TagId");
 
                     b.ToTable("topic","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Resources.Resource", b =>
                 {
-                    b.Property<int>("IdResource")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -216,58 +189,46 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("Content")
                         .HasColumnType("text");
 
-                    b.Property<int>("IdModule")
+                    b.Property<int?>("ModuleId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("IdNextResource")
+                    b.Property<int?>("NextResourceId")
                         .HasColumnType("integer");
 
-                    b.Property<int?>("ModuleIdModule")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("fk_next_resource")
-                        .HasColumnType("integer");
+                    b.HasIndex("ModuleId");
 
-                    b.HasKey("IdResource");
-
-                    b.HasIndex("ModuleIdModule");
-
-                    b.HasIndex("fk_next_resource");
+                    b.HasIndex("NextResourceId");
 
                     b.ToTable("resource","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Resources.State", b =>
                 {
-                    b.Property<int>("IdState")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int?>("AttendeeIdAttendee")
+                    b.Property<int?>("AttendeeId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdAttendee")
+                    b.Property<int?>("ResourceId")
                         .HasColumnType("integer");
 
-                    b.Property<int>("IdResource")
-                        .HasColumnType("integer");
+                    b.HasKey("Id");
 
-                    b.Property<int?>("ResourceIdResource")
-                        .HasColumnType("integer");
+                    b.HasIndex("AttendeeId");
 
-                    b.HasKey("IdState");
-
-                    b.HasIndex("AttendeeIdAttendee");
-
-                    b.HasIndex("ResourceIdResource");
+                    b.HasIndex("ResourceId");
 
                     b.ToTable("state","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Users.Moderator", b =>
                 {
-                    b.Property<int>("IdModerator")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -286,10 +247,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("ModeratorSalt")
                         .HasColumnType("text");
 
-                    b.Property<int?>("ModeratorSubscriptionPlanIdSubscriptionPlan")
+                    b.Property<int?>("ModeratorSubscriptionPlanId")
                         .HasColumnType("integer");
 
-                    b.HasKey("IdModerator");
+                    b.HasKey("Id");
 
                     b.HasIndex("ModeratorEmail")
                         .HasName("index_moderator_email");
@@ -297,14 +258,14 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.HasIndex("ModeratorNickname")
                         .HasName("index_moderator_nickname");
 
-                    b.HasIndex("ModeratorSubscriptionPlanIdSubscriptionPlan");
+                    b.HasIndex("ModeratorSubscriptionPlanId");
 
                     b.ToTable("moderator","public");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Users.Pupil", b =>
                 {
-                    b.Property<int>("IdPupil")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -323,7 +284,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<string>("PupilSalt")
                         .HasColumnType("text");
 
-                    b.HasKey("IdPupil");
+                    b.HasKey("Id");
 
                     b.HasIndex("PupilEmail")
                         .HasName("index_pupil_email");
@@ -336,7 +297,7 @@ namespace InTechNet.DataAccessLayer.Migrations
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Users.SubscriptionPlan", b =>
                 {
-                    b.Property<int>("IdSubscriptionPlan")
+                    b.Property<int>("Id")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
@@ -356,14 +317,14 @@ namespace InTechNet.DataAccessLayer.Migrations
                     b.Property<decimal>("SubscriptionPlanPrice")
                         .HasColumnType("numeric");
 
-                    b.HasKey("IdSubscriptionPlan");
+                    b.HasKey("Id");
 
                     b.ToTable("subscription_plan","public");
 
                     b.HasData(
                         new
                         {
-                            IdSubscriptionPlan = 1,
+                            Id = 1,
                             MaxAttendeesPerHub = 32,
                             MaxHubPerModeratorAccount = 3,
                             MaxModulePerHub = 3,
@@ -372,7 +333,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                         },
                         new
                         {
-                            IdSubscriptionPlan = 2,
+                            Id = 2,
                             MaxAttendeesPerHub = 50,
                             MaxHubPerModeratorAccount = 5,
                             MaxModulePerHub = 5,
@@ -381,7 +342,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                         },
                         new
                         {
-                            IdSubscriptionPlan = 3,
+                            Id = 3,
                             MaxAttendeesPerHub = 60,
                             MaxHubPerModeratorAccount = 10,
                             MaxModulePerHub = 15,
@@ -394,12 +355,12 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Hub", "Hub")
                         .WithMany("Attendees")
-                        .HasForeignKey("HubIdHub")
+                        .HasForeignKey("HubId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Users.Pupil", "Pupil")
                         .WithMany("Attendees")
-                        .HasForeignKey("PupilIdPupil")
+                        .HasForeignKey("PupilId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -407,7 +368,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Users.Moderator", "Moderator")
                         .WithMany("Hubs")
-                        .HasForeignKey("ModeratorIdModerator")
+                        .HasForeignKey("ModeratorId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -415,12 +376,12 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Hub", "Hub")
                         .WithMany("AvailableModules")
-                        .HasForeignKey("HubIdHub")
+                        .HasForeignKey("HubId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("AvailableModules")
-                        .HasForeignKey("ModuleIdModule")
+                        .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -428,18 +389,18 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", "Attendee")
                         .WithMany("CurrentModules")
-                        .HasForeignKey("AttendeeIdAttendee");
+                        .HasForeignKey("AttendeeId");
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("CurrentModules")
-                        .HasForeignKey("ModuleIdModule");
+                        .HasForeignKey("ModuleId");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Users.SubscriptionPlan", "SubscriptionPlan")
                         .WithMany("Modules")
-                        .HasForeignKey("SubscriptionPlanIdSubscriptionPlan")
+                        .HasForeignKey("SubscriptionPlanId")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 
@@ -447,12 +408,12 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("Topics")
-                        .HasForeignKey("ModuleIdModule")
+                        .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Tag", "Tag")
                         .WithMany("Topics")
-                        .HasForeignKey("TagIdTag")
+                        .HasForeignKey("TagId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -460,24 +421,24 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("Resources")
-                        .HasForeignKey("ModuleIdModule")
+                        .HasForeignKey("ModuleId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Resources.Resource", "NextResource")
                         .WithMany()
-                        .HasForeignKey("fk_next_resource");
+                        .HasForeignKey("NextResourceId");
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Resources.State", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", "Attendee")
                         .WithMany("States")
-                        .HasForeignKey("AttendeeIdAttendee")
+                        .HasForeignKey("AttendeeId")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Resources.Resource", "Resource")
                         .WithMany("States")
-                        .HasForeignKey("ResourceIdResource")
+                        .HasForeignKey("ResourceId")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
 
@@ -485,7 +446,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Users.SubscriptionPlan", "ModeratorSubscriptionPlan")
                         .WithMany("Moderators")
-                        .HasForeignKey("ModeratorSubscriptionPlanIdSubscriptionPlan")
+                        .HasForeignKey("ModeratorSubscriptionPlanId")
                         .OnDelete(DeleteBehavior.SetNull);
                 });
 #pragma warning restore 612, 618

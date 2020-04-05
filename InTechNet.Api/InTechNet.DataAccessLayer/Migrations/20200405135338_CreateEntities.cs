@@ -16,7 +16,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdPupil = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     PupilNickname = table.Column<string>(maxLength: 64, nullable: true),
                     PupilEmail = table.Column<string>(maxLength: 128, nullable: true),
@@ -25,7 +25,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_pupil", x => x.IdPupil);
+                    table.PrimaryKey("PK_pupil", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -33,7 +33,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdSubscriptionPlan = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     SubscriptionPlanName = table.Column<string>(nullable: true),
                     MaxHubPerModeratorAccount = table.Column<int>(nullable: false),
@@ -43,7 +43,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_subscription_plan", x => x.IdSubscriptionPlan);
+                    table.PrimaryKey("PK_subscription_plan", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -51,13 +51,13 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdTag = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     Name = table.Column<string>(maxLength: 32, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_tag", x => x.IdTag);
+                    table.PrimaryKey("PK_tag", x => x.Id);
                 });
 
             migrationBuilder.CreateTable(
@@ -65,23 +65,23 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdModerator = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     ModeratorNickname = table.Column<string>(maxLength: 64, nullable: true),
                     ModeratorEmail = table.Column<string>(maxLength: 128, nullable: true),
                     ModeratorPassword = table.Column<string>(nullable: true),
                     ModeratorSalt = table.Column<string>(nullable: true),
-                    ModeratorSubscriptionPlanIdSubscriptionPlan = table.Column<int>(nullable: true)
+                    ModeratorSubscriptionPlanId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_moderator", x => x.IdModerator);
+                    table.PrimaryKey("PK_moderator", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_moderator_subscription_plan_ModeratorSubscriptionPlanIdSubs~",
-                        column: x => x.ModeratorSubscriptionPlanIdSubscriptionPlan,
+                        name: "FK_moderator_subscription_plan_ModeratorSubscriptionPlanId",
+                        column: x => x.ModeratorSubscriptionPlanId,
                         principalSchema: "public",
                         principalTable: "subscription_plan",
-                        principalColumn: "IdSubscriptionPlan",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
 
@@ -90,21 +90,20 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdModule = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdSubscriptionPlan = table.Column<int>(nullable: false),
-                    SubscriptionPlanIdSubscriptionPlan = table.Column<int>(nullable: true),
+                    SubscriptionPlanId = table.Column<int>(nullable: true),
                     ModuleName = table.Column<string>(maxLength: 32, nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_module", x => x.IdModule);
+                    table.PrimaryKey("PK_module", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_module_subscription_plan_SubscriptionPlanIdSubscriptionPlan",
-                        column: x => x.SubscriptionPlanIdSubscriptionPlan,
+                        name: "FK_module_subscription_plan_SubscriptionPlanId",
+                        column: x => x.SubscriptionPlanId,
                         principalSchema: "public",
                         principalTable: "subscription_plan",
-                        principalColumn: "IdSubscriptionPlan",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.SetNull);
                 });
 
@@ -113,23 +112,23 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdHub = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
                     HubName = table.Column<string>(nullable: true),
                     HubLink = table.Column<string>(nullable: true),
                     HubDescription = table.Column<string>(nullable: true),
                     HubCreationDate = table.Column<DateTime>(nullable: false),
-                    ModeratorIdModerator = table.Column<int>(nullable: true)
+                    ModeratorId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_hub", x => x.IdHub);
+                    table.PrimaryKey("PK_hub", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_hub_moderator_ModeratorIdModerator",
-                        column: x => x.ModeratorIdModerator,
+                        name: "FK_hub_moderator_ModeratorId",
+                        column: x => x.ModeratorId,
                         principalSchema: "public",
                         principalTable: "moderator",
-                        principalColumn: "IdModerator",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -138,30 +137,28 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdResource = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdModule = table.Column<int>(nullable: false),
-                    ModuleIdModule = table.Column<int>(nullable: true),
+                    ModuleId = table.Column<int>(nullable: true),
                     Content = table.Column<string>(nullable: true),
-                    IdNextResource = table.Column<int>(nullable: true),
-                    fk_next_resource = table.Column<int>(nullable: true)
+                    NextResourceId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_resource", x => x.IdResource);
+                    table.PrimaryKey("PK_resource", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_resource_module_ModuleIdModule",
-                        column: x => x.ModuleIdModule,
+                        name: "FK_resource_module_ModuleId",
+                        column: x => x.ModuleId,
                         principalSchema: "public",
                         principalTable: "module",
-                        principalColumn: "IdModule",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_resource_resource_fk_next_resource",
-                        column: x => x.fk_next_resource,
+                        name: "FK_resource_resource_NextResourceId",
+                        column: x => x.NextResourceId,
                         principalSchema: "public",
                         principalTable: "resource",
-                        principalColumn: "IdResource",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -170,29 +167,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdTopic = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdModule = table.Column<int>(nullable: false),
-                    ModuleIdModule = table.Column<int>(nullable: true),
-                    IdTag = table.Column<int>(nullable: false),
-                    TagIdTag = table.Column<int>(nullable: true)
+                    ModuleId = table.Column<int>(nullable: true),
+                    TagId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_topic", x => x.IdTopic);
+                    table.PrimaryKey("PK_topic", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_topic_module_ModuleIdModule",
-                        column: x => x.ModuleIdModule,
+                        name: "FK_topic_module_ModuleId",
+                        column: x => x.ModuleId,
                         principalSchema: "public",
                         principalTable: "module",
-                        principalColumn: "IdModule",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_topic_tag_TagIdTag",
-                        column: x => x.TagIdTag,
+                        name: "FK_topic_tag_TagId",
+                        column: x => x.TagId,
                         principalSchema: "public",
                         principalTable: "tag",
-                        principalColumn: "IdTag",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -201,29 +196,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdAttendee = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdPupil = table.Column<int>(nullable: false),
-                    PupilIdPupil = table.Column<int>(nullable: true),
-                    IdHub = table.Column<int>(nullable: false),
-                    HubIdHub = table.Column<int>(nullable: true)
+                    PupilId = table.Column<int>(nullable: true),
+                    HubId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_attendee", x => x.IdAttendee);
+                    table.PrimaryKey("PK_attendee", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_attendee_hub_HubIdHub",
-                        column: x => x.HubIdHub,
+                        name: "FK_attendee_hub_HubId",
+                        column: x => x.HubId,
                         principalSchema: "public",
                         principalTable: "hub",
-                        principalColumn: "IdHub",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_attendee_pupil_PupilIdPupil",
-                        column: x => x.PupilIdPupil,
+                        name: "FK_attendee_pupil_PupilId",
+                        column: x => x.PupilId,
                         principalSchema: "public",
                         principalTable: "pupil",
-                        principalColumn: "IdPupil",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -232,29 +225,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdAvailableModule = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdHub = table.Column<int>(nullable: false),
-                    HubIdHub = table.Column<int>(nullable: true),
-                    IdModule = table.Column<int>(nullable: false),
-                    ModuleIdModule = table.Column<int>(nullable: true)
+                    HubId = table.Column<int>(nullable: true),
+                    ModuleId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_available_module", x => x.IdAvailableModule);
+                    table.PrimaryKey("PK_available_module", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_available_module_hub_HubIdHub",
-                        column: x => x.HubIdHub,
+                        name: "FK_available_module_hub_HubId",
+                        column: x => x.HubId,
                         principalSchema: "public",
                         principalTable: "hub",
-                        principalColumn: "IdHub",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_available_module_module_ModuleIdModule",
-                        column: x => x.ModuleIdModule,
+                        name: "FK_available_module_module_ModuleId",
+                        column: x => x.ModuleId,
                         principalSchema: "public",
                         principalTable: "module",
-                        principalColumn: "IdModule",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
@@ -263,29 +254,27 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdCurrentModule = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdModule = table.Column<int>(nullable: false),
-                    ModuleIdModule = table.Column<int>(nullable: true),
-                    IdAttendee = table.Column<int>(nullable: false),
-                    AttendeeIdAttendee = table.Column<int>(nullable: true)
+                    ModuleId = table.Column<int>(nullable: true),
+                    AttendeeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_current_module", x => x.IdCurrentModule);
+                    table.PrimaryKey("PK_current_module", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_current_module_attendee_AttendeeIdAttendee",
-                        column: x => x.AttendeeIdAttendee,
+                        name: "FK_current_module_attendee_AttendeeId",
+                        column: x => x.AttendeeId,
                         principalSchema: "public",
                         principalTable: "attendee",
-                        principalColumn: "IdAttendee",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                     table.ForeignKey(
-                        name: "FK_current_module_module_ModuleIdModule",
-                        column: x => x.ModuleIdModule,
+                        name: "FK_current_module_module_ModuleId",
+                        column: x => x.ModuleId,
                         principalSchema: "public",
                         principalTable: "module",
-                        principalColumn: "IdModule",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Restrict);
                 });
 
@@ -294,36 +283,34 @@ namespace InTechNet.DataAccessLayer.Migrations
                 schema: "public",
                 columns: table => new
                 {
-                    IdState = table.Column<int>(nullable: false)
+                    Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdResource = table.Column<int>(nullable: false),
-                    ResourceIdResource = table.Column<int>(nullable: true),
-                    IdAttendee = table.Column<int>(nullable: false),
-                    AttendeeIdAttendee = table.Column<int>(nullable: true)
+                    ResourceId = table.Column<int>(nullable: true),
+                    AttendeeId = table.Column<int>(nullable: true)
                 },
                 constraints: table =>
                 {
-                    table.PrimaryKey("PK_state", x => x.IdState);
+                    table.PrimaryKey("PK_state", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_state_attendee_AttendeeIdAttendee",
-                        column: x => x.AttendeeIdAttendee,
+                        name: "FK_state_attendee_AttendeeId",
+                        column: x => x.AttendeeId,
                         principalSchema: "public",
                         principalTable: "attendee",
-                        principalColumn: "IdAttendee",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                     table.ForeignKey(
-                        name: "FK_state_resource_ResourceIdResource",
-                        column: x => x.ResourceIdResource,
+                        name: "FK_state_resource_ResourceId",
+                        column: x => x.ResourceId,
                         principalSchema: "public",
                         principalTable: "resource",
-                        principalColumn: "IdResource",
+                        principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
 
             migrationBuilder.InsertData(
                 schema: "public",
                 table: "subscription_plan",
-                columns: new[] { "IdSubscriptionPlan", "MaxAttendeesPerHub", "MaxHubPerModeratorAccount", "MaxModulePerHub", "SubscriptionPlanName", "SubscriptionPlanPrice" },
+                columns: new[] { "Id", "MaxAttendeesPerHub", "MaxHubPerModeratorAccount", "MaxModulePerHub", "SubscriptionPlanName", "SubscriptionPlanPrice" },
                 values: new object[,]
                 {
                     { 1, 32, 3, 3, "Standard", 0.0m },
@@ -332,40 +319,40 @@ namespace InTechNet.DataAccessLayer.Migrations
                 });
 
             migrationBuilder.CreateIndex(
-                name: "IX_attendee_HubIdHub",
+                name: "IX_attendee_HubId",
                 schema: "public",
                 table: "attendee",
-                column: "HubIdHub");
+                column: "HubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_attendee_PupilIdPupil",
+                name: "IX_attendee_PupilId",
                 schema: "public",
                 table: "attendee",
-                column: "PupilIdPupil");
+                column: "PupilId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_available_module_HubIdHub",
+                name: "IX_available_module_HubId",
                 schema: "public",
                 table: "available_module",
-                column: "HubIdHub");
+                column: "HubId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_available_module_ModuleIdModule",
+                name: "IX_available_module_ModuleId",
                 schema: "public",
                 table: "available_module",
-                column: "ModuleIdModule");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_current_module_AttendeeIdAttendee",
+                name: "IX_current_module_AttendeeId",
                 schema: "public",
                 table: "current_module",
-                column: "AttendeeIdAttendee");
+                column: "AttendeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_current_module_ModuleIdModule",
+                name: "IX_current_module_ModuleId",
                 schema: "public",
                 table: "current_module",
-                column: "ModuleIdModule");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
                 name: "index_hub_link",
@@ -374,10 +361,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "HubLink");
 
             migrationBuilder.CreateIndex(
-                name: "IX_hub_ModeratorIdModerator",
+                name: "IX_hub_ModeratorId",
                 schema: "public",
                 table: "hub",
-                column: "ModeratorIdModerator");
+                column: "ModeratorId");
 
             migrationBuilder.CreateIndex(
                 name: "index_moderator_email",
@@ -392,16 +379,16 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "ModeratorNickname");
 
             migrationBuilder.CreateIndex(
-                name: "IX_moderator_ModeratorSubscriptionPlanIdSubscriptionPlan",
+                name: "IX_moderator_ModeratorSubscriptionPlanId",
                 schema: "public",
                 table: "moderator",
-                column: "ModeratorSubscriptionPlanIdSubscriptionPlan");
+                column: "ModeratorSubscriptionPlanId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_module_SubscriptionPlanIdSubscriptionPlan",
+                name: "IX_module_SubscriptionPlanId",
                 schema: "public",
                 table: "module",
-                column: "SubscriptionPlanIdSubscriptionPlan");
+                column: "SubscriptionPlanId");
 
             migrationBuilder.CreateIndex(
                 name: "index_pupil_email",
@@ -416,28 +403,28 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "PupilNickname");
 
             migrationBuilder.CreateIndex(
-                name: "IX_resource_ModuleIdModule",
+                name: "IX_resource_ModuleId",
                 schema: "public",
                 table: "resource",
-                column: "ModuleIdModule");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_resource_fk_next_resource",
+                name: "IX_resource_NextResourceId",
                 schema: "public",
                 table: "resource",
-                column: "fk_next_resource");
+                column: "NextResourceId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_state_AttendeeIdAttendee",
+                name: "IX_state_AttendeeId",
                 schema: "public",
                 table: "state",
-                column: "AttendeeIdAttendee");
+                column: "AttendeeId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_state_ResourceIdResource",
+                name: "IX_state_ResourceId",
                 schema: "public",
                 table: "state",
-                column: "ResourceIdResource");
+                column: "ResourceId");
 
             migrationBuilder.CreateIndex(
                 name: "index_tag_name",
@@ -446,16 +433,16 @@ namespace InTechNet.DataAccessLayer.Migrations
                 column: "Name");
 
             migrationBuilder.CreateIndex(
-                name: "IX_topic_ModuleIdModule",
+                name: "IX_topic_ModuleId",
                 schema: "public",
                 table: "topic",
-                column: "ModuleIdModule");
+                column: "ModuleId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_topic_TagIdTag",
+                name: "IX_topic_TagId",
                 schema: "public",
                 table: "topic",
-                column: "TagIdTag");
+                column: "TagId");
         }
 
         protected override void Down(MigrationBuilder migrationBuilder)

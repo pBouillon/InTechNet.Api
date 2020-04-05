@@ -13,7 +13,7 @@ namespace InTechNet.DataAccessLayer.Entities.Users
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdSubscriptionPlan { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Name of the subscription

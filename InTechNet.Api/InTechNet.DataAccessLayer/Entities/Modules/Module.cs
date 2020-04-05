@@ -14,12 +14,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdModule { get; set; }
-
-        /// <summary>
-        /// Id of the subscription plan of the module
-        /// </summary>
-        public int IdSubscriptionPlan { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Subscription plan required to see this module

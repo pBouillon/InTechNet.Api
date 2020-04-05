@@ -11,22 +11,12 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdTopic { get; set; }
-
-        /// <summary>
-        /// Id of the module that has this tag
-        /// </summary>
-        public int IdModule { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Module that has this tag
         /// </summary>
         public Module Module { get; set; }
-
-        /// <summary>
-        /// Id of the tag this module has
-        /// </summary>
-        public int IdTag { get; set; }
 
         /// <summary>
         /// The tag this module has

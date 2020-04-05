@@ -67,7 +67,7 @@ namespace InTechNet.Services.User
 
             SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
             {
-                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                IdSubscriptionPlan = moderatorSubscriptionPlan.Id,
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
@@ -78,7 +78,7 @@ namespace InTechNet.Services.User
             // Return the DTO associated to the moderator without its password
             return new ModeratorDto
             {
-                Id = moderator.IdModerator,
+                Id = moderator.Id,
                 Email = moderator.ModeratorEmail,
                 Nickname = moderator.ModeratorNickname,
                 NumberOfHub = moderator.Hubs.Count(),
@@ -90,7 +90,7 @@ namespace InTechNet.Services.User
         public void DeleteModerator(ModeratorDto moderatorDto)
         {
             var moderator = _context.Moderators.FirstOrDefault(_ =>
-                    _.IdModerator == moderatorDto.Id)
+                    _.Id == moderatorDto.Id)
                 ?? throw new UnknownUserException();
 
             _context.Moderators.Remove(moderator);
@@ -103,14 +103,14 @@ namespace InTechNet.Services.User
             var moderator = _context.Moderators
                 .Include(_ => _.ModeratorSubscriptionPlan)
                 .Include(_ => _.Hubs)
-                .FirstOrDefault(_ => _.IdModerator == moderatorId) 
+                .FirstOrDefault(_ => _.Id == moderatorId) 
                             ?? throw new UnknownUserException();
 
             var moderatorSubscriptionPlan = moderator.ModeratorSubscriptionPlan;
 
             SubscriptionPlanDto subscriptionPlanDtoForCurrentModerator = new SubscriptionPlanDto
             {
-                IdSubscriptionPlan = moderatorSubscriptionPlan.IdSubscriptionPlan,
+                IdSubscriptionPlan = moderatorSubscriptionPlan.Id,
                 MaxHubPerModeratorAccount = moderatorSubscriptionPlan.MaxHubPerModeratorAccount,
                 SubscriptionPlanName = moderatorSubscriptionPlan.SubscriptionPlanName,
                 SubscriptionPlanPrice = moderatorSubscriptionPlan.SubscriptionPlanPrice,
