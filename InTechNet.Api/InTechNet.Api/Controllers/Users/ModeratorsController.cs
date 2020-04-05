@@ -18,6 +18,8 @@ using Swashbuckle.AspNetCore.Annotations;
 using System;
 using System.Collections.Generic;
 using System.Net;
+using InTechNet.Exception.Hub;
+using InTechNet.Exception.Module;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -141,27 +143,6 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [ModeratorClaimRequired]
-        [HttpPut("me/Hubs/{idHub}/Modules/{idModule}")]
-        [SwaggerResponse((int) HttpStatusCode.OK, "State of the module toggled")]
-        [SwaggerOperation(
-            Summary = "Toggle the activation of a module in a given hub",
-            Tags = new[]
-            {
-                SwaggerTag.Hubs,
-                SwaggerTag.Moderators,
-                SwaggerTag.Modules,
-            }
-        )]
-        public IActionResult ToggleModuleState(
-            [FromRoute, SwaggerParameter("Id of the concerned hub")]
-            int idHub,
-            [FromRoute, SwaggerParameter("Id of the module to be toggled")]
-            int idModule)
-        {
-            throw new NotImplementedException();
-        }
-
-        [ModeratorClaimRequired]
         [HttpGet("me/Hubs/{idHub}/Modules")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The current user can't perform this action")]
@@ -275,6 +256,42 @@ namespace InTechNet.Api.Controllers.Users
             {
                 return Unauthorized(
                     new UnauthorizedError(ex));
+            }
+        }
+
+        [ModeratorClaimRequired]
+        [HttpPut("me/Hubs/{idHub}/Modules/{idModule}")]
+        [SwaggerResponse((int)HttpStatusCode.OK, "State of the module toggled")]
+        [SwaggerOperation(
+            Summary = "Toggle the activation of a module in a given hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Moderators,
+                SwaggerTag.Modules,
+            }
+        )]
+        public IActionResult ToggleModuleState(
+            [FromRoute, SwaggerParameter("Id of the concerned hub")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to be toggled")]
+            int idModule)
+        {
+            try
+            {
+                var currentModerator = _authenticationService.GetCurrentModerator();
+                _moduleService.ToggleModuleState(currentModerator.Id, idHub, idModule);
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownHubException 
+                    || ex is UnknownModuleException)
+                {
+                    return BadRequest(ex);
+                }
+
+                return Unauthorized(ex);
             }
         }
     }

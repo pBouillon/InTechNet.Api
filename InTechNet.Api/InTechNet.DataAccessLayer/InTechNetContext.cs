@@ -155,6 +155,12 @@ namespace InTechNet.DataAccessLayer
                 .WithOne(_ => _.ModeratorSubscriptionPlan)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
+            
+            modelBuilder.Entity<SubscriptionPlan>()
+                .HasMany(_ => _.Modules)
+                .WithOne(_ => _.SubscriptionPlan)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Moderator>()
                 .HasMany(_ => _.Hubs)
@@ -173,12 +179,12 @@ namespace InTechNet.DataAccessLayer
 
             modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Hub)
-                .WithMany(_ => _.SelectedModules)
+                .WithMany(_ => _.AvailableModules)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Module)
-                .WithMany(_ => _.SelectedModules)
+                .WithMany(_ => _.AvailableModules)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Topic>()

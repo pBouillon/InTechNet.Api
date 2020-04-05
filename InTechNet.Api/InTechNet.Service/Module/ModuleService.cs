@@ -2,11 +2,13 @@
 using InTechNet.Common.Dto.Topic;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Hub;
+using InTechNet.Exception.Module;
 using InTechNet.Services.Module.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.DataAccessLayer.Entities.Modules;
 
 namespace InTechNet.Services.Module
 {
@@ -47,10 +49,7 @@ namespace InTechNet.Services.Module
             // Filter all hub to be displayed
             return _context.Modules
                 .Include(_ => _.SubscriptionPlan)
-                .Include(_ => _.SelectedModules)
-                // Only select the modules associated to the current hub
-                .Where(_ => 
-                    _.SelectedModules.Any(_ => _.IdHub == idHub))
+                .Include(_ => _.AvailableModules)
                 // Only select the modules with the same subscription plan as the moderator
                 // FIXME: "lower" subscription plans should be visible for higher subscription plans
                 .Where(_ =>
@@ -67,8 +66,8 @@ namespace InTechNet.Services.Module
                         Name = topic.Tag.Name
                     }),
                     // A module is active if its ID also belong to the SelectedModule table
-                    IsActive = _.SelectedModules.Any(selected 
-                        => selected.IdModule == _.IdModule),
+                    IsActive = _.AvailableModules.Any(availableModules
+                        => availableModules.IdModule == _.IdModule),
                     ModuleName = _.ModuleName,
                     ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
                     {
@@ -76,6 +75,47 @@ namespace InTechNet.Services.Module
                         SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
                     }
                 }).ToList();
+        }
+
+        /// <inheritdoc cref="IModuleService.ToggleModuleState"/>
+        public void ToggleModuleState(int idModerator, int idHub, int idModule)
+        {
+            // Get the hub
+            var hub = _context.Hubs.Include(_ => _.Moderator)
+                          .Include(_ => _.AvailableModules)
+                          .FirstOrDefault(_ =>
+                              _.IdHub == idHub
+                                && _.Moderator.IdModerator == idModerator)
+                      ?? throw new UnknownHubException();
+
+            // Get the related module
+            var module = _context.Modules.SingleOrDefault(_ =>
+                    _.IdModule == idModule)
+                ?? throw new UnknownModuleException();
+
+            // Retrieve the available module record
+            var selectedModule = hub.AvailableModules.SingleOrDefault(_ =>
+                _.IdModule == module.IdModule);
+
+            // Add the current module to the selected ones if not tracked as available
+            if (selectedModule == null)
+            {
+                _context.AvailableModules.Add(new AvailableModule
+                {
+                    IdHub = hub.IdHub,
+                    Hub = hub,
+                    IdModule = module.IdModule,
+                    Module = module,
+                });
+            }
+            // Delete the selected module record if tracked
+            else
+            {
+                _context.AvailableModules.Remove(selectedModule);
+            }
+
+            // Commit changes
+            _context.SaveChanges();
         }
     }
 }

@@ -17,9 +17,9 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         public int IdModule { get; set; }
 
         /// <summary>
-        /// Id of the type of the module
+        /// Id of the subscription plan of the module
         /// </summary>
-        public int IdType { get; set; }
+        public int IdSubscriptionPlan { get; set; }
 
         /// <summary>
         /// Subscription plan required to see this module
@@ -35,7 +35,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// <summary>
         /// References hubs where this module is selected
         /// </summary>
-        public IEnumerable<AvailableModule> SelectedModules { get; set; }
+        public IEnumerable<AvailableModule> AvailableModules { get; set; }
 
         /// <summary>
         /// The topics of this hub

@@ -10,8 +10,8 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200404150621_CreateUsersHubsSubscriptionPlansModules")]
-    partial class CreateUsersHubsSubscriptionPlansModules
+    [Migration("20200405125447_CreateEntities")]
+    partial class CreateEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -144,7 +144,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
-                    b.Property<int>("IdType")
+                    b.Property<int>("IdSubscriptionPlan")
                         .HasColumnType("integer");
 
                     b.Property<string>("ModuleName")
@@ -416,12 +416,12 @@ namespace InTechNet.DataAccessLayer.Migrations
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.AvailableModule", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Hub", "Hub")
-                        .WithMany("SelectedModules")
+                        .WithMany("AvailableModules")
                         .HasForeignKey("HubIdHub")
                         .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
-                        .WithMany("SelectedModules")
+                        .WithMany("AvailableModules")
                         .HasForeignKey("ModuleIdModule")
                         .OnDelete(DeleteBehavior.Cascade);
                 });
@@ -440,8 +440,9 @@ namespace InTechNet.DataAccessLayer.Migrations
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Users.SubscriptionPlan", "SubscriptionPlan")
-                        .WithMany()
-                        .HasForeignKey("SubscriptionPlanIdSubscriptionPlan");
+                        .WithMany("Modules")
+                        .HasForeignKey("SubscriptionPlanIdSubscriptionPlan")
+                        .OnDelete(DeleteBehavior.SetNull);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Topic", b =>

@@ -4,7 +4,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 
 namespace InTechNet.DataAccessLayer.Migrations
 {
-    public partial class CreateUsersHubsSubscriptionPlansModules : Migration
+    public partial class CreateEntities : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -92,7 +92,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     IdModule = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
-                    IdType = table.Column<int>(nullable: false),
+                    IdSubscriptionPlan = table.Column<int>(nullable: false),
                     SubscriptionPlanIdSubscriptionPlan = table.Column<int>(nullable: true),
                     ModuleName = table.Column<string>(maxLength: 32, nullable: true)
                 },
@@ -105,7 +105,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                         principalSchema: "public",
                         principalTable: "subscription_plan",
                         principalColumn: "IdSubscriptionPlan",
-                        onDelete: ReferentialAction.Restrict);
+                        onDelete: ReferentialAction.SetNull);
                 });
 
             migrationBuilder.CreateTable(

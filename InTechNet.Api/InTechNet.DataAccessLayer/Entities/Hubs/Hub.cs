@@ -51,6 +51,6 @@ namespace InTechNet.DataAccessLayer.Entities.Hubs
         /// <summary>
         /// Selected modules of the hub
         /// </summary>
-        public IEnumerable<AvailableModule> SelectedModules { get; set; }
+        public IEnumerable<AvailableModule> AvailableModules { get; set; }
     }
 }
