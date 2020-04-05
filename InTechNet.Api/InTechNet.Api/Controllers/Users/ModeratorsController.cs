@@ -15,6 +15,7 @@ using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
+using System;
 using System.Collections.Generic;
 using System.Net;
 
@@ -76,7 +77,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
-            [FromQuery, SwaggerParameter("Credentials to check")] CredentialsCheckDto credentials)
+            [FromQuery, SwaggerParameter("Credentials to check")]
+            CredentialsCheckDto credentials)
         {
             return Ok(
                 _authenticationService.AreCredentialsAlreadyInUse(credentials));
@@ -95,7 +97,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult<ModeratorDto> Authenticate(
-            [FromBody, SwaggerParameter("Moderator login details")] AuthenticationDto authenticationDto)
+            [FromBody, SwaggerParameter("Moderator login details")]
+            AuthenticationDto authenticationDto)
         {
             try
             {
@@ -138,8 +141,30 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [ModeratorClaimRequired]
+        [HttpPut("me/Hubs/{idHub}/Modules/{idModule}")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "State of the module toggled")]
+        [SwaggerOperation(
+            Summary = "Toggle the activation of a module in a given hub",
+            Tags = new[]
+            {
+                SwaggerTag.Hubs,
+                SwaggerTag.Moderators,
+                SwaggerTag.Modules,
+            }
+        )]
+        public IActionResult ToggleModuleState(
+            [FromRoute, SwaggerParameter("Id of the concerned hub")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to be toggled")]
+            int idModule)
+        {
+            throw new NotImplementedException();
+        }
+
+        [ModeratorClaimRequired]
         [HttpGet("me/Hubs/{idHub}/Modules")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The current user can't perform this action")]
         [SwaggerOperation(
             Summary = "Fetch the modules of the specified hub for the current moderator",
             Tags = new[]
@@ -150,7 +175,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
-            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub)
+            [FromRoute, SwaggerParameter("Id of the hub from which fetch the modules")] 
+            int idHub)
         {
             ModeratorDto currentModerator;
             
@@ -182,7 +208,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult Register(
-            [FromBody, SwaggerParameter("Moderator's creation payload")] ModeratorRegistrationDto newModeratorData)
+            [FromBody, SwaggerParameter("Moderator's creation payload")] 
+            ModeratorRegistrationDto newModeratorData)
         {
             try
             {
@@ -224,9 +251,12 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult RemoveAttendee(
-            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int idHub,
-            [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")] int idPupil,
-            [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the attending pupil to be removed")]
+            int idPupil,
+            [FromBody, SwaggerParameter("Attendee to be removed")]
+            AttendeeDto attendeeDto)
         {
             var currentModerator = _authenticationService.GetCurrentModerator();
 
