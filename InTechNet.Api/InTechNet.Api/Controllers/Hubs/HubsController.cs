@@ -120,26 +120,22 @@ namespace InTechNet.Api.Controllers.Hubs
             try
             {
                 // Fetch the hub from the moderator
-                HubDto hub;
-
                 if (_authenticationService.TryGetCurrentModerator(out var currentModerator))
                 {
-                    hub = _hubService.GetModeratorHub(currentModerator, hubId);
-
-                    return Ok(hub);
+                    return Ok(
+                        _hubService.GetModeratorHub(currentModerator, hubId));
                 }
 
-                // If the request came from the pupil, fetch the request from the pupil
+                // If the request does not come from any of the allowed roles, return Unauthorized
                 if (!_authenticationService.TryGetCurrentPupil(out var currentPupil))
                 {
                     return Unauthorized();
                 }
 
-                hub = _hubService.GetPupilHub(currentPupil, hubId);
+                // If the request came from the pupil, fetch the request from the pupil
+                return Ok(
+                    _hubService.GetPupilHub(currentPupil, hubId));
 
-                return Ok(hub);
-
-                // If the request does not come from any of the previous roles, return Unauthorized
             }
             catch (BaseException ex)
             {
