@@ -50,9 +50,9 @@ namespace InTechNet.DataAccessLayer
         public DbSet<Module> Modules { get; set; }
 
         /// <summary>
-        /// DbSet for the SelectedModule Entity
+        /// DbSet for the AvailableModule Entity
         /// </summary>
-        public DbSet<SelectedModule> SelectedModules { get; set; }
+        public DbSet<AvailableModule> AvailableModules { get; set; }
 
         /// <summary>
         /// DbSet for the Tag Entity
@@ -80,11 +80,6 @@ namespace InTechNet.DataAccessLayer
         public DbSet<CurrentModule> CurrentModules { get; set; }
 
         /// <summary>
-        /// DbSet for the ModuleType Entity
-        /// </summary>
-        public DbSet<ModuleType> ModuleTypes { get; set; }
-
-        /// <summary>
         /// Build the model
         /// </summary>
         /// <param name="modelBuilder"></param>
@@ -110,7 +105,7 @@ namespace InTechNet.DataAccessLayer
             var freeSubscriptionPlan = new FreeSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = freeSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = freeSubscriptionPlan.MaxHubsCount,
@@ -123,7 +118,7 @@ namespace InTechNet.DataAccessLayer
             var premiumSubscriptionPlan = new PremiumSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = premiumSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = premiumSubscriptionPlan.MaxHubsCount,
@@ -136,7 +131,7 @@ namespace InTechNet.DataAccessLayer
             var platinumSubscriptionPlan = new PlatinumSubscriptionPlan();
             subscriptionPlans.Enqueue(new SubscriptionPlan
             {
-                IdSubscriptionPlan = ++subscriptionId,
+                Id = ++subscriptionId,
                 Moderators = new List<Moderator>(),
                 MaxAttendeesPerHub = platinumSubscriptionPlan.MaxAttendeesPerHubCount,
                 MaxHubPerModeratorAccount = platinumSubscriptionPlan.MaxHubsCount,
@@ -160,6 +155,12 @@ namespace InTechNet.DataAccessLayer
                 .WithOne(_ => _.ModeratorSubscriptionPlan)
                 .IsRequired(false)
                 .OnDelete(DeleteBehavior.SetNull);
+            
+            modelBuilder.Entity<SubscriptionPlan>()
+                .HasMany(_ => _.Modules)
+                .WithOne(_ => _.SubscriptionPlan)
+                .IsRequired(false)
+                .OnDelete(DeleteBehavior.SetNull);
 
             modelBuilder.Entity<Moderator>()
                 .HasMany(_ => _.Hubs)
@@ -176,14 +177,14 @@ namespace InTechNet.DataAccessLayer
                 .WithMany(_ => _.Attendees)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SelectedModule>()
+            modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Hub)
-                .WithMany(_ => _.SelectedModules)
+                .WithMany(_ => _.AvailableModules)
                 .OnDelete(DeleteBehavior.Cascade);
 
-            modelBuilder.Entity<SelectedModule>()
+            modelBuilder.Entity<AvailableModule>()
                 .HasOne(_ => _.Module)
-                .WithMany(_ => _.SelectedModules)
+                .WithMany(_ => _.AvailableModules)
                 .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<Topic>()
@@ -218,12 +219,6 @@ namespace InTechNet.DataAccessLayer
             modelBuilder.Entity<CurrentModule>()
                 .HasOne(_ => _.Module)
                 .WithMany(_ => _.CurrentModules);
-
-            modelBuilder.Entity<ModuleType>()
-                .HasMany(_ => _.Modules)
-                .WithOne(_ => _.ModuleType)
-                .OnDelete(DeleteBehavior.SetNull)
-                .IsRequired(false);
         }
 
         /// <summary>
@@ -233,24 +228,28 @@ namespace InTechNet.DataAccessLayer
         private static void CreateIndexes(ModelBuilder modelBuilder)
         {
             modelBuilder.Entity<Moderator>()
-                .HasIndex(b => b.ModeratorNickname)
+                .HasIndex(_ => _.ModeratorNickname)
                 .HasName("index_moderator_nickname");
 
             modelBuilder.Entity<Moderator>()
-                .HasIndex(b => b.ModeratorEmail)
+                .HasIndex(_ => _.ModeratorEmail)
                 .HasName("index_moderator_email");
 
             modelBuilder.Entity<Pupil>()
-                .HasIndex(b => b.PupilNickname)
+                .HasIndex(_ => _.PupilNickname)
                 .HasName("index_pupil_nickname");
 
             modelBuilder.Entity<Pupil>()
-                .HasIndex(b => b.PupilEmail)
+                .HasIndex(_ => _.PupilEmail)
                 .HasName("index_pupil_email");
 
             modelBuilder.Entity<Hub>()
-                .HasIndex(b => b.HubLink)
+                .HasIndex(_ => _.HubLink)
                 .HasName("index_hub_link");
+
+            modelBuilder.Entity<Tag>()
+                .HasIndex(_ => _.Name)
+                .HasName("index_tag_name");
         }
     }
 }

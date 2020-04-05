@@ -1,7 +1,8 @@
-﻿using System;
-
-namespace InTechNet.Common.Dto.Subscription
+﻿namespace InTechNet.Common.Dto.Subscription
 {
+    /// <summary>
+    /// Subscription plan details
+    /// </summary>
     public class SubscriptionPlanDto
     {
         /// <summary>

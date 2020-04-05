@@ -21,6 +21,11 @@
         public const string Moderators = "Moderators";
 
         /// <summary>
+        /// Endpoint relative to the module's logic
+        /// </summary>
+        public const string Modules = "Modules";
+
+        /// <summary>
         /// Endpoint relative to the pupil's logic
         /// </summary>
         public const string Pupils = "Pupils";

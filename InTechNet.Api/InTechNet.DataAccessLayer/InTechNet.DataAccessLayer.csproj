@@ -5,13 +5,6 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="Migrations\20200403191515_ModuleLogic.cs" />
-    <Compile Remove="Migrations\20200403191515_ModuleLogic.Designer.cs" />
-    <Compile Remove="Migrations\20200404124236_AddModuleType.cs" />
-    <Compile Remove="Migrations\20200404124236_AddModuleType.Designer.cs" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="EntityFramework" Version="6.4.0" />
     <PackageReference Include="IdentityServer4" Version="3.1.2" />
     <PackageReference Include="IdentityServer4.EntityFramework.Storage" Version="3.1.2" />

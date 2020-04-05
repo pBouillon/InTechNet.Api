@@ -54,7 +54,7 @@ namespace InTechNet.Services.User
             // Return the DTO associated to the moderator
             return new PupilDto
             {
-                Id = pupil.IdPupil,
+                Id = pupil.Id,
                 Email = pupil.PupilEmail,
                 Nickname = pupil.PupilNickname
             };
@@ -64,7 +64,7 @@ namespace InTechNet.Services.User
         public void DeletePupil(PupilDto pupilDto)
         {
             var pupil = _context.Pupils.FirstOrDefault(_ =>
-                    _.IdPupil == pupilDto.Id)
+                    _.Id == pupilDto.Id)
                 ?? throw new UnknownUserException();
 
             _context.Pupils.Remove(pupil);
@@ -75,7 +75,7 @@ namespace InTechNet.Services.User
         public PupilDto GetPupil(int pupilId)
         {
             var pupil = _context.Pupils
-                                .FirstOrDefault(_ => _.IdPupil == pupilId)
+                                .FirstOrDefault(_ => _.Id == pupilId)
                             ?? throw new UnknownUserException();
 
             return new PupilDto
@@ -95,12 +95,12 @@ namespace InTechNet.Services.User
                 .FirstOrDefault(_ =>
                     _.HubLink == hubLink
                     && _.Attendees.Any(_ =>
-                        _.IdPupil == pupilDto.Id))
+                        _.Pupil.Id == pupilDto.Id))
                 ?? throw new UnknownHubException();
 
             return new PupilHubDto
             {
-                Id = hub.IdHub,
+                Id = hub.Id,
                 Description = hub.HubDescription,
                 ModeratorNickname = hub.Moderator.ModeratorNickname,
                 Name = hub.HubName,

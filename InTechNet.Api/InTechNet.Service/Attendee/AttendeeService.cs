@@ -1,13 +1,10 @@
-﻿using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User.Attendee;
-using InTechNet.Common.Dto.User.Moderator;
+﻿using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
 using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
 using InTechNet.Services.Attendee.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System;
 using System.Linq;
 
 namespace InTechNet.Services.Attendee
@@ -50,7 +47,7 @@ namespace InTechNet.Services.Attendee
 
             // Check if the pupil is already an attendee of this hub
             var attendeeAlreadyExists = _context.Attendees.Any(_ =>
-                    _.IdHub == hub.IdHub && _.IdPupil == pupilDto.Id);
+                    _.Hub.Id == hub.Id && _.Pupil.Id == pupilDto.Id);
 
             if (attendeeAlreadyExists)
             {
@@ -59,14 +56,12 @@ namespace InTechNet.Services.Attendee
 
             // Create the attendee to be added to this hub
             var pupil = _context.Pupils.First(_ =>
-                _.IdPupil == pupilDto.Id);
+                _.Id == pupilDto.Id);
 
             _context.Attendees.Add(new DataAccessLayer.Entities.Hubs.Attendee
             {
                 Hub = hub,
-                IdHub = hub.IdHub,
                 Pupil = pupil,
-                IdPupil = pupil.IdPupil,
             });
 
             _context.SaveChanges();
@@ -77,7 +72,7 @@ namespace InTechNet.Services.Attendee
         {
             // Retrieve the connection
             var attendee = _context.Attendees
-                .FirstOrDefault(_ => _.IdAttendee == attendeeDto.Id)
+                .FirstOrDefault(_ => _.Id == attendeeDto.Id)
                 ?? throw new UnknownAttendeeException();
 
             // Remove the connection

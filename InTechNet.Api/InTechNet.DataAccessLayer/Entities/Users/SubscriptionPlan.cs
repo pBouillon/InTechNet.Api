@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using InTechNet.DataAccessLayer.Entities.Modules;
 
 namespace InTechNet.DataAccessLayer.Entities.Users
 {
@@ -12,7 +13,7 @@ namespace InTechNet.DataAccessLayer.Entities.Users
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdSubscriptionPlan { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Name of the subscription
@@ -43,5 +44,10 @@ namespace InTechNet.DataAccessLayer.Entities.Users
         /// Moderators using this subscription
         /// </summary>
         public IEnumerable<Moderator> Moderators { get; set; }
+
+        /// <summary>
+        /// Modules referring to this subscription
+        /// </summary>
+        public IEnumerable<Module> Modules { get; set; }
     }
 }

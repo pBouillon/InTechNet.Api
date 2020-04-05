@@ -7,6 +7,8 @@ using InTechNet.Services.Authentication.Interfaces;
 using InTechNet.Services.Authentication.Jwt;
 using InTechNet.Services.Hub;
 using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.Module;
+using InTechNet.Services.Module.Interfaces;
 using InTechNet.Services.SubscriptionPlan;
 using InTechNet.Services.SubscriptionPlan.Interfaces;
 using InTechNet.Services.User;
@@ -83,6 +85,9 @@ namespace InTechNet.Api.Helpers
 
             // Subscription plan
             _services.AddTransient<ISubscriptionPlanService, SubscriptionPlanService>();
+
+            // Modules
+            _services.AddTransient<IModuleService, ModuleService>();
         }
 
         /// <summary>

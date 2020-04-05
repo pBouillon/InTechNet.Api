@@ -15,7 +15,7 @@ namespace InTechNet.DataAccessLayer.Entities.Hubs
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdHub { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Name of the Hub
@@ -51,6 +51,6 @@ namespace InTechNet.DataAccessLayer.Entities.Hubs
         /// <summary>
         /// Selected modules of the hub
         /// </summary>
-        public IEnumerable<SelectedModule> SelectedModules { get; set; }
+        public IEnumerable<AvailableModule> AvailableModules { get; set; }
     }
 }

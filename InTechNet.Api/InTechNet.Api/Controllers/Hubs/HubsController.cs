@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
-using InTechNet.Common.Dto.User.Moderator;
 
 namespace InTechNet.Api.Controllers.Hubs
 {
@@ -50,7 +49,8 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         )]
         public IActionResult CreateHub(
-            [FromBody, SwaggerParameter("Basic data for hub creation")] HubCreationDto hubCreation)
+            [FromBody, SwaggerParameter("Basic data for hub creation")] 
+            HubCreationDto hubCreation)
         {
             try
             {
@@ -85,7 +85,8 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         )]
         public IActionResult DeleteHub(
-            [FromRoute, SwaggerParameter("Id of the hub to be deleted")] int hubId)
+            [FromRoute, SwaggerParameter("Id of the hub to be deleted")] 
+            int hubId)
         {
             try
             {
@@ -112,30 +113,29 @@ namespace InTechNet.Api.Controllers.Hubs
                 SwaggerTag.Hubs,
             }
         )]
-        public ActionResult<HubDto> GetHub(int hubId)
+        public ActionResult<HubDto> GetHub(
+            [FromRoute, SwaggerParameter("Id of the hub from which fetching the details")] 
+            int hubId)
         {
-            HubDto hub;
-
             try
             {
                 // Fetch the hub from the moderator
                 if (_authenticationService.TryGetCurrentModerator(out var currentModerator))
                 {
-                    hub = _hubService.GetModeratorHub(currentModerator, hubId);
+                    return Ok(
+                        _hubService.GetModeratorHub(currentModerator, hubId));
+                }
 
-                    return Ok(hub);
+                // If the request does not come from any of the allowed roles, return Unauthorized
+                if (!_authenticationService.TryGetCurrentPupil(out var currentPupil))
+                {
+                    return Unauthorized();
                 }
 
                 // If the request came from the pupil, fetch the request from the pupil
-                if (_authenticationService.TryGetCurrentPupil(out var currentPupil))
-                {
-                    hub = _hubService.GetPupilHub(currentPupil, hubId);
+                return Ok(
+                    _hubService.GetPupilHub(currentPupil, hubId));
 
-                    return Ok(hub);
-                }
-
-                // If the request does not come from any of the previous roles, return Unauthorized
-                return Unauthorized();
             }
             catch (BaseException ex)
             {
@@ -184,8 +184,10 @@ namespace InTechNet.Api.Controllers.Hubs
             }
         )]
         public IActionResult UpdateHub(
-            [FromRoute, SwaggerParameter("Id of the hub to update")] int hubId,
-            [FromBody, SwaggerParameter("Data for hub update")] HubUpdateDto hubUpdate)
+            [FromRoute, SwaggerParameter("Id of the hub to update")] 
+            int hubId,
+            [FromBody, SwaggerParameter("Data for hub update")] 
+            HubUpdateDto hubUpdate)
         {
             try
             {

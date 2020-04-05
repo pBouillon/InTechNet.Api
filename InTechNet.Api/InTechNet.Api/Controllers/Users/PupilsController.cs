@@ -77,7 +77,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult<CredentialsCheckDto> AreIdentifiersAlreadyInUse(
-            [FromQuery, SwaggerParameter("Credentials to check")] CredentialsCheckDto credentials)
+            [FromQuery, SwaggerParameter("Credentials to check")]
+            CredentialsCheckDto credentials)
         {
             return Ok(
                 _authenticationService.AreCredentialsAlreadyInUse(credentials));
@@ -96,7 +97,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult<string> Authenticate(
-            [FromBody, SwaggerParameter("Pupil login details")] AuthenticationDto authenticationDto)
+            [FromBody, SwaggerParameter("Pupil login details")]
+            AuthenticationDto authenticationDto)
         {
             try
             {
@@ -149,7 +151,9 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Hubs,
             }
         )]
-        public ActionResult<HubDto> GetHubByLink(string hubLink)
+        public ActionResult<HubDto> GetHubByLink(
+            [FromRoute, SwaggerParameter("Link of the hub to be checked")] 
+            string hubLink)
         {
             try
             {
@@ -209,7 +213,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public ActionResult JoinHub(
-            [FromQuery, SwaggerParameter("Link of the hub the pupil is joining")] string link)
+            [FromQuery, SwaggerParameter("Link of the hub the pupil is joining")] 
+            string link)
         {
             try
             {
@@ -250,7 +255,8 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult Register(
-            [FromBody, SwaggerParameter("Pupil's creation payload")] PupilRegistrationDto newPupilData)
+            [FromBody, SwaggerParameter("Pupil's creation payload")] 
+            PupilRegistrationDto newPupilData)
         {
             try
             {
@@ -293,8 +299,10 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult RemoveAttendee(
-            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] int hubId,
-            [FromBody, SwaggerParameter("Attendee to be removed")] AttendeeDto attendeeDto)
+            [FromRoute, SwaggerParameter("Id of the hub from which the attendance is removed")] 
+            int hubId,
+            [FromBody, SwaggerParameter("Attendee to be removed")] 
+            AttendeeDto attendeeDto)
         {
             var currentPupil = _authenticationService.GetCurrentPupil();
 

@@ -13,7 +13,7 @@ namespace InTechNet.DataAccessLayer.Entities.Users
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdPupil { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
         /// Nickname of the Pupil

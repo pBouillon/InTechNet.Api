@@ -26,7 +26,7 @@ namespace InTechNet.Services.SubscriptionPlan
         {
             return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
             {
-                IdSubscriptionPlan = _.IdSubscriptionPlan,
+                IdSubscriptionPlan = _.Id,
                 MaxAttendeesPerHub = _.MaxAttendeesPerHub,
                 MaxHubPerModeratorAccount = _.MaxHubPerModeratorAccount,
                 MaxModulePerHub = _.MaxModulePerHub,

@@ -10,7 +10,6 @@ using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Hub.Helpers;
 using InTechNet.Services.Hub.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Internal;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -44,12 +43,12 @@ namespace InTechNet.Services.Hub
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(
-                                _ => _.IdModerator == moderatorDto.Id)
+                                _ => _.Id == moderatorDto.Id)
                             ?? throw new UnknownUserException();
 
             // Assert that this moderator does not have a hub of the same name
             var isDuplicateTracked = _context.Hubs.Any(_ =>
-                _.Moderator.IdModerator == moderator.IdModerator
+                _.Moderator.Id == moderator.Id
                 && _.HubName == newHubDto.Name);
 
             if (isDuplicateTracked)
@@ -79,16 +78,16 @@ namespace InTechNet.Services.Hub
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(_ =>
-                                _.IdModerator == moderatorDto.Id)
+                                _.Id == moderatorDto.Id)
                             ?? throw new UnknownUserException();
 
             // Retrieve the current hub
             var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.IdHub == hubId)
+                          _.Id == hubId)
                       ?? throw new UnknownHubException();
 
             // Assert that the moderator is allowed to delete this hub
-            if (moderator.IdModerator != hub.Moderator.IdModerator)
+            if (moderator.Id != hub.Moderator.Id)
             {
                 throw new IllegalHubOperationException();
             }
@@ -110,27 +109,27 @@ namespace InTechNet.Services.Hub
                     .Include(_ => _.Attendees)
                         .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
-                        _.IdHub == hubId 
-                        && _.Moderator.IdModerator == moderatorDto.Id);
+                        _.Id == hubId 
+                        && _.Moderator.Id == moderatorDto.Id);
 
                 // Retrieve the attending pupils from the junction table `Attendee`
                 var hubAttendees = hub.Attendees?.Join(
                     _context.Pupils,
-                    attendee => attendee.IdPupil,
-                    pupil => pupil.IdPupil,
+                    attendee => attendee.Pupil.Id,
+                    pupil => pupil.Id,
                     (_, pupil) => new LightweightPupilDto
                     {
                         Nickname = pupil.PupilNickname,
-                        Id = pupil.IdPupil
+                        Id = pupil.Id
                     }).ToList() ?? new List<LightweightPupilDto>();
 
                 // Return the agglomerated data
                 return new HubDto
                 {
-                    IdModerator = hub.Moderator.IdModerator,
+                    IdModerator = hub.Moderator.Id,
                     Attendees = hubAttendees,
                     Description = hub.HubDescription,
-                    Id = hub.IdHub,
+                    Id = hub.Id,
                     Name = hub.HubName,
                     Link = hub.HubLink,
                 };
@@ -145,13 +144,13 @@ namespace InTechNet.Services.Hub
         public IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto)
         {
             var moderatorsHubs = _context.Hubs.Where(_ =>
-                    _.Moderator.IdModerator == moderatorDto.Id);
+                    _.Moderator.Id == moderatorDto.Id);
 
             return moderatorsHubs.Select(_ => new LightweightHubDto
             {
                 Name = _.HubName,
                 Link = _.HubLink,
-                Id = _.IdHub,
+                Id = _.Id,
                 Description = _.HubDescription,
                 AttendeesCount = _.Attendees.Count()
             });
@@ -168,29 +167,29 @@ namespace InTechNet.Services.Hub
                     .Include(_ => _.Attendees)
                         .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
-                        _.IdHub == hubId
+                        _.Id == hubId
                         && _.Attendees.Any(_ => 
-                            _.IdHub == hubId 
-                            && _.IdPupil == currentPupil.Id));
+                            _.Hub.Id == hubId 
+                            && _.Pupil.Id == currentPupil.Id));
 
                 // Retrieve the attending pupils from the junction table `Attendee`
                 var hubAttendees = hub.Attendees?.Join(
                     _context.Pupils,
-                    attendee => attendee.IdPupil,
-                    pupil => pupil.IdPupil,
+                    attendee => attendee.Pupil.Id,
+                    pupil => pupil.Id,
                     (_, pupil) => new LightweightPupilDto
                     {
                         Nickname = pupil.PupilNickname,
-                        Id = pupil.IdPupil
+                        Id = pupil.Id
                     }).ToList() ?? new List<LightweightPupilDto>();
 
                 // Return the agglomerated data
                 return new HubDto
                 {
-                    IdModerator = hub.Moderator.IdModerator,
+                    IdModerator = hub.Moderator.Id,
                     Attendees = hubAttendees,
                     Description = hub.HubDescription,
-                    Id = hub.IdHub,
+                    Id = hub.Id,
                     Name = hub.HubName,
                     Link = hub.HubLink,
                 };
@@ -206,11 +205,11 @@ namespace InTechNet.Services.Hub
         {
             var pupilsAttendance = _context.Attendees.Include(_ => _.Hub)
                 .Where(_ =>
-                    _.IdPupil == currentPupil.Id);
+                    _.Pupil.Id == currentPupil.Id);
 
             return pupilsAttendance.Select(_ => new PupilHubDto
             {
-                Id = _.IdHub,
+                Id = _.Hub.Id,
                 Description = _.Hub.HubDescription,
                 Name = _.Hub.HubName,
                 ModeratorNickname = _.Hub.Moderator.ModeratorNickname
@@ -222,10 +221,10 @@ namespace InTechNet.Services.Hub
         {
             // Fetching the exact record to be removed
             var attendee = _context.Attendees.FirstOrDefault(_ => 
-                    _.IdHub == attendeeDto.IdHub && _.IdPupil == attendeeDto.IdPupil)
+                    _.Hub.Id == attendeeDto.IdHub && _.Pupil.Id == attendeeDto.IdPupil)
                 ?? throw new UnknownAttendeeException();
 
-            attendeeDto.Id = attendee.IdAttendee;
+            attendeeDto.Id = attendee.Id;
 
             // Remove the attendance
             _attendeeService.RemoveAttendance(attendeeDto);
@@ -236,10 +235,10 @@ namespace InTechNet.Services.Hub
         {
             // Fetch the related hub attended by the current moderator
             var attendee = _context.Attendees.FirstOrDefault(_ =>
-                    _.IdHub == attendeeDto.IdHub && _.IdPupil == attendeeDto.IdPupil)
+                    _.Hub.Id == attendeeDto.IdHub && _.Pupil.Id == attendeeDto.IdPupil)
                 ?? throw new UnknownAttendeeException();
 
-            attendeeDto.Id = attendee.IdAttendee;
+            attendeeDto.Id = attendee.Id;
 
             // Remove the attendance
             _attendeeService.RemoveAttendance(attendeeDto);
@@ -250,16 +249,16 @@ namespace InTechNet.Services.Hub
         {
             // Retrieve the associated moderator to `moderatorDto`
             var moderator = _context.Moderators.FirstOrDefault(_ =>
-                                _.IdModerator == moderatorDto.Id)
+                                _.Id == moderatorDto.Id)
                             ?? throw new UnknownUserException();
 
             // Retrieve the current hub
             var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.IdHub == hubId)
+                          _.Id == hubId)
                       ?? throw new UnknownHubException();
 
             // Assert that the moderator is allowed to update this hub
-            if (moderator.IdModerator != hub.Moderator.IdModerator)
+            if (moderator.Id != hub.Moderator.Id)
             {
                 throw new IllegalHubOperationException();
             }

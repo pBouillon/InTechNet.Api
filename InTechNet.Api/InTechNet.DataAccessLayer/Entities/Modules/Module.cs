@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using InTechNet.DataAccessLayer.Entities.Users;
 
 namespace InTechNet.DataAccessLayer.Entities.Modules
 {
@@ -13,17 +14,12 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
-        public int IdModule { get; set; }
+        public int Id { get; set; }
 
         /// <summary>
-        /// Id of the type of the module
+        /// Subscription plan required to see this module
         /// </summary>
-        public int IdType { get; set; }
-
-        /// <summary>
-        /// Type of this module
-        /// </summary>
-        public ModuleType ModuleType { get; set; }
+        public SubscriptionPlan SubscriptionPlan { get; set; }
 
         /// <summary>
         /// Name of the module
@@ -34,7 +30,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// <summary>
         /// References hubs where this module is selected
         /// </summary>
-        public IEnumerable<SelectedModule> SelectedModules { get; set; }
+        public IEnumerable<AvailableModule> AvailableModules { get; set; }
 
         /// <summary>
         /// The topics of this hub
