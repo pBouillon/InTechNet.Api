@@ -9,10 +9,12 @@ using InTechNet.Common.Utils.Authentication;
 using InTechNet.Exception;
 using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
+using InTechNet.Exception.Module;
 using InTechNet.Exception.Registration;
 using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Authentication.Interfaces;
 using InTechNet.Services.Hub.Interfaces;
+using InTechNet.Services.Module.Interfaces;
 using InTechNet.Services.User.Interfaces;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
@@ -45,6 +47,11 @@ namespace InTechNet.Api.Controllers.Users
         private readonly IHubService _hubService;
 
         /// <summary>
+        /// Module service for module related operations
+        /// </summary>
+        private readonly IModuleService _moduleService;
+
+        /// <summary>
         /// User service for user related operations
         /// </summary>
         private readonly IPupilService _pupilService;
@@ -53,15 +60,17 @@ namespace InTechNet.Api.Controllers.Users
         /// Controller for hub endpoints relative to pupils management
         /// </summary>
         /// <param name="authenticationService">Authentication service</param>
-        /// <param name="pupilService">Pupil service</param>
-        /// <param name="hubService">Hub service</param>
         /// <param name="attendeeService">Attendee service</param>
+        /// <param name="hubService">Hub service</param>
+        /// <param name="moduleService">Module service</param>
+        /// <param name="pupilService">Pupil service</param>
         public PupilsController(IAttendeeService attendeeService, IAuthenticationService authenticationService,
-            IHubService hubService, IPupilService pupilService)
+            IHubService hubService, IModuleService moduleService, IPupilService pupilService)
         {
             _attendeeService = attendeeService;
             _authenticationService = authenticationService;
             _hubService = hubService;
+            _moduleService = moduleService;
             _pupilService = pupilService;
         }
 
@@ -193,6 +202,43 @@ namespace InTechNet.Api.Controllers.Users
             }
             catch (BaseException ex)
             {
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
+        [HttpGet("me/Hubs/{idHub}/Modules")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Modules successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Modules fetching failed")]
+        [SwaggerOperation(
+            Summary = "Get a list of all modules the current pupil can see in the specified hub",
+            Tags = new[]
+            {
+                SwaggerTag.Pupils
+            }
+        )]
+        public ActionResult<IEnumerable<PupilHubDto>> GetHubSelectedModules(
+            [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")]
+            int idHub)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var hubs = _moduleService.GetPupilModules(currentPupil.Id, idHub);
+
+                return Ok(hubs);
+
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownHubException
+                    || ex is UnknownModuleException)
+                {
+                    return BadRequest(ex);
+                }
+
                 return Unauthorized(
                     new UnauthorizedError(ex));
             }

@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using InTechNet.Common.Dto.Modules;
+using InTechNet.Common.Dto.User.Pupil;
 
 namespace InTechNet.Services.Module.Interfaces
 {
@@ -15,6 +16,14 @@ namespace InTechNet.Services.Module.Interfaces
         /// <param name="idHub">Id of the hub to query</param>
         /// <returns>A collection of <see cref="ModuleDto"/></returns>
         IEnumerable<ModuleDto> GetModulesForHub(int idModerator, int idHub);
+
+        /// <summary>
+        /// 
+        /// </summary>
+        /// <param name="currentPupil">Id of the querying pupil</param>
+        /// <param name="idHub"></param>
+        /// <returns>A collection of <see cref="PupilModuleDto"/></returns>
+        IEnumerable<PupilModuleDto> GetPupilModules(int idPupil, int idHub);
 
         /// <summary>
         /// Add or remove the current module to the selected ones
