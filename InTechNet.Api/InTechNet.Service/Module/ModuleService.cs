@@ -115,6 +115,7 @@ namespace InTechNet.Services.Module
             // Get the hub
             var hub = _context.Hubs.Include(_ => _.Moderator)
                 .Include(_ => _.AvailableModules)
+                    .ThenInclude(_ => _.Module)
                 .FirstOrDefault(_ =>
                     _.Id == idHub
                         && _.Moderator.Id == idModerator)
