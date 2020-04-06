@@ -29,7 +29,7 @@ namespace InTechNet.DataAccessLayer.Entities.Hubs
         public string HubLink { get; set; }
 
         /// <summary>
-        /// Description of the Hub
+        /// ModuleDescription of the Hub
         /// </summary>
         public string HubDescription { get; set; }
 

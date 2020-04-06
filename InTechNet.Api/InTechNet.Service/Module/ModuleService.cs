@@ -68,7 +68,8 @@ namespace InTechNet.Services.Module
                     // A module is active if its ID also belong to the SelectedModule table
                     IsActive = _.AvailableModules.Any(availableModules
                         => availableModules.Module.Id == _.Id),
-                    ModuleName = _.ModuleName,
+                    Name = _.ModuleName,
+                    Description = _.ModuleDescription,
                     ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
                     {
                         IdSubscriptionPlan = _.SubscriptionPlan.Id,
