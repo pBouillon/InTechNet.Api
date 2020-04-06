@@ -146,7 +146,7 @@ namespace InTechNet.Api.Controllers.Users
         [HttpGet("me/Hubs/{idHub}/Modules")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The current user can't perform this action")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "The provided data does not correspond")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
         [SwaggerOperation(
             Summary = "Fetch the modules of the specified hub for the current moderator",
             Tags = new[]

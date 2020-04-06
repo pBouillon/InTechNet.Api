@@ -67,7 +67,8 @@ namespace InTechNet.Services.Module
                     }),
                     // A module is active if its ID also belong to the SelectedModule table
                     IsActive = _.AvailableModules.Any(availableModules
-                        => availableModules.Module.Id == _.Id),
+                        => availableModules.Module.Id == _.Id
+                           && availableModules.Hub.Id == hub.Id),
                     Name = _.ModuleName,
                     Description = _.ModuleDescription,
                     ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
@@ -75,7 +76,7 @@ namespace InTechNet.Services.Module
                         IdSubscriptionPlan = _.SubscriptionPlan.Id,
                         SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
                     }
-                }).ToList();
+                });
         }
 
         /// <inheritdoc cref="IModuleService.GetPupilModules"/>
@@ -84,6 +85,7 @@ namespace InTechNet.Services.Module
             // Get the hub
             var hub = _context.Hubs.Include(_ => _.Moderator)
                 .Include(_ => _.Attendees)
+                    .ThenInclude(_ => _.Pupil)
                 .FirstOrDefault(_ =>
                     _.Id == idHub
                         && _.Attendees.Any(_ =>
@@ -97,14 +99,14 @@ namespace InTechNet.Services.Module
                 .Select(_ => new PupilModuleDto
                 {
                     Id = _.Id,
-                    ModuleName = _.Module.ModuleName,
+                    Name = _.Module.ModuleName,
+                    Description = _.Module.ModuleDescription,
                     // An available module is the current module 
                     // if its id is found in the current_module table
                     IsOnGoing = _context.CurrentModules
                         .Any(current =>
                             current.Module.Id == _.Module.Id),
-                })
-                .ToList();
+                });
         }
 
         /// <inheritdoc cref="IModuleService.ToggleModuleState"/>

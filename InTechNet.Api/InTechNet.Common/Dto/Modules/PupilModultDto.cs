@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using InTechNet.Common.Dto.Subscription;
-using InTechNet.Common.Dto.Topic;
+﻿using InTechNet.Common.Dto.Topic;
+using System.Collections.Generic;
 
 namespace InTechNet.Common.Dto.Modules
 {
@@ -17,7 +16,12 @@ namespace InTechNet.Common.Dto.Modules
         /// <summary>
         /// Module name
         /// </summary>
-        public string ModuleName { get; set; }
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Module description
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// Collections of the current module <see cref="TagDto"/>

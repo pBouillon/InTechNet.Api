@@ -211,10 +211,12 @@ namespace InTechNet.Api.Controllers.Users
         [PupilClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Modules successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "Modules fetching failed")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond to any resource")]
         [SwaggerOperation(
             Summary = "Get a list of all modules the current pupil can see in the specified hub",
             Tags = new[]
             {
+                SwaggerTag.Modules,
                 SwaggerTag.Pupils
             }
         )]
@@ -229,7 +231,6 @@ namespace InTechNet.Api.Controllers.Users
                 var hubs = _moduleService.GetPupilModules(currentPupil.Id, idHub);
 
                 return Ok(hubs);
-
             }
             catch (BaseException ex)
             {

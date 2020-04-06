@@ -20,7 +20,7 @@ namespace InTechNet.Services.Module.Interfaces
         /// <summary>
         /// 
         /// </summary>
-        /// <param name="currentPupil">Id of the querying pupil</param>
+        /// <param name="idPupil">Id of the querying pupil</param>
         /// <param name="idHub"></param>
         /// <returns>A collection of <see cref="PupilModuleDto"/></returns>
         IEnumerable<PupilModuleDto> GetPupilModules(int idPupil, int idHub);
