@@ -32,11 +32,11 @@ namespace InTechNet.Services.Module
         {
             // Fetch the hub queried
             var hub = _context.Hubs
-                          .Include(_ => _.Moderator)
-                              .ThenInclude(_ => _.ModeratorSubscriptionPlan)
-                          .SingleOrDefault(_ =>
-                            _.Id == idHub)
-                      ?? throw new UnknownHubException();
+                .Include(_ => _.Moderator)
+                .ThenInclude(_ => _.ModeratorSubscriptionPlan)
+                .SingleOrDefault(_ =>
+                    _.Id == idHub)
+                ?? throw new UnknownHubException();
 
             // Assert the current moderator can query this hub
             var hubModerator = hub.Moderator;
@@ -67,14 +67,46 @@ namespace InTechNet.Services.Module
                     }),
                     // A module is active if its ID also belong to the SelectedModule table
                     IsActive = _.AvailableModules.Any(availableModules
-                        => availableModules.Module.Id == _.Id),
-                    ModuleName = _.ModuleName,
+                        => availableModules.Module.Id == _.Id
+                           && availableModules.Hub.Id == hub.Id),
+                    Name = _.ModuleName,
+                    Description = _.ModuleDescription,
                     ModuleSubscriptionPlanDto = new Common.Dto.Subscription.LightweightSubscriptionPlanDto
                     {
                         IdSubscriptionPlan = _.SubscriptionPlan.Id,
                         SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
                     }
-                }).ToList();
+                });
+        }
+
+        /// <inheritdoc cref="IModuleService.GetPupilModules"/>
+        public IEnumerable<PupilModuleDto> GetPupilModules(int idPupil, int idHub)
+        {
+            // Get the hub
+            var hub = _context.Hubs.Include(_ => _.Moderator)
+                .Include(_ => _.Attendees)
+                    .ThenInclude(_ => _.Pupil)
+                .FirstOrDefault(_ =>
+                    _.Id == idHub
+                        && _.Attendees.Any(_ =>
+                            _.Pupil.Id == idPupil))
+                ?? throw new UnknownHubException();
+
+            // Return all available modules
+            return _context.AvailableModules
+                .Where(_ =>
+                    _.Hub.Id == hub.Id)
+                .Select(_ => new PupilModuleDto
+                {
+                    Id = _.Id,
+                    Name = _.Module.ModuleName,
+                    Description = _.Module.ModuleDescription,
+                    // An available module is the current module 
+                    // if its id is found in the current_module table
+                    IsOnGoing = _context.CurrentModules
+                        .Any(current =>
+                            current.Module.Id == _.Module.Id),
+                });
         }
 
         /// <inheritdoc cref="IModuleService.ToggleModuleState"/>
@@ -82,11 +114,11 @@ namespace InTechNet.Services.Module
         {
             // Get the hub
             var hub = _context.Hubs.Include(_ => _.Moderator)
-                          .Include(_ => _.AvailableModules)
-                          .FirstOrDefault(_ =>
-                              _.Id == idHub
-                                && _.Moderator.Id == idModerator)
-                      ?? throw new UnknownHubException();
+                .Include(_ => _.AvailableModules)
+                .FirstOrDefault(_ =>
+                    _.Id == idHub
+                        && _.Moderator.Id == idModerator)
+                ?? throw new UnknownHubException();
 
             // Get the related module
             var module = _context.Modules.SingleOrDefault(_ =>

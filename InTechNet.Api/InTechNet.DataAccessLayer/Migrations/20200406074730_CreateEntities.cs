@@ -92,6 +92,7 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     Id = table.Column<int>(nullable: false)
                         .Annotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn),
+                    ModuleDescription = table.Column<string>(maxLength: 128, nullable: true),
                     SubscriptionPlanId = table.Column<int>(nullable: true),
                     ModuleName = table.Column<string>(maxLength: 32, nullable: true)
                 },

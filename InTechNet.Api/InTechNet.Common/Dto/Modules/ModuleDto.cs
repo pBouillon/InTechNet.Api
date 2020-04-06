@@ -17,7 +17,12 @@ namespace InTechNet.Common.Dto.Modules
         /// <summary>
         /// Module name
         /// </summary>
-        public string ModuleName { get; set; }
+        public string Name { get; set; }
+
+        /// <summary>
+        /// Module description
+        /// </summary>
+        public string Description { get; set; }
 
         /// <summary>
         /// <see cref="LightweightSubscriptionPlanDto"/> of the current module

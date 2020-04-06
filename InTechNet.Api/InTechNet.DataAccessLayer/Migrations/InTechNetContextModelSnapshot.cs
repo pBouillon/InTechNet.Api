@@ -124,6 +124,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
 
+                    b.Property<string>("ModuleDescription")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
+
                     b.Property<string>("ModuleName")
                         .HasColumnType("character varying(32)")
                         .HasMaxLength(32);

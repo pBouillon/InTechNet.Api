@@ -17,6 +17,13 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         public int Id { get; set; }
 
         /// <summary>
+        /// Module description
+        /// </summary>
+        [MinLength(8)]
+        [MaxLength(128)]
+        public string ModuleDescription { get; set; }
+
+        /// <summary>
         /// Subscription plan required to see this module
         /// </summary>
         public SubscriptionPlan SubscriptionPlan { get; set; }

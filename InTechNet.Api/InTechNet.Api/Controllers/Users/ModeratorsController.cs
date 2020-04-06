@@ -146,6 +146,7 @@ namespace InTechNet.Api.Controllers.Users
         [HttpGet("me/Hubs/{idHub}/Modules")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hubs modules successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The current user can't perform this action")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "The provided data does not correspond")]
         [SwaggerOperation(
             Summary = "Fetch the modules of the specified hub for the current moderator",
             Tags = new[]
@@ -155,8 +156,8 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Modules,
             }
         )]
-        public ActionResult<IEnumerable<ModuleDto>> GetHubsModules(
-            [FromRoute, SwaggerParameter("Id of the hub from which fetch the modules")] 
+        public ActionResult<IEnumerable<ModuleDto>> GetHubModules(
+            [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")] 
             int idHub)
         {
             ModeratorDto currentModerator;
@@ -167,6 +168,12 @@ namespace InTechNet.Api.Controllers.Users
             }
             catch (BaseException ex)
             {
+                if (ex is UnknownHubException
+                    || ex is UnknownModuleException)
+                {
+                    return BadRequest(ex);
+                }
+
                 return Unauthorized (ex);
             }
 
@@ -261,7 +268,9 @@ namespace InTechNet.Api.Controllers.Users
 
         [ModeratorClaimRequired]
         [HttpPut("me/Hubs/{idHub}/Modules/{idModule}")]
-        [SwaggerResponse((int)HttpStatusCode.OK, "State of the module toggled")]
+        [SwaggerResponse((int) HttpStatusCode.OK, "State of the module toggled")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "User does not own the right claim")]
         [SwaggerOperation(
             Summary = "Toggle the activation of a module in a given hub",
             Tags = new[]

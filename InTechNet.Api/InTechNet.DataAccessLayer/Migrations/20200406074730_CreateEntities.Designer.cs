@@ -10,7 +10,7 @@ using Npgsql.EntityFrameworkCore.PostgreSQL.Metadata;
 namespace InTechNet.DataAccessLayer.Migrations
 {
     [DbContext(typeof(InTechNetContext))]
-    [Migration("20200405135338_CreateEntities")]
+    [Migration("20200406074730_CreateEntities")]
     partial class CreateEntities
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -125,6 +125,10 @@ namespace InTechNet.DataAccessLayer.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("integer")
                         .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn);
+
+                    b.Property<string>("ModuleDescription")
+                        .HasColumnType("character varying(128)")
+                        .HasMaxLength(128);
 
                     b.Property<string>("ModuleName")
                         .HasColumnType("character varying(32)")
