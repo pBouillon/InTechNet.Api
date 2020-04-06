@@ -20,7 +20,7 @@ namespace InTechNet.DataAccessLayer.Entities.Modules
         /// Module description
         /// </summary>
         [MinLength(8)]
-        [MaxLength(128)]
+        [MaxLength(256)]
         public string ModuleDescription { get; set; }
 
         /// <summary>
