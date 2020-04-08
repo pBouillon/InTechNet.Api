@@ -10,6 +10,14 @@ namespace InTechNet.Services.Module.Interfaces
     public interface IModuleService
     {
         /// <summary>
+        /// Terminate the module finished by the pupil
+        /// </summary>
+        /// <param name="idPupil">Id of the pupil that will finish the module</param>
+        /// <param name="idHub">id of the hub in which the pupil is</param>
+        /// <param name="idModule">id of the module to finish</param>
+        void FinishModule(int idPupil, int idHub, int idModule);
+
+        /// <summary>
         /// Get all modules available for a given hub
         /// </summary>
         /// <param name="idModerator">Id of the querying moderator</param>
@@ -28,7 +36,7 @@ namespace InTechNet.Services.Module.Interfaces
         /// <summary>
         /// Begin a module for a pupil
         /// </summary>
-        /// <param name="idPupil">Id of the pupil that is about to start the hub</param>
+        /// <param name="idPupil">Id of the pupil that is about to start the module</param>
         /// <param name="idHub">id of the hub in which the pupil is</param>
         /// <param name="idModule">id of the module to start</param>
         void StartModule(int idPupil, int idHub, int idModule);

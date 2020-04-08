@@ -150,6 +150,39 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [PupilClaimRequired]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Module successfully finished")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Unable to finish this module")]
+        [HttpDelete("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [SwaggerOperation(
+            Summary = "Remove the logged in pupil from the specified hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult FinishModule(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to finish")]
+            int idModule)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _moduleService.FinishModule(currentPupil.Id, idHub, idModule);
+
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                return BadRequest(ex);
+            }
+        }
+
         [HttpGet("me/Hubs/{hubLink}")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Hub successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Invalid payload")]
@@ -384,7 +417,7 @@ namespace InTechNet.Api.Controllers.Users
             }
         )]
         public IActionResult StartModule(
-            [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")]
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
             int idHub,
             [FromRoute, SwaggerParameter("Id of the module to start")]
             int idModule)
@@ -404,7 +437,7 @@ namespace InTechNet.Api.Controllers.Users
                     return Unauthorized(ex);
                 }
 
-                return BadRequest();
+                return BadRequest(ex);
             }
         }
     }

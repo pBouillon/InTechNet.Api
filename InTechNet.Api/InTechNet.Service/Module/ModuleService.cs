@@ -1,6 +1,9 @@
 ﻿using InTechNet.Common.Dto.Modules;
 using InTechNet.Common.Dto.Topic;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Resources;
+using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Module;
 using InTechNet.Services.Module.Interfaces;
@@ -8,9 +11,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.DataAccessLayer.Entities.Modules;
-using InTechNet.DataAccessLayer.Entities.Resources;
-using InTechNet.Exception.Attendee;
 
 namespace InTechNet.Services.Module
 {
@@ -28,6 +28,12 @@ namespace InTechNet.Services.Module
         /// <param name="context">Database context</param>
         public ModuleService(InTechNetContext context)
             => _context = context;
+
+        /// <inheritdoc cref="IModuleService.FinishModule"/>
+        public void FinishModule(int idPupil, int idHub, int idModule)
+        {
+            throw new NotImplementedException();
+        }
 
         /// <inheritdoc cref="IModuleService.GetModulesForHub"/>
         public IEnumerable<ModuleDto> GetModulesForHub(int idModerator, int idHub)
