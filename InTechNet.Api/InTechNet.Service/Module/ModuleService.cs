@@ -235,16 +235,19 @@ namespace InTechNet.Services.Module
             var nextResourcesIds = _context.Resources
                 .Include(_ => _.Module)
                 .Include(_ => _.NextResource)
-                .Where(_ => _.Module.Id == module.Id)
+                .Where(_ => 
+                    _.Module.Id == module.Id
+                    && _.NextResource != null)
                 .Select(_ => _.NextResource.Id);
 
             // Retrieve the first resource of this module
             var startingResource = _context.Resources.Include(_ => _.Module)
-                    .FirstOrDefault(_ => 
-                        _.Module.Id == module.Id
-                        // The first resource of the module is the one that is not used as next resource for any existing resource
-                        && !nextResourcesIds.Contains(_.Id))
-                ?? throw new UnknownResourceException();
+                .Include(_ => _.NextResource)
+                .FirstOrDefault(_ => 
+                    _.Module.Id == module.Id
+                    // The first resource of the module is the one that is not used as next resource for any existing resource
+                    && !nextResourcesIds.Contains(_.Id))
+            ?? throw new UnknownResourceException();
 
             // Create the initial state of the user's module completion
             _context.States.Add(new State
