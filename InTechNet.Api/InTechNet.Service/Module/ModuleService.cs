@@ -297,5 +297,11 @@ namespace InTechNet.Services.Module
             // Commit changes
             _context.SaveChanges();
         }
+
+        /// <inheritdoc cref="IModuleService.ValidateCurrentResource"/>
+        public void ValidateCurrentResource(int idPupil, int idHub, int idModule)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

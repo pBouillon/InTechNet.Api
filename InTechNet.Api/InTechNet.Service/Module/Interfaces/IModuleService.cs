@@ -57,5 +57,13 @@ namespace InTechNet.Services.Module.Interfaces
         /// <param name="idHub">Id of the concerned hub</param>
         /// <param name="idModule">Id of the related module</param>
         void ToggleModuleState(int idModerator, int idHub, int idModule);
+
+        /// <summary>
+        /// Validate the current resource of the user and set its current resource as the next one
+        /// </summary>
+        /// <param name="idPupil">Id of the pupil</param>
+        /// <param name="idHub">id of the hub in which the pupil is</param>
+        /// <param name="idModule">id of the module in which the pupil is progressing</param>
+        void ValidateCurrentResource(int idPupil, int idHub, int idModule);
     }
 }

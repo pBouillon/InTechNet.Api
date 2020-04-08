@@ -504,7 +504,23 @@ namespace InTechNet.Api.Controllers.Users
             [FromRoute, SwaggerParameter("Id of the module to start")]
             int idModule)
         {
-            throw new NotImplementedException();
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _moduleService.ValidateCurrentResource(currentPupil.Id, idHub, idModule);
+
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest(ex);
+            }
         }
     }
 }
