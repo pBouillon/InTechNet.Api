@@ -178,6 +178,11 @@ namespace InTechNet.Api.Controllers.Users
             }
             catch (BaseException ex)
             {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
                 return BadRequest(ex);
             }
         }
