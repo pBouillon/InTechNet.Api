@@ -172,7 +172,7 @@ namespace InTechNet.Services.Module
                     _.Hub.Id == hub.Id)
                 .Select(_ => new PupilModuleDto
                 {
-                    Id = _.Id,
+                    Id = _.Module.Id,
                     Name = _.Module.ModuleName,
                     Description = _.Module.ModuleDescription,
                     // An available module is the current module 
@@ -180,6 +180,11 @@ namespace InTechNet.Services.Module
                     IsOnGoing = _context.CurrentModules
                         .Any(current =>
                             current.Module.Id == _.Module.Id),
+                    Tags = _.Module.Topics.Select(topic => new TagDto
+                    {
+                        Id = topic.Tag.Id,
+                        Name = topic.Tag.Name
+                    }),
                 });
         }
 
@@ -227,7 +232,7 @@ namespace InTechNet.Services.Module
                 ?? throw new UnknownModuleException();
 
             // Retrieve all ids that connect each resource to the following one
-            var nextResources = _context.Resources
+            var nextResourcesIds = _context.Resources
                 .Include(_ => _.Module)
                 .Include(_ => _.NextResource)
                 .Where(_ => _.Module.Id == module.Id)
@@ -235,10 +240,11 @@ namespace InTechNet.Services.Module
 
             // Retrieve the first resource of this module
             var startingResource = _context.Resources.Include(_ => _.Module)
-                .FirstOrDefault(_ => 
-                    _.Module.Id == module.Id
-                    // The first resource of the module is the one that is not used as next resource for any existing resource
-                    && !nextResources.Contains(_.Id));
+                    .FirstOrDefault(_ => 
+                        _.Module.Id == module.Id
+                        // The first resource of the module is the one that is not used as next resource for any existing resource
+                        && !nextResourcesIds.Contains(_.Id))
+                ?? throw new UnknownResourceException();
 
             // Create the initial state of the user's module completion
             _context.States.Add(new State
@@ -316,8 +322,11 @@ namespace InTechNet.Services.Module
 
             // Get the associated resource
             var resource = _context.Resources
+                    .Include(_ => _.Module)
                     .Include(_ => _.NextResource)
-                    .FirstOrDefault(_ => _.Id == currentStep.Resource.Id)
+                    .FirstOrDefault(_ => 
+                        _.Id == currentStep.Resource.Id
+                        && _.Module.Id == idModule)
                 ?? throw new UnknownResourceException();
 
             // Set the current resource to the next one

@@ -60,7 +60,7 @@ namespace InTechNet.Services.User
             };
         }
 
-        /// <inheritdoc cref="IPupilService.De" />
+        /// <inheritdoc cref="IPupilService.DeletePupil" />
         public void DeletePupil(PupilDto pupilDto)
         {
             var pupil = _context.Pupils.FirstOrDefault(_ =>
