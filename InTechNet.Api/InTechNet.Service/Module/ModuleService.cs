@@ -109,6 +109,12 @@ namespace InTechNet.Services.Module
                 });
         }
 
+        /// <inheritdoc cref="IModuleService.StartModule"/>
+        public void StartModule(int idPupil, int idHub, int idModule)
+        {
+            throw new NotImplementedException();
+        }
+
         /// <inheritdoc cref="IModuleService.ToggleModuleState"/>
         public void ToggleModuleState(int idModerator, int idHub, int idModule)
         {

@@ -1,4 +1,5 @@
-﻿using InTechNet.Api.Attributes;
+﻿using System;
+using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
@@ -331,7 +332,6 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-
         [PupilClaimRequired]
         [HttpDelete("me/Hubs/{hubId}")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
@@ -368,6 +368,29 @@ namespace InTechNet.Api.Controllers.Users
                 return Unauthorized(
                     new UnauthorizedError(ex));
             }
+        }
+
+        [PupilClaimRequired]
+        [HttpPost("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [SwaggerOperation(
+            Summary = "Remove the logged in pupil from the specified hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult StartModule(
+            [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to start")]
+            int idModule)
+        {
+            var currentPupil = _authenticationService.GetCurrentPupil();
+
+            _moduleService.StartModule(currentPupil.Id, idHub, idModule);
+
+            return Ok();
         }
     }
 }
