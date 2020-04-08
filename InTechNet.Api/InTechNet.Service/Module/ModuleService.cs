@@ -34,13 +34,10 @@ namespace InTechNet.Services.Module
         public void FinishModule(int idPupil, int idHub, int idModule)
         {
             // Retrieve the attendee associated to the pupil in this hub
-            var attendee = _context.Attendees
-                   .Include(_ => _.Pupil)
-                   .Include(_ => _.Hub)
-                   .FirstOrDefault(_ =>
-                       _.Pupil.Id == idPupil
-                       && _.Hub.Id == idHub)
-               ?? throw new UnknownAttendeeException();
+            if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
+            {
+                throw new UnknownAttendeeException();
+            }
 
             // Check if the module is in progress for the pupil
             var isModuleInProgress = _context.CurrentModules.Include(_ => _.Attendee)
@@ -163,17 +160,34 @@ namespace InTechNet.Services.Module
                 });
         }
 
-        /// <inheritdoc cref="IModuleService.StartModule"/>
-        public void StartModule(int idPupil, int idHub, int idModule)
+        /// <summary>
+        /// Check whether or not the pupil is attending the hub
+        /// If it is, retrieve it
+        /// </summary>
+        /// <param name="idPupil">Id of the pupil</param>
+        /// <param name="idHub">Id of the hub to be looked at</param>
+        /// <param name="attendee">The retrieved attendee</param>
+        /// <returns>True if the pupil is attending; false otherwise</returns>
+        private bool TryGetAttendingPupil(int idPupil, int idHub, out DataAccessLayer.Entities.Hubs.Attendee attendee)
         {
-            // Retrieve the attendee associated to the pupil in this hub
-            var attendee = _context.Attendees
+            attendee = _context.Attendees
                 .Include(_ => _.Pupil)
                 .Include(_ => _.Hub)
                 .FirstOrDefault(_ =>
                     _.Pupil.Id == idPupil
-                    && _.Hub.Id == idHub)
-                ?? throw new UnknownAttendeeException();
+                    && _.Hub.Id == idHub);
+
+            return attendee != null;
+        }
+
+        /// <inheritdoc cref="IModuleService.StartModule"/>
+        public void StartModule(int idPupil, int idHub, int idModule)
+        {
+            // Retrieve the attendee associated to the pupil in this hub
+            if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
+            {
+                throw new UnknownAttendeeException();
+            }
 
             // Assert that this module is reachable for this attendee
             var isModuleReachable = _context.AvailableModules.Include(_ => _.Hub)
