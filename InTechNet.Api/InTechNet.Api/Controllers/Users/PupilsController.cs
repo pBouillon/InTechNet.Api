@@ -371,6 +371,9 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Module successfully started")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to start this module")]
         [HttpPost("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
         [SwaggerOperation(
             Summary = "Remove the logged in pupil from the specified hub",
