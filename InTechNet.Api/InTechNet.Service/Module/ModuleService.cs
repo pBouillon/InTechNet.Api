@@ -12,6 +12,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InTechNet.Common.Dto.Resource;
+using InTechNet.Exception.Resource;
 
 namespace InTechNet.Services.Module
 {
@@ -75,7 +76,29 @@ namespace InTechNet.Services.Module
         /// <inheritdoc cref="IModuleService.GetCurrentResource"/>
         public ResourceDto GetCurrentResource(int idPupil, int idHub, int idModule)
         {
-            throw new NotImplementedException();
+            // Retrieve the attendee associated to the pupil in this hub
+            if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
+            {
+                throw new UnknownAttendeeException();
+            }
+
+            // Retrieve the state of the user
+            var state = _context.States.Include(_ => _.Attendee)
+                    .Include(_ => _.Resource)
+                     .SingleOrDefault(_ =>
+                         _.Attendee.Id == attendee.Id)
+                 ?? throw new UnknownStateException();
+
+            // Retrieve the resource associated with this sate
+            var resource = _context.Resources
+                    .SingleOrDefault(_ => _.Id == state.Resource.Id)
+                ?? throw new UnknownResourceException();
+
+            return new ResourceDto
+            {
+                Content = resource.Content,
+                Id = resource.Id
+            };
         }
 
         /// <inheritdoc cref="IModuleService.GetModulesForHub"/>
