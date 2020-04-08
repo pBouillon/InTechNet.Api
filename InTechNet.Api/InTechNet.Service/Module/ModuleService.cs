@@ -301,7 +301,30 @@ namespace InTechNet.Services.Module
         /// <inheritdoc cref="IModuleService.ValidateCurrentResource"/>
         public void ValidateCurrentResource(int idPupil, int idHub, int idModule)
         {
-            throw new NotImplementedException();
+            // Retrieve the attendee associated to the pupil in this hub
+            if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
+            {
+                throw new UnknownAttendeeException();
+            }
+
+            // Get the current state of the pupil
+            var currentStep = _context.States
+                    .Include(_ => _.Attendee)
+                    .Include(_ => _.Resource)
+                    .SingleOrDefault(_ => _.Attendee.Id == attendee.Id)
+                ?? throw new UnknownStateException();
+
+            // Get the associated resource
+            var resource = _context.Resources
+                    .Include(_ => _.NextResource)
+                    .FirstOrDefault(_ => _.Id == currentStep.Resource.Id)
+                ?? throw new UnknownResourceException();
+
+            // Set the current resource to the next one
+            currentStep.Resource = resource.NextResource;
+
+            // Commit changes
+            _context.SaveChanges();
         }
     }
 }
