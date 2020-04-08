@@ -484,5 +484,27 @@ namespace InTechNet.Api.Controllers.Users
                 return BadRequest(ex);
             }
         }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Current resource successfully updated")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to go to the next resource of this module")]
+        [HttpPut("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [SwaggerOperation(
+                    Summary = "Validate the current resource and go to the next one for the current module",
+                    Tags = new[]
+                    {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+                    }
+                )]
+        public IActionResult ValidateCurrentResource(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to start")]
+            int idModule)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

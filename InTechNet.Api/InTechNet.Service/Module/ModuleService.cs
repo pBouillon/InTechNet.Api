@@ -185,7 +185,6 @@ namespace InTechNet.Services.Module
 
         /// <summary>
         /// Attempt to retrieve the pupil attending the hub
-        /// If it is, retrieve it
         /// </summary>
         /// <param name="idPupil">Id of the pupil</param>
         /// <param name="idHub">Id of the hub to be looked at</param>
