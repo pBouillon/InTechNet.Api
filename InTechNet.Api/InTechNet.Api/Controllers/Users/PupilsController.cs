@@ -444,7 +444,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to start this module")]
         [HttpPost("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
         [SwaggerOperation(
-            Summary = "Remove the logged in pupil from the specified hub",
+            Summary = "Begin the specified module",
             Tags = new[]
             {
                 SwaggerTag.Modules,
