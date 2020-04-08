@@ -1,4 +1,5 @@
-﻿using InTechNet.Api.Attributes;
+﻿using System;
+using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;
@@ -21,6 +22,7 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
+using InTechNet.Common.Dto.Resource;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -155,7 +157,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int)HttpStatusCode.BadRequest, "Unable to finish this module")]
         [HttpDelete("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
         [SwaggerOperation(
-            Summary = "Remove the logged in pupil from the specified hub",
+            Summary = "Finish the resource currently in progress for the given pupil in a given hub",
             Tags = new[]
             {
                 SwaggerTag.Modules,
@@ -183,6 +185,35 @@ namespace InTechNet.Api.Controllers.Users
                     return Unauthorized(ex);
                 }
 
+                return BadRequest(ex);
+            }
+        }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Resource successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to fetch the resource")]
+        [HttpGet("me/Hubs/{idHub}/Modules/{idModule}/Resources/current")]
+        [SwaggerOperation(
+            Summary = "Retrieve the current resource of a module for a given pupil in a given hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public ActionResult<ResourceDto> GetCurrentResource(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module from which fetching the current resource")]
+            int idModule)
+        {
+            try
+            {
+                throw new NotImplementedException();
+            }
+            catch (BaseException ex)
+            {
                 return BadRequest(ex);
             }
         }
