@@ -161,13 +161,13 @@ namespace InTechNet.Services.Module
         }
 
         /// <summary>
-        /// Check whether or not the pupil is attending the hub
+        /// Attempt to retrieve the pupil attending the hub
         /// If it is, retrieve it
         /// </summary>
         /// <param name="idPupil">Id of the pupil</param>
         /// <param name="idHub">Id of the hub to be looked at</param>
         /// <param name="attendee">The retrieved attendee</param>
-        /// <returns>True if the pupil is attending; false otherwise</returns>
+        /// <returns>True the attending pupil is successfully fetched; false otherwise</returns>
         private bool TryGetAttendingPupil(int idPupil, int idHub, out DataAccessLayer.Entities.Hubs.Attendee attendee)
         {
             attendee = _context.Attendees
