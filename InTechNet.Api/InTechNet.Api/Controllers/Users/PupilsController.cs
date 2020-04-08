@@ -1,5 +1,4 @@
-﻿using System;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User;

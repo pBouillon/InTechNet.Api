@@ -1,6 +1,5 @@
-﻿using System.Collections.Generic;
-using InTechNet.Common.Dto.Modules;
-using InTechNet.Common.Dto.User.Pupil;
+﻿using InTechNet.Common.Dto.Modules;
+using System.Collections.Generic;
 
 namespace InTechNet.Services.Module.Interfaces
 {

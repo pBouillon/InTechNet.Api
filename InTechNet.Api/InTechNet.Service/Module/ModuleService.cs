@@ -32,7 +32,46 @@ namespace InTechNet.Services.Module
         /// <inheritdoc cref="IModuleService.FinishModule"/>
         public void FinishModule(int idPupil, int idHub, int idModule)
         {
-            throw new NotImplementedException();
+            // Retrieve the attendee associated to the pupil in this hub
+            var attendee = _context.Attendees
+                   .Include(_ => _.Pupil)
+                   .Include(_ => _.Hub)
+                   .FirstOrDefault(_ =>
+                       _.Pupil.Id == idPupil
+                       && _.Hub.Id == idHub)
+               ?? throw new UnknownAttendeeException();
+
+            // Check if the module is in progress for the pupil
+            var isModuleInProgress = _context.CurrentModules.Include(_ => _.Attendee)
+                .Include(_ => _.Module)
+                .Any(_ => _.Attendee.Id == attendee.Id && _.Module.Id == idModule);
+
+            if (!isModuleInProgress)
+            {
+                throw new IllegalModuleOperationException();
+            }
+
+            // Clear the associate current state
+            var currentState = _context.States.Include(_ => _.Attendee)
+                    .ThenInclude(_ => _.Hub)
+                    .SingleOrDefault(_ =>
+                        _.Attendee.Id == attendee.Id
+                        && _.Attendee.Hub.Id == idHub)
+                ?? throw new UnknownStateException();
+
+            _context.States.Remove(currentState);
+
+            // Clear the current module
+            var currentModule = _context.CurrentModules
+                    .SingleOrDefault(_ =>
+                        _.Attendee.Id == attendee.Id
+                        && _.Module.Id == idModule)
+                ?? throw new UnknownModuleException();
+
+            _context.CurrentModules.Remove(currentModule);
+
+            // Commit changes
+            _context.SaveChanges();
         }
 
         /// <inheritdoc cref="IModuleService.GetModulesForHub"/>
@@ -156,7 +195,7 @@ namespace InTechNet.Services.Module
                 .FirstOrDefault(_ => 
                     _.Module.Id == module.Id
                     // The first resource of the module is the one that is not used as next resource for any existing resource
-                        && !nextResources.Contains(_.Id));
+                    && !nextResources.Contains(_.Id));
 
             // Create the initial state of the user's module completion
             _context.States.Add(new State
