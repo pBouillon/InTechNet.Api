@@ -11,6 +11,7 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.Resource;
 
 namespace InTechNet.Services.Module
 {
@@ -72,6 +73,12 @@ namespace InTechNet.Services.Module
 
             // Commit changes
             _context.SaveChanges();
+        }
+
+        /// <inheritdoc cref="IModuleService.GetCurrentResource"/>
+        public ResourceDto GetCurrentResource(int idPupil, int idHub, int idModule)
+        {
+            throw new NotImplementedException();
         }
 
         /// <inheritdoc cref="IModuleService.GetModulesForHub"/>

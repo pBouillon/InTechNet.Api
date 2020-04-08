@@ -1,5 +1,6 @@
 ﻿using InTechNet.Common.Dto.Modules;
 using System.Collections.Generic;
+using InTechNet.Common.Dto.Resource;
 
 namespace InTechNet.Services.Module.Interfaces
 {
@@ -15,6 +16,15 @@ namespace InTechNet.Services.Module.Interfaces
         /// <param name="idHub">id of the hub in which the pupil is</param>
         /// <param name="idModule">id of the module to finish</param>
         void FinishModule(int idPupil, int idHub, int idModule);
+
+        /// <summary>
+        /// Get the current resource of a pupil for a module in a given hub
+        /// </summary>
+        /// <param name="idPupil">Id of the pupil completing the module</param>
+        /// <param name="idHub">Id of the hub in which this module is provided</param>
+        /// <param name="idModule">Id of the module in progress</param>
+        /// <returns>The content of the resource as a <see cref="ResourceDto"/></returns>
+        ResourceDto GetCurrentResource(int idPupil, int idHub, int idModule);
 
         /// <summary>
         /// Get all modules available for a given hub

@@ -210,7 +210,11 @@ namespace InTechNet.Api.Controllers.Users
         {
             try
             {
-                throw new NotImplementedException();
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var currentResource = _moduleService.GetCurrentResource(currentPupil.Id, idHub, idModule);
+
+                return Ok(currentResource);
             }
             catch (BaseException ex)
             {
