@@ -386,11 +386,23 @@ namespace InTechNet.Api.Controllers.Users
             [FromRoute, SwaggerParameter("Id of the module to start")]
             int idModule)
         {
-            var currentPupil = _authenticationService.GetCurrentPupil();
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
 
-            _moduleService.StartModule(currentPupil.Id, idHub, idModule);
+                _moduleService.StartModule(currentPupil.Id, idHub, idModule);
 
-            return Ok();
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest();
+            }
         }
     }
 }

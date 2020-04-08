@@ -9,6 +9,8 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using InTechNet.DataAccessLayer.Entities.Modules;
+using InTechNet.DataAccessLayer.Entities.Resources;
+using InTechNet.Exception.Attendee;
 
 namespace InTechNet.Services.Module
 {
@@ -112,7 +114,60 @@ namespace InTechNet.Services.Module
         /// <inheritdoc cref="IModuleService.StartModule"/>
         public void StartModule(int idPupil, int idHub, int idModule)
         {
-            throw new NotImplementedException();
+            // Retrieve the attendee associated to the pupil in this hub
+            var attendee = _context.Attendees
+                .Include(_ => _.Pupil)
+                .Include(_ => _.Hub)
+                .FirstOrDefault(_ =>
+                    _.Pupil.Id == idPupil
+                    && _.Hub.Id == idHub)
+                ?? throw new UnknownAttendeeException();
+
+            // Assert that this module is reachable for this attendee
+            var isModuleReachable = _context.AvailableModules.Include(_ => _.Hub)
+                .Any(_ => 
+                    _.Hub.Id == attendee.Hub.Id);
+
+            if (!isModuleReachable)
+            {
+                throw new UnknownModuleException();
+            }
+
+            // Retrieve the module to be associated with the current module
+            var module = _context.Modules.FirstOrDefault(_ =>
+                    _.Id == idModule)
+                ?? throw new UnknownModuleException();
+
+            // Retrieve all ids that connect each resource to the following one
+            var nextResources = _context.Resources
+                .Include(_ => _.Module)
+                .Include(_ => _.NextResource)
+                .Where(_ => _.Module.Id == module.Id)
+                .Select(_ => _.NextResource.Id);
+
+            // Retrieve the first resource of this module
+            var startingResource = _context.Resources.Include(_ => _.Module)
+                .FirstOrDefault(_ => 
+                    _.Module.Id == module.Id
+                    // The first resource of the module is the one that is not used as next resource for any existing resource
+                        && !nextResources.Contains(_.Id));
+
+            // Create the initial state of the user's module completion
+            _context.States.Add(new State
+            {
+                Attendee = attendee,
+                Resource = startingResource,
+            });
+
+            // Set this module as the current one
+            _context.CurrentModules.Add(new CurrentModule
+            {
+                Attendee = attendee,
+                Module = module,
+            });
+
+            // Commit changes
+            _context.SaveChanges();
         }
 
         /// <inheritdoc cref="IModuleService.ToggleModuleState"/>
