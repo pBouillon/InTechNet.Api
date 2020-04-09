@@ -1,6 +1,7 @@
 ﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.Resource;
 using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
@@ -146,6 +147,78 @@ namespace InTechNet.Api.Controllers.Users
             {
                 return Unauthorized(
                     new UnauthorizedError(ex));
+            }
+        }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.NoContent, "Module successfully finished")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to finish this module")]
+        [HttpDelete("me/Hubs/{idHub}/Modules/current/States/current")]
+        [SwaggerOperation(
+            Summary = "Finish the resource currently in progress for the given pupil in a given hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult FinishModule(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _moduleService.FinishModule(currentPupil.Id, idHub);
+
+                return NoContent();
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest(ex);
+            }
+        }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Resource successfully fetched")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to fetch the resource")]
+        [HttpGet("me/Hubs/{idHub}/Modules/current/Resources/current")]
+        [SwaggerOperation(
+            Summary = "Retrieve the current resource of a module for a given pupil in a given hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public ActionResult<ResourceDto> GetCurrentResource(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var currentResource = _moduleService.GetCurrentResource(currentPupil.Id, idHub);
+
+                return Ok(currentResource);
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest(ex);
             }
         }
 
@@ -331,7 +404,6 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
-
         [PupilClaimRequired]
         [HttpDelete("me/Hubs/{hubId}")]
         [SwaggerResponse((int) HttpStatusCode.OK, "Attendee successfully removed")]
@@ -367,6 +439,80 @@ namespace InTechNet.Api.Controllers.Users
             {
                 return Unauthorized(
                     new UnauthorizedError(ex));
+            }
+        }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.Created, "Module successfully started")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to start this module")]
+        [HttpPost("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [SwaggerOperation(
+            Summary = "Begin the specified module",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult StartModule(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to start")]
+            int idModule)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var startingResource = _moduleService.StartModule(currentPupil.Id, idHub, idModule);
+
+                return Created("me/Hubs/{idHub}/Modules/{idModule}/Resources/current", startingResource);
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest(ex);
+            }
+        }
+
+        [PupilClaimRequired]
+        [SwaggerResponse((int) HttpStatusCode.OK, "Current resource successfully updated")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to go to the next resource of this module")]
+        [HttpPut("me/Hubs/{idHub}/Modules/current/States/current")]
+        [SwaggerOperation(
+            Summary = "Validate the current resource and go to the next one for the current module",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils,
+            }
+        )]
+        public IActionResult ValidateCurrentResource(
+            [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
+            int idHub)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                _moduleService.ValidateCurrentResource(currentPupil.Id, idHub);
+
+                return Ok();
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownAttendeeException)
+                {
+                    return Unauthorized(ex);
+                }
+
+                return BadRequest(ex);
             }
         }
     }

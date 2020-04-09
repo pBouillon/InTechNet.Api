@@ -9,14 +9,14 @@ namespace InTechNet.DataAccessLayer.Entities.Resources
     public class Resource
     {
         /// <summary>
-        /// Unique ID of the selected module
+        /// Unique ID of the selected resource
         /// </summary>
         [Key]
         [DatabaseGenerated(DatabaseGeneratedOption.Identity)]
         public int Id { get; set; }
 
         /// <summary>
-        /// The module this is resource is in
+        /// The module this resource is in
         /// </summary>
         public Module Module { get; set; }
 
