@@ -32,7 +32,7 @@ namespace InTechNet.Services.Module
             => _context = context;
 
         /// <inheritdoc cref="IModuleService.FinishModule"/>
-        public void FinishModule(int idPupil, int idHub, int idModule)
+        public void FinishModule(int idPupil, int idHub)
         {
             // Retrieve the attendee associated to the pupil in this hub
             if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
@@ -42,8 +42,8 @@ namespace InTechNet.Services.Module
 
             // Check if the module is in progress for the pupil
             var isModuleInProgress = _context.CurrentModules.Include(_ => _.Attendee)
-                .Include(_ => _.Module)
-                .Any(_ => _.Attendee.Id == attendee.Id && _.Module.Id == idModule);
+                // Each attendee is unique and can only have one active module
+                .Any(_ => _.Attendee.Id == attendee.Id);
 
             if (!isModuleInProgress)
             {
@@ -63,8 +63,7 @@ namespace InTechNet.Services.Module
             // Clear the current module
             var currentModule = _context.CurrentModules
                     .SingleOrDefault(_ =>
-                        _.Attendee.Id == attendee.Id
-                        && _.Module.Id == idModule)
+                        _.Attendee.Id == attendee.Id)
                 ?? throw new UnknownModuleException();
 
             _context.CurrentModules.Remove(currentModule);
@@ -74,7 +73,7 @@ namespace InTechNet.Services.Module
         }
 
         /// <inheritdoc cref="IModuleService.GetCurrentResource"/>
-        public ResourceDto GetCurrentResource(int idPupil, int idHub, int idModule)
+        public ResourceDto GetCurrentResource(int idPupil, int idHub)
         {
             // Retrieve the attendee associated to the pupil in this hub
             if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
@@ -308,7 +307,7 @@ namespace InTechNet.Services.Module
         }
 
         /// <inheritdoc cref="IModuleService.ValidateCurrentResource"/>
-        public void ValidateCurrentResource(int idPupil, int idHub, int idModule)
+        public void ValidateCurrentResource(int idPupil, int idHub)
         {
             // Retrieve the attendee associated to the pupil in this hub
             if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
@@ -328,8 +327,7 @@ namespace InTechNet.Services.Module
                     .Include(_ => _.Module)
                     .Include(_ => _.NextResource)
                     .FirstOrDefault(_ => 
-                        _.Id == currentStep.Resource.Id
-                        && _.Module.Id == idModule)
+                        _.Id == currentStep.Resource.Id)
                 ?? throw new UnknownResourceException();
 
             // Set the current resource to the next one
