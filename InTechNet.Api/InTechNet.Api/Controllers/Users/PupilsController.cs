@@ -154,7 +154,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.NoContent, "Module successfully finished")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to finish this module")]
-        [HttpDelete("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [HttpDelete("me/Hubs/{idHub}/Modules/current/States/current")]
         [SwaggerOperation(
             Summary = "Finish the resource currently in progress for the given pupil in a given hub",
             Tags = new[]
@@ -165,15 +165,13 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public IActionResult FinishModule(
             [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
-            int idHub,
-            [FromRoute, SwaggerParameter("Id of the module to finish")]
-            int idModule)
+            int idHub)
         {
             try
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                _moduleService.FinishModule(currentPupil.Id, idHub, idModule);
+                _moduleService.FinishModule(currentPupil.Id, idHub);
 
                 return NoContent();
             }
@@ -192,7 +190,7 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.OK, "Resource successfully fetched")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to fetch the resource")]
-        [HttpGet("me/Hubs/{idHub}/Modules/{idModule}/Resources/current")]
+        [HttpGet("me/Hubs/{idHub}/Modules/current/Resources/current")]
         [SwaggerOperation(
             Summary = "Retrieve the current resource of a module for a given pupil in a given hub",
             Tags = new[]
@@ -203,15 +201,13 @@ namespace InTechNet.Api.Controllers.Users
         )]
         public ActionResult<ResourceDto> GetCurrentResource(
             [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
-            int idHub,
-            [FromRoute, SwaggerParameter("Id of the module from which fetching the current resource")]
-            int idModule)
+            int idHub)
         {
             try
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                var currentResource = _moduleService.GetCurrentResource(currentPupil.Id, idHub, idModule);
+                var currentResource = _moduleService.GetCurrentResource(currentPupil.Id, idHub);
 
                 return Ok(currentResource);
             }
@@ -488,26 +484,24 @@ namespace InTechNet.Api.Controllers.Users
         [SwaggerResponse((int) HttpStatusCode.OK, "Current resource successfully updated")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to go to the next resource of this module")]
-        [HttpPut("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
+        [HttpPut("me/Hubs/{idHub}/Modules/current/States/current")]
         [SwaggerOperation(
-                    Summary = "Validate the current resource and go to the next one for the current module",
-                    Tags = new[]
-                    {
+            Summary = "Validate the current resource and go to the next one for the current module",
+            Tags = new[]
+            {
                 SwaggerTag.Modules,
                 SwaggerTag.Pupils,
-                    }
-                )]
+            }
+        )]
         public IActionResult ValidateCurrentResource(
             [FromRoute, SwaggerParameter("Id of the hub in which the module is")]
-            int idHub,
-            [FromRoute, SwaggerParameter("Id of the module to start")]
-            int idModule)
+            int idHub)
         {
             try
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                _moduleService.ValidateCurrentResource(currentPupil.Id, idHub, idModule);
+                _moduleService.ValidateCurrentResource(currentPupil.Id, idHub);
 
                 return Ok();
             }
