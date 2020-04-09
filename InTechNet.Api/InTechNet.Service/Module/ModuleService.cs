@@ -1,4 +1,5 @@
 ﻿using InTechNet.Common.Dto.Modules;
+using InTechNet.Common.Dto.Resource;
 using InTechNet.Common.Dto.Topic;
 using InTechNet.DataAccessLayer;
 using InTechNet.DataAccessLayer.Entities.Modules;
@@ -6,13 +7,12 @@ using InTechNet.DataAccessLayer.Entities.Resources;
 using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Module;
+using InTechNet.Exception.Resource;
 using InTechNet.Services.Module.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Common.Dto.Resource;
-using InTechNet.Exception.Resource;
 
 namespace InTechNet.Services.Module
 {
@@ -208,7 +208,7 @@ namespace InTechNet.Services.Module
         }
 
         /// <inheritdoc cref="IModuleService.StartModule"/>
-        public void StartModule(int idPupil, int idHub, int idModule)
+        public ResourceDto StartModule(int idPupil, int idHub, int idModule)
         {
             // Retrieve the attendee associated to the pupil in this hub
             if (!TryGetAttendingPupil(idPupil, idHub, out var attendee))
@@ -265,6 +265,12 @@ namespace InTechNet.Services.Module
 
             // Commit changes
             _context.SaveChanges();
+
+            return new ResourceDto
+            {
+                Id = startingResource.Id,
+                Content = startingResource.Content,
+            };
         }
 
         /// <inheritdoc cref="IModuleService.ToggleModuleState"/>

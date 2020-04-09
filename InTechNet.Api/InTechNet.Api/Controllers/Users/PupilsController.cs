@@ -1,7 +1,7 @@
-﻿using System;
-using InTechNet.Api.Attributes;
+﻿using InTechNet.Api.Attributes;
 using InTechNet.Api.Errors.Classes;
 using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.Resource;
 using InTechNet.Common.Dto.User;
 using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
@@ -22,7 +22,6 @@ using Microsoft.AspNetCore.Mvc;
 using Swashbuckle.AspNetCore.Annotations;
 using System.Collections.Generic;
 using System.Net;
-using InTechNet.Common.Dto.Resource;
 
 namespace InTechNet.Api.Controllers.Users
 {
@@ -152,9 +151,9 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [PupilClaimRequired]
-        [SwaggerResponse((int)HttpStatusCode.OK, "Module successfully finished")]
-        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
-        [SwaggerResponse((int)HttpStatusCode.BadRequest, "Unable to finish this module")]
+        [SwaggerResponse((int) HttpStatusCode.NoContent, "Module successfully finished")]
+        [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
+        [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to finish this module")]
         [HttpDelete("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
         [SwaggerOperation(
             Summary = "Finish the resource currently in progress for the given pupil in a given hub",
@@ -176,7 +175,7 @@ namespace InTechNet.Api.Controllers.Users
 
                 _moduleService.FinishModule(currentPupil.Id, idHub, idModule);
 
-                return Ok();
+                return NoContent();
             }
             catch (BaseException ex)
             {
@@ -448,7 +447,7 @@ namespace InTechNet.Api.Controllers.Users
         }
 
         [PupilClaimRequired]
-        [SwaggerResponse((int) HttpStatusCode.OK, "Module successfully started")]
+        [SwaggerResponse((int) HttpStatusCode.Created, "Module successfully started")]
         [SwaggerResponse((int) HttpStatusCode.Unauthorized, "The attendee does not exists in the current hub")]
         [SwaggerResponse((int) HttpStatusCode.BadRequest, "Unable to start this module")]
         [HttpPost("me/Hubs/{idHub}/Modules/{idModule}/States/current")]
@@ -470,9 +469,9 @@ namespace InTechNet.Api.Controllers.Users
             {
                 var currentPupil = _authenticationService.GetCurrentPupil();
 
-                _moduleService.StartModule(currentPupil.Id, idHub, idModule);
+                var startingResource = _moduleService.StartModule(currentPupil.Id, idHub, idModule);
 
-                return Ok();
+                return Created("me/Hubs/{idHub}/Modules/{idModule}/Resources/current", startingResource);
             }
             catch (BaseException ex)
             {

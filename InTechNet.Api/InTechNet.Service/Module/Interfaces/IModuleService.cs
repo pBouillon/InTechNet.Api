@@ -1,6 +1,6 @@
 ﻿using InTechNet.Common.Dto.Modules;
-using System.Collections.Generic;
 using InTechNet.Common.Dto.Resource;
+using System.Collections.Generic;
 
 namespace InTechNet.Services.Module.Interfaces
 {
@@ -48,7 +48,7 @@ namespace InTechNet.Services.Module.Interfaces
         /// <param name="idPupil">Id of the pupil that is about to start the module</param>
         /// <param name="idHub">id of the hub in which the pupil is</param>
         /// <param name="idModule">id of the module to start</param>
-        void StartModule(int idPupil, int idHub, int idModule);
+        ResourceDto StartModule(int idPupil, int idHub, int idModule);
 
         /// <summary>
         /// Add or remove the current module to the selected ones
