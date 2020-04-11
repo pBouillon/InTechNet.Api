@@ -295,7 +295,7 @@ namespace InTechNet.Api.Controllers.Users
                 SwaggerTag.Pupils
             }
         )]
-        public ActionResult<IEnumerable<PupilHubDto>> GetHubSelectedModule(
+        public ActionResult<PupilHubDto> GetHubSelectedModule(
             [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")]
             int idHub,
             [FromRoute, SwaggerParameter("Id of the module to retrieve")]
