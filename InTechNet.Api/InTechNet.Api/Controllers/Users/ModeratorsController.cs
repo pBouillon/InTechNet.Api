@@ -171,10 +171,12 @@ namespace InTechNet.Api.Controllers.Users
                 if (ex is UnknownHubException
                     || ex is UnknownModuleException)
                 {
-                    return BadRequest(ex);
+                    return BadRequest(
+                        new BadRequestError(ex));
                 }
 
-                return Unauthorized (ex);
+                return Unauthorized (
+                    new UnauthorizedError(ex));
             }
 
             var modules = _moduleService.GetModulesForHub(currentModerator.Id, idHub);
@@ -297,10 +299,12 @@ namespace InTechNet.Api.Controllers.Users
                 if (ex is UnknownHubException 
                     || ex is UnknownModuleException)
                 {
-                    return BadRequest(ex);
+                    return BadRequest(
+                        new BadRequestError(ex));
                 }
 
-                return Unauthorized(ex);
+                return Unauthorized(
+                    new UnauthorizedError(ex));
             }
         }
     }

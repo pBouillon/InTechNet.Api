@@ -179,10 +179,12 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
-                return BadRequest(ex);
+                return BadRequest(
+                        new BadRequestError(ex));
             }
         }
 
@@ -215,10 +217,12 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
-                return BadRequest(ex);
+                return BadRequest(
+                        new BadRequestError(ex));
             }
         }
 
@@ -280,6 +284,47 @@ namespace InTechNet.Api.Controllers.Users
             }
         }
 
+        [HttpGet("me/Hubs/{idHub}/Modules/{idModule}")]
+        [PupilClaimRequired]
+        [SwaggerResponse((int)HttpStatusCode.OK, "Modules successfully fetched")]
+        [SwaggerResponse((int)HttpStatusCode.Unauthorized, "Modules fetching failed")]
+        [SwaggerResponse((int)HttpStatusCode.BadRequest, "The provided data does not correspond to any resource")]
+        [SwaggerOperation(
+            Summary = "Get a specific module of a hub",
+            Tags = new[]
+            {
+                SwaggerTag.Modules,
+                SwaggerTag.Pupils
+            }
+        )]
+        public ActionResult<PupilHubDto> GetHubSelectedModule(
+            [FromRoute, SwaggerParameter("Id of the hub from which the modules are fetched")]
+            int idHub,
+            [FromRoute, SwaggerParameter("Id of the module to retrieve")]
+            int idModule)
+        {
+            try
+            {
+                var currentPupil = _authenticationService.GetCurrentPupil();
+
+                var hub = _moduleService.GetPupilModule(currentPupil.Id, idHub, idModule);
+
+                return Ok(hub);
+            }
+            catch (BaseException ex)
+            {
+                if (ex is UnknownHubException
+                    || ex is UnknownModuleException)
+                {
+                    return BadRequest(
+                        new BadRequestError(ex));
+                }
+
+                return Unauthorized(
+                    new UnauthorizedError(ex));
+            }
+        }
+
         [HttpGet("me/Hubs/{idHub}/Modules")]
         [PupilClaimRequired]
         [SwaggerResponse((int) HttpStatusCode.OK, "Modules successfully fetched")]
@@ -310,7 +355,8 @@ namespace InTechNet.Api.Controllers.Users
                 if (ex is UnknownHubException
                     || ex is UnknownModuleException)
                 {
-                    return BadRequest(ex);
+                    return BadRequest(
+                        new BadRequestError(ex));
                 }
 
                 return Unauthorized(
@@ -473,10 +519,12 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
-                return BadRequest(ex);
+                return BadRequest(
+                        new BadRequestError(ex));
             }
         }
 
@@ -509,10 +557,12 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
-                return BadRequest(ex);
+                return BadRequest(
+                        new BadRequestError(ex));
             }
         }
     }

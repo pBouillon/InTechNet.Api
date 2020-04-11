@@ -33,6 +33,15 @@ namespace InTechNet.Services.Module.Interfaces
         IEnumerable<ModuleDto> GetModulesForHub(int idModerator, int idHub);
 
         /// <summary>
+        /// Get a specific module of a given hub for a given pupil
+        /// </summary>
+        /// <param name="idPupil">Id of the querying pupil</param>
+        /// <param name="idHub">Id of the hub queried</param>
+        /// <param name="idModule">Id of the requested module</param>
+        /// <returns>The associated <see cref="PupilModuleDto"/></returns>
+        PupilModuleDto GetPupilModule(int idPupil, int idHub, int idModule);
+
+        /// <summary>
         /// Get all modules for the current pupil in a given hub
         /// </summary>
         /// <param name="idPupil">Id of the querying pupil</param>
