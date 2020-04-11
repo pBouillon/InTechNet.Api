@@ -154,10 +154,9 @@ namespace InTechNet.Services.Module
         public PupilModuleDto GetPupilModule(int idPupil, int idHub, int idModule)
         {
             // Get the hub
-            var hub = _context.Hubs.Include(_ => _.Moderator)
-                          .Include(_ => _.Attendees)
+            var hub = _context.Hubs.Include(_ => _.Attendees)
                           .ThenInclude(_ => _.Pupil)
-                          .FirstOrDefault(_ =>
+                          .SingleOrDefault(_ =>
                               _.Id == idHub
                               && _.Attendees.Any(_ =>
                                   _.Pupil.Id == idPupil))
@@ -191,10 +190,9 @@ namespace InTechNet.Services.Module
         public IEnumerable<PupilModuleDto> GetPupilModules(int idPupil, int idHub)
         {
             // Get the hub
-            var hub = _context.Hubs.Include(_ => _.Moderator)
-                .Include(_ => _.Attendees)
+            var hub = _context.Hubs.Include(_ => _.Attendees)
                     .ThenInclude(_ => _.Pupil)
-                .FirstOrDefault(_ =>
+                .SingleOrDefault(_ =>
                     _.Id == idHub
                         && _.Attendees.Any(_ =>
                             _.Pupil.Id == idPupil))
