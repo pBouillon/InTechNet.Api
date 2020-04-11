@@ -179,7 +179,8 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
                 return BadRequest(
@@ -216,7 +217,8 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
                 return BadRequest(
@@ -517,7 +519,8 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
                 return BadRequest(
@@ -554,7 +557,8 @@ namespace InTechNet.Api.Controllers.Users
             {
                 if (ex is UnknownAttendeeException)
                 {
-                    return Unauthorized(ex);
+                    return Unauthorized(
+                        new UnauthorizedError(ex));
                 }
 
                 return BadRequest(
