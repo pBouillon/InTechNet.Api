@@ -89,9 +89,7 @@ namespace InTechNet.Services.Module
                  ?? throw new UnknownStateException();
 
             // Retrieve the resource associated with this sate
-            var resource = _context.Resources
-                    .SingleOrDefault(_ => _.Id == state.Resource.Id)
-                ?? throw new UnknownResourceException();
+            var resource = state.Resource;
 
             return new ResourceDto
             {
@@ -150,6 +148,43 @@ namespace InTechNet.Services.Module
                         SubscriptionPlanName = _.SubscriptionPlan.SubscriptionPlanName,
                     }
                 });
+        }
+
+        /// <inheritdoc cref="IModuleService.GetPupilModule"/>
+        public PupilModuleDto GetPupilModule(int idPupil, int idHub, int idModule)
+        {
+            // Get the hub
+            var hub = _context.Hubs.Include(_ => _.Moderator)
+                          .Include(_ => _.Attendees)
+                          .ThenInclude(_ => _.Pupil)
+                          .FirstOrDefault(_ =>
+                              _.Id == idHub
+                              && _.Attendees.Any(_ =>
+                                  _.Pupil.Id == idPupil))
+                      ?? throw new UnknownHubException();
+
+            // Return the matching module
+            return _context.AvailableModules
+                .Where(_ =>
+                    _.Hub.Id == hub.Id
+                    && _.Module.Id == idModule)
+                .Select(_ => new PupilModuleDto
+                {
+                    Id = _.Module.Id,
+                    Name = _.Module.ModuleName,
+                    Description = _.Module.ModuleDescription,
+                    // An available module is the current module 
+                    // if its id is found in the current_module table
+                    IsOnGoing = _context.CurrentModules
+                        .Any(current =>
+                            current.Module.Id == _.Module.Id),
+                    Tags = _.Module.Topics.Select(topic => new TagDto
+                    {
+                        Id = topic.Tag.Id,
+                        Name = topic.Tag.Name
+                    }),
+                }).SingleOrDefault()
+                ?? throw new UnknownModuleException();
         }
 
         /// <inheritdoc cref="IModuleService.GetPupilModules"/>
