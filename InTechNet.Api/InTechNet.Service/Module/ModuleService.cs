@@ -258,6 +258,15 @@ namespace InTechNet.Services.Module
                 throw new UnknownModuleException();
             }
 
+            // Assert that the state does not already exist
+            var isStateAlreadyTracked = _context.CurrentModules.Any(_ =>
+                _.Module.Id == idModule && _.Attendee.Pupil.Id == idPupil);
+
+            if (isStateAlreadyTracked)
+            {
+                throw new IllegalModuleOperationException();
+            }
+
             // Retrieve the module to be associated with the current module
             var module = _context.Modules.FirstOrDefault(_ =>
                     _.Id == idModule)
