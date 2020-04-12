@@ -258,6 +258,15 @@ namespace InTechNet.Services.Module
                 throw new UnknownModuleException();
             }
 
+            // Assert that the state does not already exist
+            var isStateAlreadyTracked = _context.CurrentModules.Any(_ =>
+                _.Module.Id == idModule && _.Attendee.Pupil.Id == idPupil);
+
+            if (isStateAlreadyTracked)
+            {
+                throw new IllegalModuleOperationException();
+            }
+
             // Retrieve the module to be associated with the current module
             var module = _context.Modules.FirstOrDefault(_ =>
                     _.Id == idModule)
@@ -339,6 +348,27 @@ namespace InTechNet.Services.Module
             else
             {
                 _context.AvailableModules.Remove(selectedModule);
+
+                // Remove the attendees that were doing this module
+                var currentModules = _context.CurrentModules
+                    .Include(_ => _.Module)
+                        .ThenInclude(_ => _.AvailableModules)
+                    .Where(_ =>
+                    _.Module.Id == idModule
+                    && _.Module.AvailableModules.Any(_ =>
+                        _.Hub.Id == idHub));
+
+                var states = _context.States
+                    .Include(_ => _.Resource)
+                        .ThenInclude(_ => _.Module)
+                            .ThenInclude(_ => _.AvailableModules)
+                    .Where(_ =>
+                    _.Resource.Module.Id == idModule
+                    && _.Resource.Module.AvailableModules.Any(_ =>
+                        _.Hub.Id == idHub));
+
+                _context.CurrentModules.RemoveRange(currentModules);
+                _context.States.RemoveRange(states);
             }
 
             // Commit changes
