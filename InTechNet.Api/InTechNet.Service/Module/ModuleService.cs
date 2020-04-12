@@ -348,6 +348,27 @@ namespace InTechNet.Services.Module
             else
             {
                 _context.AvailableModules.Remove(selectedModule);
+
+                // Remove the attendees that were doing this module
+                var currentModules = _context.CurrentModules
+                    .Include(_ => _.Module)
+                        .ThenInclude(_ => _.AvailableModules)
+                    .Where(_ =>
+                    _.Module.Id == idModule
+                    && _.Module.AvailableModules.Any(_ =>
+                        _.Hub.Id == idHub));
+
+                var states = _context.States
+                    .Include(_ => _.Resource)
+                        .ThenInclude(_ => _.Module)
+                            .ThenInclude(_ => _.AvailableModules)
+                    .Where(_ =>
+                    _.Resource.Module.Id == idModule
+                    && _.Resource.Module.AvailableModules.Any(_ =>
+                        _.Hub.Id == idHub));
+
+                _context.CurrentModules.RemoveRange(currentModules);
+                _context.States.RemoveRange(states);
             }
 
             // Commit changes
