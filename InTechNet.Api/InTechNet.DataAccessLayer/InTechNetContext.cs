@@ -214,11 +214,13 @@ namespace InTechNet.DataAccessLayer
 
             modelBuilder.Entity<CurrentModule>()
                 .HasOne(_ => _.Attendee)
-                .WithMany(_ => _.CurrentModules);
+                .WithMany(_ => _.CurrentModules)
+                .OnDelete(DeleteBehavior.Cascade);
 
             modelBuilder.Entity<CurrentModule>()
                 .HasOne(_ => _.Module)
-                .WithMany(_ => _.CurrentModules);
+                .WithMany(_ => _.CurrentModules)
+                .OnDelete(DeleteBehavior.Cascade);
         }
 
         /// <summary>
