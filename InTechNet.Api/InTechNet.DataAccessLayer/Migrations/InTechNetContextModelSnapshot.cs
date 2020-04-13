@@ -16,7 +16,7 @@ namespace InTechNet.DataAccessLayer.Migrations
 #pragma warning disable 612, 618
             modelBuilder
                 .HasAnnotation("Npgsql:ValueGenerationStrategy", NpgsqlValueGenerationStrategy.IdentityByDefaultColumn)
-                .HasAnnotation("ProductVersion", "3.1.2")
+                .HasAnnotation("ProductVersion", "3.1.3")
                 .HasAnnotation("Relational:MaxIdentifierLength", 63);
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", b =>
@@ -393,11 +393,13 @@ namespace InTechNet.DataAccessLayer.Migrations
                 {
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Hubs.Attendee", "Attendee")
                         .WithMany("CurrentModules")
-                        .HasForeignKey("AttendeeId");
+                        .HasForeignKey("AttendeeId")
+                        .OnDelete(DeleteBehavior.Cascade);
 
                     b.HasOne("InTechNet.DataAccessLayer.Entities.Modules.Module", "Module")
                         .WithMany("CurrentModules")
-                        .HasForeignKey("ModuleId");
+                        .HasForeignKey("ModuleId")
+                        .OnDelete(DeleteBehavior.Cascade);
                 });
 
             modelBuilder.Entity("InTechNet.DataAccessLayer.Entities.Modules.Module", b =>
