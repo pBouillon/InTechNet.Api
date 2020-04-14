@@ -198,6 +198,10 @@ namespace InTechNet.Services.Module
                             _.Pupil.Id == idPupil))
                 ?? throw new UnknownHubException();
 
+            // Get the attendee
+            var attendee = hub.Attendees
+                .SingleOrDefault(_ => _.Pupil.Id == idPupil);
+
             // Return all available modules
             return _context.AvailableModules
                 .Where(_ =>
@@ -211,7 +215,8 @@ namespace InTechNet.Services.Module
                     // if its id is found in the current_module table
                     IsOnGoing = _context.CurrentModules
                         .Any(current =>
-                            current.Module.Id == _.Module.Id),
+                            current.Module.Id == _.Module.Id
+                            && current.Attendee.Id == attendee.Id),
                     Tags = _.Module.Topics.Select(topic => new TagDto
                     {
                         Id = topic.Tag.Id,
