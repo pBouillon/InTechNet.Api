@@ -1,0 +1,77 @@
+<!-- Title -->
+<h5 class="text-center mb-2">
+    Bienvenue dans ce module sur <span class="text-success">la sécurité des mots de passe</span> !
+</h5>
+<!-- /Title -->
+
+<!-- Module goals -->
+<div class="row">
+
+    <div class="col-md-5 mx-auto mt-3">
+
+        <h6 class="mb-3">
+            Dans ce module, nous apprendrons :
+            </h4>
+
+            <ul class="list-unstyled">
+                <li class="pl-3 mb-1">✅ L'importance d'un mot de passe</li>
+                <li class="pl-3 mb-1">✅ Qu'est ce qu'un mot de passe "robuste"</li>
+                <li class="pl-3 mb-1">✅ Les bonnes attitudes à adopter</li>
+            </ul>
+
+    </div>
+
+</div>
+<!-- /Module goals -->
+
+<!-- Module button -->
+<div class="row">
+
+    <div class="col-md-3 mx-auto mt-3">
+
+        <button id="btn-next" class="btn btn-success">C'est parti !</button>
+
+    </div>
+
+</div>
+<!-- /Module button -->
+
+
+
+<!-- Logic -->
+<script>
+    $(document).ready(() => {
+
+        const hubId = location.href.split("/")[4];
+
+        const apiUrl = "http://localhost:8080/api/v1";
+        const nextResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/Resources/current";
+        const validateResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/States/current";
+
+        const token = JSON.parse(localStorage.currentPupil).token;
+
+        function loadNextResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", nextResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+
+            const resource = JSON.parse(xmlHttp.responseText);
+            document.getElementById("resource-content").innerHTML = resource.content;
+        }
+
+        function validateResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("PUT", validateResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+        }
+
+        $("#btn-next").click(() => {
+            validateResource();
+            loadNextResource();
+        });
+
+    });
+</script>
+<!-- /Logic -->
