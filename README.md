@@ -73,5 +73,5 @@ That's it ! The API is now reachable on port 5001 by default. You can access it
 on `http://localhost:5001`. You can also use the Swagger UI with the generated
 documentation on `http://localhost:5001/swagger`.
 
-On startup, the programm will check if the database is up and will create the
+On startup, the program will check if the database is up and will create the
 appropriates tables if any is missing.
