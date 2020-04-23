@@ -66,7 +66,7 @@ namespace InTechNet.Services.Hub
                     => _.Moderator.Id == moderator.Id)
                 .Count();
 
-            if (++ownedHubsCount >= moderatorSubscription.MaxHubPerModeratorAccount)
+            if (ownedHubsCount + 1 >= moderatorSubscription.MaxHubPerModeratorAccount)
             {
                 throw new HubMaxCountReachedException();
             }
