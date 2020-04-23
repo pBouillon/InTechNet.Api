@@ -53,7 +53,7 @@ namespace InTechNet.Services.User
                 throw new InvalidCredentialsException();
             }
 
-            // Return the DTO associated to the moderator
+            // Return the DTO associated to the pupil
             return new PupilDto
             {
                 Id = pupil.Id,

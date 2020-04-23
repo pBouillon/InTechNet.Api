@@ -13,6 +13,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Net.Mail;
 using InTechNet.Exception.Registration;
+using InTechNet.Services.User.Helpers;
 using Xbehave;
 
 namespace InTechNet.UnitTests.Services.User
@@ -77,7 +78,7 @@ namespace InTechNet.UnitTests.Services.User
                     var pupilsDbSet = _pupils.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.Pupils)
-                        .Returns(pupilsDbSet.Object.AsMockedDbSet().Object);
+                        .Returns(pupilsDbSet.Object);
 
                     _context.Setup(_ => _.Pupils.Add(It.IsAny<Pupil>()))
                         .Callback<Pupil>(entity => _pupils.Add(entity));
@@ -89,6 +90,166 @@ namespace InTechNet.UnitTests.Services.User
             "And a pupil service"
                 .x(()
                     => _pupilService = new PupilService(_context.Object));
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when authenticating
+        /// a pupil with its email
+        /// </summary>
+        [Scenario]
+        public void AuthenticatePupilByEmail(string originalPassword, Pupil registeredPupil, AuthenticationDto pupil,
+            PupilDto authenticatedPupil)
+        {
+            "Given a password"
+                .x(()
+                    => originalPassword = _fixture.Create<string>());
+
+            "And a pupil already registered using this password"
+                .x(() =>
+                {
+                    registeredPupil = _fixture.Create<Pupil>();
+
+                    var hashedPassword = originalPassword.HashedWith(registeredPupil.PupilSalt);
+                    registeredPupil.PupilPassword = hashedPassword;
+
+                    _pupils.Add(registeredPupil);
+                });
+
+            "When a pupil connect to its account with its original password and its email"
+                .x(()
+                    =>
+                {
+                    pupil = _fixture.Build<AuthenticationDto>()
+                        .With(_ => _.Login, registeredPupil.PupilEmail)
+                        .With(_ => _.Password, originalPassword)
+                        .Create();
+
+                    authenticatedPupil = _pupilService.AuthenticatePupil(pupil);
+                });
+
+            "Then we should retrieve the original Pupil"
+                .x(() =>
+                {
+                    authenticatedPupil.Email.Should()
+                        .Be(registeredPupil.PupilEmail);
+
+                    authenticatedPupil.Nickname.Should()
+                        .Be(registeredPupil.PupilNickname);
+                });
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when authenticating
+        /// a pupil with its nickname
+        /// </summary>
+        [Scenario]
+        public void AuthenticatePupilByNickname(string originalPassword, Pupil registeredPupil, AuthenticationDto pupil,
+            PupilDto authenticatedPupil)
+        {
+            "Given a password"
+                .x(()
+                    => originalPassword = _fixture.Create<string>());
+
+            "And a pupil already registered using this password"
+                .x(() =>
+                {
+                    registeredPupil = _fixture.Create<Pupil>();
+
+                    var hashedPassword = originalPassword.HashedWith(registeredPupil.PupilSalt);
+                    registeredPupil.PupilPassword = hashedPassword;
+
+                    _pupils.Add(registeredPupil);
+                });
+
+            "When a pupil connect to its account with its original password and its nickname"
+                .x(()
+                    =>
+                {
+                    pupil = _fixture.Build<AuthenticationDto>()
+                        .With(_ => _.Login, registeredPupil.PupilNickname)
+                        .With(_ => _.Password, originalPassword)
+                        .Create();
+
+                    authenticatedPupil = _pupilService.AuthenticatePupil(pupil);
+                });
+
+            "Then we should retrieve the original Pupil"
+                .x(() =>
+                {
+                    authenticatedPupil.Email.Should()
+                        .Be(registeredPupil.PupilEmail);
+
+                    authenticatedPupil.Nickname.Should()
+                        .Be(registeredPupil.PupilNickname);
+                });
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when authenticating
+        /// a pupil with its email and an invalid password
+        /// </summary>
+        [Scenario]
+        public void AuthenticatePupilByEmailWithInvalidPassword(Pupil registeredPupil, AuthenticationDto pupil,
+            Action authenticatePupilWithInvalidPassword)
+        {
+            "Given a registered pupil"
+                .x(() =>
+                {
+                    registeredPupil = _fixture.Create<Pupil>();
+                    _pupils.Add(registeredPupil);
+                });
+
+            "When a pupil connect to its account an invalid password using its email"
+                .x(()
+                    =>
+                {
+                    pupil = _fixture.Build<AuthenticationDto>()
+                        .With(_ => _.Login, registeredPupil.PupilEmail)
+                        .With(_ => _.Password, string.Empty)
+                        .Create();
+
+                    authenticatePupilWithInvalidPassword = ()
+                        => _pupilService.AuthenticatePupil(pupil);
+                });
+
+            "Then the system should throw an exception"
+                .x(()
+                    => authenticatePupilWithInvalidPassword.Should()
+                        .Throw<InvalidCredentialsException>());
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when authenticating
+        /// a pupil with its nickname and an invalid password
+        /// </summary>
+        [Scenario]
+        public void AuthenticatePupilByNicknameWithInvalidPassword(Pupil registeredPupil, AuthenticationDto pupil,
+            Action authenticatePupilWithInvalidPassword)
+        {
+            "Given a registered pupil"
+                .x(() =>
+                {
+                    registeredPupil = _fixture.Create<Pupil>();
+                    _pupils.Add(registeredPupil);
+                });
+
+            "When a pupil connect to its account an invalid password using its nickname"
+                .x(()
+                    =>
+                {
+                    pupil = _fixture.Build<AuthenticationDto>()
+                        .With(_ => _.Login, registeredPupil.PupilNickname)
+                        .With(_ => _.Password, string.Empty)
+                        .Create();
+
+                    authenticatePupilWithInvalidPassword = ()
+                        => _pupilService.AuthenticatePupil(pupil);
+                });
+
+            "Then the system should throw an exception"
+                .x(() 
+                    => authenticatePupilWithInvalidPassword.Should()
+                        .Throw<InvalidCredentialsException>());
         }
 
         /// <summary>

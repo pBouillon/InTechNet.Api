@@ -90,13 +90,7 @@ namespace InTechNet.UnitTests.Services.Hub
 
             "And various moderators"
                 .x(()
-                    => _moderators = _fixture.Build<InTechNetUsers.Moderator>()
-                        .With(_ 
-                            => _.ModeratorSubscriptionPlan, 
-                            _fixture.Build<InTechNetUsers.SubscriptionPlan>()
-                                .With(_ => _.MaxHubPerModeratorAccount, _fixture.Create<int>())
-                                .Create())
-                        .CreateMany()
+                    => _moderators = _fixture.CreateMany<InTechNetUsers.Moderator>()
                         .ToList());
 
             "And various pupils"
@@ -113,7 +107,7 @@ namespace InTechNet.UnitTests.Services.Hub
                     var attendeeDbSet = _attendees.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.Attendees)
-                        .Returns(attendeeDbSet.Object.AsMockedDbSet().Object);
+                        .Returns(attendeeDbSet.Object);
 
                     _context.Setup(_ => _.Attendees.Add(It.IsAny<Attendee>()))
                         .Callback<Attendee>(entity => _attendees.Add(entity));
@@ -125,7 +119,7 @@ namespace InTechNet.UnitTests.Services.Hub
                     var hubDbSet = _hubs.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.Hubs)
-                        .Returns(hubDbSet.Object.AsMockedDbSet().Object);
+                        .Returns(hubDbSet.Object);
 
                     _context.Setup(_ => _.Hubs.Add(It.IsAny<InTechNetHubs.Hub>()))
                         .Callback<InTechNetHubs.Hub>(entity => _hubs.Add(entity));
@@ -137,16 +131,16 @@ namespace InTechNet.UnitTests.Services.Hub
                     var moderatorDbSet = _moderators.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.Moderators)
-                        .Returns(moderatorDbSet.Object.AsMockedDbSet().Object); 
+                        .Returns(moderatorDbSet.Object); 
 
                     // Setup Pupils property
                     var pupilDbSet = _pupils.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.Pupils)
-                        .Returns(pupilDbSet.Object.AsMockedDbSet().Object);
+                        .Returns(pupilDbSet.Object);
                 });
 
-            "And a subscription plans service"
+            "And a hub service"
                 .x(() =>
                 {
                     var attendeeService = new Mock<IAttendeeService>();

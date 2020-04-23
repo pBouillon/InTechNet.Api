@@ -42,7 +42,8 @@ namespace InTechNet.Services.Authentication
         /// <param name="pupilService">The <see cref="IPupilService" /> to be used for pupil authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
         /// <param name="httpContextAccessor">The current HTTP context accessor</param>
-        public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+        public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService,
+                IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
             => (_moderatorService, _pupilService, _jwtService, _httpContextAccessor) = (moderatorService, pupilService, jwtService, httpContextAccessor);
 
         /// <inheritdoc cref="IAuthenticationService.AreCredentialsAlreadyInUse" />

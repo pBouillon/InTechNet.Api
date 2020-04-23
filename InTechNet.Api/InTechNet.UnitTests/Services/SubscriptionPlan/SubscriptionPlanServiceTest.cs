@@ -70,7 +70,7 @@ namespace InTechNet.UnitTests.Services.SubscriptionPlan
                     var subscriptionPlansDbSet = _subscriptionPlans.AsMockedDbSet();
 
                     _context.SetupGet(_ => _.SubscriptionPlans)
-                        .Returns(subscriptionPlansDbSet.Object.AsMockedDbSet().Object);
+                        .Returns(subscriptionPlansDbSet.Object);
                 });
 
             "And a subscription plans service"
