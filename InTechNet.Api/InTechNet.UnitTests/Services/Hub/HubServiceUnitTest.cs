@@ -198,6 +198,10 @@ namespace InTechNet.UnitTests.Services.Hub
                 });
         }
 
+        /// <summary>
+        /// Check the behavior of the hub service on hub creation when the moderator has reached
+        /// its maximum allowed hubs
+        /// </summary>
         [Scenario]
         public void CreateHubWhenMaxHubCountReached(ModeratorDto moderator, HubCreationDto newHubDto,
             Action createHubWhenMaxHubCountReached)
@@ -394,5 +398,178 @@ namespace InTechNet.UnitTests.Services.Hub
                         .Be(2);
                 });
         }
+
+        /// <summary>
+        /// Check the behavior of the hub service when removing an existing hub
+        /// </summary>
+        [Scenario]
+        public void DeleteHub(ModeratorDto moderator, int hubToDeleteId)
+        {
+            "Given a moderator"
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
+
+            "And a hub that belongs to it"
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ 
+                            => _.Moderator, 
+                            _moderators.FirstOrDefault(registered 
+                                => registered.Id == moderator.Id))
+                        .Create();
+                    _hubs.Add(hub);
+
+                    hubToDeleteId = hub.Id;
+                });
+
+            "When the moderator delete its hub"
+                .x(() => _hubService.DeleteHub(moderator, hubToDeleteId));
+
+            "Then the hub should no longer appear in database"
+                .x(() =>
+                {
+                    _context.Verify(_ => _.SaveChanges(), Times.Once);
+
+                    _hubs.Should().BeEmpty();
+                });
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when an unknown user attempt to
+        /// remove a hub
+        /// </summary>
+        [Scenario]
+        public void DeleteHubByUnknownModerator(ModeratorDto moderator, Action deleteHubFromUnknownModerator)
+        {
+            "Given an unknown moderator"
+                .x(() =>
+                {
+                    const int unknownModeratorId = -1;
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = unknownModeratorId
+                    };
+                });
+
+            "When it attempts to delete a hub"
+                .x(()
+                    => deleteHubFromUnknownModerator = ()
+                        => _hubService.DeleteHub(moderator, _fixture.Create<int>()));
+
+            "Then the service should throw an exception"
+                .x(()
+                    => deleteHubFromUnknownModerator.Should()
+                        .Throw<UnknownUserException>());
+
+            "And no operation should have been performed on the database"
+                .x(() 
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when a moderator attempt to delete
+        /// a hub that is not its
+        /// </summary>
+        [Scenario]
+        public void DeleteHubThatDoesNotBelongToModerator(ModeratorDto moderator, ModeratorDto otherModerator,
+            int moderatorHubId, Action deleteHubFromOtherModerator)
+        {
+            "Given a moderator"
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
+
+            "And a hub that belongs to it"
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_
+                                => _.Moderator,
+                            _moderators.FirstOrDefault(registered
+                                => registered.Id == moderator.Id))
+                        .Create();
+                    _hubs.Add(hub);
+
+                    moderatorHubId = hub.Id;
+                });
+
+            "And another moderator"
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    otherModerator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
+
+            "When the other moderator attempts to delete the hub of the first one"
+                .x(() 
+                    => deleteHubFromOtherModerator = () 
+                        =>_hubService.DeleteHub(otherModerator, moderatorHubId));
+
+            "Then the service should throw an exception"
+                .x(()
+                    => deleteHubFromOtherModerator.Should()
+                        .Throw<IllegalHubOperationException>());
+
+            "And no operation should have been performed on the database"
+                .x(()
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to delete an unknown hub
+        /// </summary>
+        [Scenario]
+        public void DeleteUnknownHub(ModeratorDto moderator, Action deleteUnknownHub)
+        {
+            "Given a moderator"
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
+
+            "When the moderator delete a hub that does not exists"
+                .x(() 
+                    => deleteUnknownHub = () 
+                        => _hubService.DeleteHub(moderator, _fixture.Create<int>()));
+
+            "Then the service should throw an exception"
+                .x(()
+                    => deleteUnknownHub.Should()
+                        .Throw<UnknownHubException>());
+
+            "And no operation should have been performed on the database"
+                .x(()
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
+        }
+
+        
     }
 }
