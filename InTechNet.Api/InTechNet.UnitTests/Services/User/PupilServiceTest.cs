@@ -356,7 +356,6 @@ namespace InTechNet.UnitTests.Services.User
                         .BeTrue());
         }
 
-
         /// <summary>
         /// Assert the behavior of the pupil service when registering
         /// a new pupil
