@@ -11,6 +11,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.Mail;
+using InTechNet.Exception.Registration;
 using Xbehave;
 
 namespace InTechNet.UnitTests.Services.User
@@ -25,10 +27,19 @@ namespace InTechNet.UnitTests.Services.User
         /// </summary>
         private readonly Fixture _fixture = new Fixture();
 
+        /// <summary>
+        /// InTechNet context mock
+        /// </summary>
         private Mock<IInTechNetContext> _context;
 
+        /// <summary>
+        /// Collection of Pupil objects representing the database
+        /// </summary>
         private ICollection<Pupil> _pupils;
 
+        /// <summary>
+        /// Pupil service
+        /// </summary>
         private PupilService _pupilService;
 
         /// <summary>
@@ -68,8 +79,11 @@ namespace InTechNet.UnitTests.Services.User
                     _context.SetupGet(_ => _.Pupils)
                         .Returns(pupilsDbSet.Object.AsMockedDbSet().Object);
 
+                    _context.Setup(_ => _.Pupils.Add(It.IsAny<Pupil>()))
+                        .Callback<Pupil>(entity => _pupils.Add(entity));
+
                     _context.Setup(_ => _.Pupils.Remove(It.IsAny<Pupil>()))
-                        .Callback<Pupil>((entity) => _pupils.Remove(entity));
+                        .Callback<Pupil>(entity => _pupils.Remove(entity));
                 });
 
             "And a pupil service"
@@ -185,13 +199,13 @@ namespace InTechNet.UnitTests.Services.User
                     }));
 
             "Then the system should throw an exception"
-                .x(() =>
-                {
-                    _context.Verify(_ => _.SaveChanges(), Times.Never);
+                .x(() 
+                    => removeUnknownPupil.Should()
+                        .Throw<UnknownUserException>());
 
-                    removeUnknownPupil.Should()
-                        .Throw<UnknownUserException>();
-                });
+            "And never apply the changes"
+                .x(()
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
         }
 
         /// <summary>
@@ -209,7 +223,8 @@ namespace InTechNet.UnitTests.Services.User
                 });
 
             "And attempt to fetch it from the its ID"
-                .x(() => retrievedPupil = _pupilService.GetPupil(pickedPupil.Id));
+                .x(() 
+                    => retrievedPupil = _pupilService.GetPupil(pickedPupil.Id));
 
             "Then it should retrieve the original record"
                 .x(() =>
@@ -249,6 +264,201 @@ namespace InTechNet.UnitTests.Services.User
                     getUnknownPupil.Should()
                         .Throw<UnknownUserException>();
                 });
-        }    
+        }
+
+        /// <summary>
+        /// Assert the behavior of the email duplication detection method on unique email
+        /// </summary>
+        [Scenario]
+        public void IsEmailAlreadyInUse(string email, bool isEmailExisting)
+        {
+            "Given a new email"
+                .x(()
+                    => email = _fixture.Create<MailAddress>().Address);
+
+            "When checking its existence in the database"
+                .x(()
+                    => isEmailExisting = _pupilService.IsEmailAlreadyInUse(email));
+
+            "Then the result should be false"
+                .x(()
+                    => isEmailExisting.Should()
+                        .BeFalse());
+        }
+
+        /// <summary>
+        /// Assert the behavior of the email duplication detection method on duplicated email
+        /// </summary>
+        [Scenario]
+        public void IsEmailAlreadyInUseWithExistingEmail(string email, bool isEmailExisting)
+        {
+            "Given an email in use"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    email = pickedPupil.PupilEmail;
+                });
+
+            "When checking its existence in the database"
+                .x(()
+                    => isEmailExisting = _pupilService.IsEmailAlreadyInUse(email));
+
+            "Then the result should be true"
+                .x(()
+                    => isEmailExisting.Should()
+                        .BeTrue());
+        }
+
+        /// <summary>
+        /// Assert the behavior of the nickname duplication detection method on unique nickname
+        /// </summary>
+        [Scenario]
+        public void IsNicknameAlreadyInUse(string nickname, bool isNicknameExisting)
+        {
+            "Given a new email"
+                .x(()
+                    => nickname = _fixture.Create<string>());
+
+            "When checking its existence in the database"
+                .x(()
+                    => isNicknameExisting = _pupilService.IsNicknameAlreadyInUse(nickname));
+
+            "Then the result should be false"
+                .x(()
+                    => isNicknameExisting.Should()
+                        .BeFalse());
+        }
+
+        /// <summary>
+        /// Assert the behavior of the email nickname detection method on duplicated nickname
+        /// </summary>
+        [Scenario]
+        public void IsNicknameAlreadyInUseWithExistingNickname(string nickname, bool isNicknameExisting)
+        {
+            "Given an email in use"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    nickname = pickedPupil.PupilNickname;
+                });
+
+            "When checking its existence in the database"
+                .x(()
+                    => isNicknameExisting = _pupilService.IsNicknameAlreadyInUse(nickname));
+
+            "Then the result should be true"
+                .x(()
+                    => isNicknameExisting.Should()
+                        .BeTrue());
+        }
+
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when registering
+        /// a new pupil
+        /// </summary>
+        [Scenario]
+        public void RegisterPupil(PupilRegistrationDto pupilRegistration)
+        {
+            "Given a new pupil"
+                .x(() 
+                    => pupilRegistration = _fixture.Create<PupilRegistrationDto>());
+            
+            "When it registers"
+                .x(() 
+                    => _pupilService.RegisterPupil(pupilRegistration));
+
+            "Then it should appear in the database"
+                .x(() =>
+                {
+                    _context.Verify(_ => _.SaveChanges(), Times.Once);
+
+                    _pupils.Should()
+                        .ContainSingle(_ =>
+                            _.PupilEmail == pupilRegistration.Email
+                            && _.PupilNickname == pupilRegistration.Nickname);
+                });
+
+            "And its password should have been hashed"
+                .x(() =>
+                {
+                    var insertedPupil = _pupils.FirstOrDefault(_ =>
+                        _.PupilEmail == pupilRegistration.Email
+                        && _.PupilNickname == pupilRegistration.Nickname);
+
+                    insertedPupil.PupilPassword.Should()
+                        .NotBe(pupilRegistration.Password);
+                });
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when attempting to
+        /// register a new pupil using an email already in use
+        /// </summary>
+        [Scenario]
+        public void RegisterPupilWithExistingEmail(PupilRegistrationDto pupilRegistration,
+            Action registerPupilWithExistingEmail)
+        {
+            "Given a new pupil using an existing email"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Email = pickedPupil.PupilEmail;
+                });
+
+            "When it attempt to register"
+                .x(()
+                    => registerPupilWithExistingEmail = ()
+                        => _pupilService.RegisterPupil(pupilRegistration));
+
+            "Then the system should throw an exception"
+                .x(()
+                    => registerPupilWithExistingEmail.Should()
+                        .Throw<DuplicatedEmailException>());
+
+            "And never apply the changes"
+                .x(()
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
+        }
+
+        /// <summary>
+        /// Assert the behavior of the pupil service when attempting to
+        /// register a new pupil using a nickname already in use
+        /// </summary>
+        [Scenario]
+        public void RegisterPupilWithExistingNickname(PupilRegistrationDto pupilRegistration,
+            Action registerPupilWithExistingNickname)
+        {
+            "Given a new pupil using an existing email"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Nickname = pickedPupil.PupilNickname;
+                });
+
+            "When it attempt to register"
+                .x(()
+                    => registerPupilWithExistingNickname = () 
+                        => _pupilService.RegisterPupil(pupilRegistration));
+
+            "Then the system should throw an exception"
+                .x(() 
+                    => registerPupilWithExistingNickname.Should()
+                        .Throw<DuplicatedIdentifierException>());
+
+            "And never apply the changes"
+                .x(() 
+                    => _context.Verify(_ => _.SaveChanges(), Times.Never));
+        }
     }
 }

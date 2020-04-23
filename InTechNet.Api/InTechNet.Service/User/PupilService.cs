@@ -151,15 +151,15 @@ namespace InTechNet.Services.User
         /// <inheritdoc cref="IPupilService.IsEmailAlreadyInUse" />
         public bool IsEmailAlreadyInUse(string email)
         {
-            return _context.Pupils.Any(_ =>
-                    _.PupilEmail == email);
+            return _context.Pupils.Any(_ 
+                =>  _.PupilEmail == email);
         }
 
         /// <inheritdoc cref="IPupilService.IsNicknameAlreadyInUse" />
         public bool IsNicknameAlreadyInUse(string nickname)
         {
-            return _context.Pupils.Any(_ =>
-                    _.PupilNickname == nickname);
+            return _context.Pupils.Any(_ 
+                => _.PupilNickname == nickname);
         }
     }
 }
