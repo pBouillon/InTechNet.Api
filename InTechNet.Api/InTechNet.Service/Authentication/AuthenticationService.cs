@@ -38,7 +38,8 @@ namespace InTechNet.Services.Authentication
         /// <summary>
         /// Default AuthenticationService constructor
         /// </summary>
-        /// <param name="userService">The <see cref="IUserService" /> to be used for authentication checks and data retrieval</param>
+        /// <param name="moderatorService">The <see cref="IModeratorService" /> to be used for moderator authentication checks and data retrieval</param>
+        /// <param name="pupilService">The <see cref="IPupilService" /> to be used for pupil authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
         /// <param name="httpContextAccessor">The current HTTP context accessor</param>
         public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)

@@ -1,6 +1,6 @@
 ﻿using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Pupil;
-using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Context;
 using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Hub;
 using InTechNet.Services.Attendee.Interfaces;
@@ -15,13 +15,13 @@ namespace InTechNet.Services.Attendee
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly InTechNetContext _context;
+        private readonly IInTechNetContext _context;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public AttendeeService(InTechNetContext context)
+        public AttendeeService(IInTechNetContext context)
             => _context = context;
 
         /// <inheritdoc cref="IAttendeeService.AddAttendee"/>

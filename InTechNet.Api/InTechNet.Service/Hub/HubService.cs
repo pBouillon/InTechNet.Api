@@ -3,6 +3,8 @@ using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Context;
+using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
@@ -13,7 +15,6 @@ using Microsoft.EntityFrameworkCore;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Exception.Attendee;
 
 namespace InTechNet.Services.Hub
 {
@@ -23,7 +24,7 @@ namespace InTechNet.Services.Hub
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly InTechNetContext _context;
+        private readonly IInTechNetContext _context;
 
         /// <summary>
         /// Attendee service
@@ -35,7 +36,7 @@ namespace InTechNet.Services.Hub
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="attendeeService">Attendee service</param>
-        public HubService(InTechNetContext context, IAttendeeService attendeeService)
+        public HubService(IInTechNetContext context, IAttendeeService attendeeService)
             => (_context, _attendeeService) = (context, attendeeService);
 
         /// <inheritdoc cref="IHubService.CreateHub" />
