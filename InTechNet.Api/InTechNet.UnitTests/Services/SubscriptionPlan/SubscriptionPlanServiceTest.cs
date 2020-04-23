@@ -5,6 +5,8 @@ using InTechNet.UnitTests.Extensions;
 using Moq;
 using System.Collections.Generic;
 using System.Linq;
+using FluentAssertions;
+using InTechNet.Common.Dto.Subscription;
 using Xbehave;
 using InTechNetUsers = InTechNet.DataAccessLayer.Entities.Users;
 
@@ -13,7 +15,7 @@ namespace InTechNet.UnitTests.Services.SubscriptionPlan
     /// <summary>
     /// SubscriptionPlanService testing methods
     /// </summary>
-    public class SubscriptionPlanTest
+    public class SubscriptionPlanServiceTest
     {
         /// <summary>
         /// Fixture object for dummy test data
@@ -34,6 +36,20 @@ namespace InTechNet.UnitTests.Services.SubscriptionPlan
         /// SubscriptionPlan service
         /// </summary>
         private SubscriptionPlanService _subscriptionPlanService;
+
+        /// <summary>
+        /// Default constructor to setup AutoFixture behavior
+        /// </summary>
+        public SubscriptionPlanServiceTest()
+        {
+            _fixture.Behaviors.OfType<ThrowingRecursionBehavior>()
+                .ToList()
+                .ForEach(_
+                    => _fixture.Behaviors.Remove(_));
+
+            _fixture.Behaviors
+                .Add(new OmitOnRecursionBehavior());
+        }
 
         /// <summary>
         /// The background method is executed exactly once before each scenario
@@ -60,6 +76,34 @@ namespace InTechNet.UnitTests.Services.SubscriptionPlan
             "And a subscription plans service"
                 .x(()
                     => _subscriptionPlanService = new SubscriptionPlanService(_context.Object));
+        }
+
+        /// <summary>
+        /// Check the behavior of the subscription plan service when fetching all subscription
+        /// plans
+        /// </summary>
+        [Scenario]
+        public void GetAllSubscriptionPlans(IEnumerable<SubscriptionPlanDto> subscriptionPlans)
+        {
+            "When fetching all subscription plans"
+                .x(() 
+                    => subscriptionPlans = _subscriptionPlanService.GetAllSubscriptionPlans());
+
+            "Then we should have fetched all available subscription plans"
+                .x(() =>
+                {
+                    subscriptionPlans.Count()
+                        .Should()
+                        .Be(_subscriptionPlans.Count);
+
+                    foreach (var subscriptionPlan in _subscriptionPlans)
+                    {
+                        subscriptionPlans.Should()
+                            .ContainSingle(_
+                                => _.IdSubscriptionPlan == subscriptionPlan.Id
+                                    && _.SubscriptionPlanName == subscriptionPlan.SubscriptionPlanName);
+                    }
+                });
         }
     }
 }

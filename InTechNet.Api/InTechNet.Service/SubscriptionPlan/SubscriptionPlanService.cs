@@ -21,8 +21,8 @@ namespace InTechNet.Services.SubscriptionPlan
         public SubscriptionPlanService(IInTechNetContext context)
             => _context = context;
 
-        /// <inheritdoc cref="ISubscriptionPlanService.GetAllSubscriptions" />
-        public IEnumerable<SubscriptionPlanDto> GetAllSubscriptions()
+        /// <inheritdoc cref="ISubscriptionPlanService.GetAllSubscriptionPlans" />
+        public IEnumerable<SubscriptionPlanDto> GetAllSubscriptionPlans()
         {
             return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
             {
