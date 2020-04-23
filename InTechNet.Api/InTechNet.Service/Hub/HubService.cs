@@ -43,9 +43,13 @@ namespace InTechNet.Services.Hub
         public void CreateHub(ModeratorDto moderatorDto, HubCreationDto newHubDto)
         {
             // Retrieve the associated moderator to `moderatorDto`
-            var moderator = _context.Moderators.FirstOrDefault(
-                                _ => _.Id == moderatorDto.Id)
-                            ?? throw new UnknownUserException();
+            var moderator = _context.Moderators
+                .Include(_ => _.ModeratorSubscriptionPlan)
+                .FirstOrDefault(
+                    _ => _.Id == moderatorDto.Id)
+                ?? throw new UnknownUserException();
+
+            var moderatorSubscription = moderator.ModeratorSubscriptionPlan;
 
             // Assert that this moderator does not have a hub of the same name
             var isDuplicateTracked = _context.Hubs.Any(_ =>
@@ -55,6 +59,16 @@ namespace InTechNet.Services.Hub
             if (isDuplicateTracked)
             {
                 throw new DuplicatedIdentifierException();
+            }
+
+            // Assert that the moderator does not exceed its allowed hub count
+            var ownedHubsCount = _context.Hubs.Select(_ 
+                    => _.Moderator.Id == moderator.Id)
+                .Count();
+
+            if (++ownedHubsCount >= moderatorSubscription.MaxHubPerModeratorAccount)
+            {
+                throw new HubMaxCountReachedException();
             }
 
             // Generate a unique link for this hub
