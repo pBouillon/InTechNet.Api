@@ -570,6 +570,165 @@ namespace InTechNet.UnitTests.Services.Hub
                     => _context.Verify(_ => _.SaveChanges(), Times.Never));
         }
 
-        
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving a specific hub belonging to a moderator
+        /// </summary>
+        [Scenario]
+        public void GetModeratorHub() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
+        /// </summary>
+        [Scenario]
+        public void GetModeratorHubByUnknownModerator() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to retrieve a hub of another moderator
+        /// </summary>
+        [Scenario]
+        public void GetModeratorHubOfAnotherModerator() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving all hubs belonging to a moderator
+        /// </summary>
+        [Scenario]
+        public void GetModeratorHubs() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
+        /// </summary>
+        [Scenario]
+        public void GetModeratorHubsByUnknownModerator() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving a specific hub belonging to a pupil
+        /// </summary>
+        [Scenario]
+        public void GetPupilHub() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
+        /// </summary>
+        [Scenario]
+        public void GetPupilHubByUnknownModerator() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving a specific hub belonging to a pupil
+        /// when the pupil is not attending this hub
+        /// </summary>
+        [Scenario]
+        public void GetPupilHubWhenNotAttended() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving all hubs belonging to a pupil
+        /// </summary>
+        [Scenario]
+        public void GetPupilHubs() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
+        /// </summary>
+        [Scenario]
+        public void GetPupilHubsByUnknownPupil() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when removing the attendance of a pupil
+        /// to a hub
+        /// </summary>
+        [Scenario]
+        public void RemoveAttendance() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to remove the attendance of a pupil
+        /// from an unknown pupil
+        /// </summary>
+        [Scenario]
+        public void RemoveAttendanceByUnknownPupil() { }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to remove the attendance of a pupil
+        /// from another pupil
+        /// </summary>
+        [Scenario]
+        public void RemoveAttendanceOfAnotherPupil()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when updating the hub's data
+        /// </summary>
+        [Scenario]
+        public void UpdateHub()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when updating the hub's description
+        /// </summary>
+        [Scenario]
+        public void UpdateHubDescription()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when updating the hub's name
+        /// </summary>
+        [Scenario]
+        public void UpdateHubName()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to update the hub's data from
+        /// an unknown moderator
+        /// </summary>
+        [Scenario]
+        public void UpdateHubByUnknownModerator()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to update the hub's data from
+        /// another moderator
+        /// </summary>
+        [Scenario]
+        public void UpdateHubOfAnotherModerator()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to update un unknown hub
+        /// </summary>
+        [Scenario]
+        public void UpdateHubOfUnknownHub()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to rename a hub with an existing
+        /// name for the current moderator hubs
+        /// </summary>
+        [Scenario]
+        public void UpdateHubWithDuplicatedNames()
+        {
+            // TODO
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when attempting to rename a hub with an existing
+        /// name for other moderators hubs
+        /// </summary>
+        [Scenario]
+        public void UpdateHubWithDuplicatedNamesForOthers()
+        {
+            // TODO
+        }
     }
 }
