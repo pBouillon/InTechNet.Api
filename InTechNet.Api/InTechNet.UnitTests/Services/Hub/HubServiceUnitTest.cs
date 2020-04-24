@@ -1439,6 +1439,11 @@ namespace InTechNet.UnitTests.Services.Hub
                             _moderators.First(_ => _.Id == moderator.Id))
                         .Create();
 
+                    _moderators.Single(_ => _.Id == moderator.Id).Hubs = new List<InTechNetHubs.Hub>
+                    {
+                        hub
+                    };
+
                     _hubs.Add(hub);
 
                     originalHub = new HubDto
@@ -1455,26 +1460,23 @@ namespace InTechNet.UnitTests.Services.Hub
             "And new information for this hub"
                 .x(()
                     => hubUpdate = _fixture.Create<HubUpdateDto>());
-
+            
             "When it changes the hub's information"
                 .x(() 
-                    =>
-                {
-                    // _hubService.UpdateHub(moderator, originalHub.Id, hubUpdate);
-                });
+                    => _hubService.UpdateHub(moderator, originalHub.Id, hubUpdate));
 
             "Then the hub's information should have changed"
                 .x(() =>
                 {
-                    // _context.Verify(_ => _.SaveChanges(), Times.Once);
+                    _context.Verify(_ => _.SaveChanges(), Times.Once);
 
-                    // var hub = _hubs.First(_ => _.Id == originalHub.Id);
+                    var hub = _hubs.First(_ => _.Id == originalHub.Id);
 
-                    // hub.HubDescription.Should()
-                    //     .Be(hubUpdate.Description);
+                    hub.HubDescription.Should()
+                        .Be(hubUpdate.Description);
 
-                    // hub.HubName.Should()
-                    //     .Be(hubUpdate.Name);
+                    hub.HubName.Should()
+                        .Be(hubUpdate.Name);
                 });
         }
 
@@ -1482,7 +1484,7 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when updating the hub's description
         /// </summary>
         [Scenario]
-        public void UpdateHubDescription(ModeratorDto moderator, HubDto originalHub)
+        public void UpdateHubDescription(ModeratorDto moderator, HubDto originalHub, HubUpdateDto hubUpdate)
         {
             "Given a moderator"
                 .x(() =>
@@ -1504,6 +1506,11 @@ namespace InTechNet.UnitTests.Services.Hub
                         .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
                         .Create();
 
+                    _moderators.Single(_ => _.Id == moderator.Id).Hubs = new List<InTechNetHubs.Hub>
+                    {
+                        hub
+                    };
+
                     _hubs.Add(hub);
 
                     originalHub = new HubDto
@@ -1517,21 +1524,37 @@ namespace InTechNet.UnitTests.Services.Hub
                     };
                 });
 
+            "And a new description for this hub"
+                .x(()
+                    => hubUpdate = _fixture.Build<HubUpdateDto>()
+                        .With(_ => _.Name, originalHub.Name)
+                        .Create());
+
             "When it changes the hub's description"
-                .x(() => { });
+                .x(() => _hubService.UpdateHub(moderator, originalHub.Id, hubUpdate));
 
             "Then the hub's description should have changed"
-                .x(() => { });
+                .x(() =>
+                {
+                    _context.Verify(_ => _.SaveChanges(), Times.Once);
+
+                    _hubs.Single(_ => _.Id == originalHub.Id).HubDescription
+                        .Should()
+                        .Be(hubUpdate.Description);
+                });
 
             "And the name should remain the same"
-                .x(() => { });
+                .x(() 
+                    => _hubs.Single(_ => _.Id == originalHub.Id).HubName
+                        .Should()
+                        .Be(hubUpdate.Name));
         }
 
         /// <summary>
         /// Check the behavior of the hub service when updating the hub's name
         /// </summary>
         [Scenario]
-        public void UpdateHubName(ModeratorDto moderator, HubDto originalHub)
+        public void UpdateHubName(ModeratorDto moderator, HubDto originalHub, HubUpdateDto hubUpdate)
         {
             "Given a moderator"
                 .x(() =>
@@ -1553,6 +1576,11 @@ namespace InTechNet.UnitTests.Services.Hub
                         .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
                         .Create();
 
+                    _moderators.Single(_ => _.Id == moderator.Id).Hubs = new List<InTechNetHubs.Hub>
+                    {
+                        hub
+                    };
+
                     _hubs.Add(hub);
 
                     originalHub = new HubDto
@@ -1566,14 +1594,30 @@ namespace InTechNet.UnitTests.Services.Hub
                     };
                 });
 
-            "When it changes the hub's name"
-                .x(() => { });
+            "And a new name for this hub"
+                .x(()
+                    => hubUpdate = _fixture.Build<HubUpdateDto>()
+                        .With(_ => _.Description, originalHub.Description)
+                        .Create());
+
+            "When it changes the hub's description"
+                .x(() => _hubService.UpdateHub(moderator, originalHub.Id, hubUpdate));
 
             "Then the hub's name should have changed"
-                .x(() => { });
+                .x(() =>
+                {
+                    _context.Verify(_ => _.SaveChanges(), Times.Once);
+
+                    _hubs.Single(_ => _.Id == originalHub.Id).HubName
+                        .Should()
+                        .Be(hubUpdate.Name);
+                });
 
             "And the description should remain the same"
-                .x(() => { });
+                .x(()
+                    => _hubs.Single(_ => _.Id == originalHub.Id).HubDescription
+                        .Should()
+                        .Be(hubUpdate.Description));
         }
 
         /// <summary>
@@ -1602,6 +1646,11 @@ namespace InTechNet.UnitTests.Services.Hub
                         .Without(_ => _.Attendees)
                         .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
                         .Create();
+
+                    _moderators.Single(_ => _.Id == moderator.Id).Hubs = new List<InTechNetHubs.Hub>
+                    {
+                        hub
+                    };
 
                     _hubs.Add(hub);
 
