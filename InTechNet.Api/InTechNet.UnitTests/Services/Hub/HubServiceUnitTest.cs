@@ -574,76 +574,232 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when retrieving a specific hub belonging to a moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHub() { }
+        public void GetModeratorHub()
+        {
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "When the moderator requests it"
+                .x(() => { });
+
+            "Then it should receive its information"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
         /// </summary>
         [Scenario]
-        public void GetModeratorHubByUnknownModerator() { }
+        public void GetModeratorHubByUnknownModerator()
+        {
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "When an unknown user requests it"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve a hub of another moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHubOfAnotherModerator() { }
+        public void GetModeratorHubOfAnotherModerator()
+        {
+            "Given a moderator"
+                .x(() => { });
+
+            "And hub that belongs to it"
+                .x(() => { });
+
+            "And another moderator"
+                .x(() => { });
+
+            "When the moderator request the hub of another one"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs belonging to a moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHubs() { }
+        public void GetModeratorHubs()
+        {
+            "Given a moderator"
+                .x(() => { });
+
+            "And several hubs that belongs to it"
+                .x(() => { });
+
+            "When the moderator requests all its hubs"
+                .x(() => { });
+
+            "Then it should receive them all"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
         /// </summary>
         [Scenario]
-        public void GetModeratorHubsByUnknownModerator() { }
+        public void GetModeratorHubsByUnknownModerator()
+        {
+            "Given a moderator"
+                .x(() => { });
+
+            "And several hubs that belongs to it"
+                .x(() => { });
+
+            "When an unknown moderator request all its hubs"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving a specific hub belonging to a pupil
         /// </summary>
         [Scenario]
-        public void GetPupilHub() { }
+        public void GetPupilHub()
+        {
+            "Given a hub"
+                .x(() => { });
+
+            "And a pupil attending this hub"
+                .x(() => { });
+
+            "When the pupil request this hub"
+                .x(() => { });
+
+            "Then it should receive its information"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
         /// </summary>
         [Scenario]
-        public void GetPupilHubByUnknownModerator() { }
+        public void GetPupilHubByUnknownPupil()
+        {
+            "Given a hub"
+                .x(() => { });
+
+            "And a pupil attending this hub"
+                .x(() => { });
+
+            "When an unknown pupil requests this hub"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving a specific hub belonging to a pupil
         /// when the pupil is not attending this hub
         /// </summary>
         [Scenario]
-        public void GetPupilHubWhenNotAttended() { }
+        public void GetPupilHubWhenNotAttended()
+        {
+            "Given a hub"
+                .x(() => { });
+
+            "And a pupil not attending this hub"
+                .x(() => { });
+
+            "When the pupil requests this hub"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs belonging to a pupil
         /// </summary>
         [Scenario]
-        public void GetPupilHubs() { }
+        public void GetPupilHubs()
+        {
+            "Given a pupil"
+                .x(() => { });
+
+            "And several hubs it is attending"
+                .x(() => { });
+
+            "When the pupil requests its hubs"
+                .x(() => { });
+
+            "Then it should receive their information"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
         /// </summary>
         [Scenario]
-        public void GetPupilHubsByUnknownPupil() { }
+        public void GetPupilHubsByUnknownPupil()
+        {
+            "Given an unknown pupil"
+                .x(() => { });
+
+            "When it attempt to retrieve all its hubs"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when removing the attendance of a pupil
         /// to a hub
         /// </summary>
         [Scenario]
-        public void RemoveAttendance() { }
+        public void RemoveAttendance()
+        {
+            "Given a hub"
+                .x(() => { });
+
+            "And a pupil attending this hub"
+                .x(() => { });
+
+            "When the pupil remove its attendance from this hub"
+                .x(() => { });
+
+            "Then it should no longer be an attendee of this hub"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to remove the attendance of a pupil
         /// from an unknown pupil
         /// </summary>
         [Scenario]
-        public void RemoveAttendanceByUnknownPupil() { }
+        public void RemoveAttendanceByUnknownPupil()
+        {
+            "Given a hub"
+                .x(() => { });
+
+            "And an unknown pupil"
+                .x(() => { });
+
+            "When it attempts to remove its attendance from this hub"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+        }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to remove the attendance of a pupil
@@ -652,7 +808,20 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void RemoveAttendanceOfAnotherPupil()
         {
-            // TODO
+            "Given a hub"
+                .x(() => { });
+
+            "And a pupil attending this hub"
+                .x(() => { });
+
+            "And another pupil not attending this hub"
+                .x(() => { });
+
+            "When it attempt to remove its attendance"
+                .x(() => { });
+
+            "Then the system should raise an exception"
+                .x(() => { });
         }
 
         /// <summary>
@@ -661,7 +830,17 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHub()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "When it changes the hub's information"
+                .x(() => { });
+
+            "Then the hub's information should have changed"
+                .x(() => { });
         }
 
         /// <summary>
@@ -670,7 +849,20 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubDescription()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "When it changes the hub's description"
+                .x(() => { });
+
+            "Then the hub's description should have changed"
+                .x(() => { });
+
+            "And the name should remain the same"
+                .x(() => { });
         }
 
         /// <summary>
@@ -679,7 +871,20 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubName()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "When it changes the hub's name"
+                .x(() => { });
+
+            "Then the hub's name should have changed"
+                .x(() => { });
+
+            "And the description should remain the same"
+                .x(() => { });
         }
 
         /// <summary>
@@ -689,7 +894,23 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubByUnknownModerator()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "And an unknown moderator"
+                .x(() => { });
+
+            "When the unknown moderator attempts to update the hub"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+
+            "And not perform any action"
+                .x(() => { });
         }
 
         /// <summary>
@@ -699,7 +920,23 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubOfAnotherModerator()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "And another moderator"
+                .x(() => { });
+
+            "When the moderator attempts to update the hub of another one"
+                .x(() => { });
+
+            "Then ths system should throw an exception"
+                .x(() => { });
+
+            "And not perform any action"
+                .x(() => { });
         }
 
         /// <summary>
@@ -708,7 +945,17 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubOfUnknownHub()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And an unknown hub"
+                .x(() => { });
+
+            "When the moderator attempts to update it"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
         }
 
         /// <summary>
@@ -718,7 +965,20 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubWithDuplicatedNames()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And two hubs it owns with different names"
+                .x(() => { });
+
+            "When it attempts to update the name of a hub with the other hub's name"
+                .x(() => { });
+
+            "Then the system should throw an exception"
+                .x(() => { });
+
+            "And not perform any change"
+                .x(() => { });
         }
 
         /// <summary>
@@ -728,7 +988,20 @@ namespace InTechNet.UnitTests.Services.Hub
         [Scenario]
         public void UpdateHubWithDuplicatedNamesForOthers()
         {
-            // TODO
+            "Given a moderator"
+                .x(() => { });
+
+            "And a hub that belongs to it"
+                .x(() => { });
+
+            "And a hub it does not own"
+                .x(() => { });
+
+            "When it attempts to update the name of a hub with the other hub's name"
+                .x(() => { });
+
+            "Then the name should have been successfully updated"
+                .x(() => { });
         }
     }
 }
