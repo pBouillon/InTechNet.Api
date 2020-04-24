@@ -15,6 +15,8 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.User.Attendee;
+using InTechNet.Exception.Attendee;
 using Xbehave;
 using InTechNetHubs = InTechNet.DataAccessLayer.Entities.Hubs;
 using InTechNetUsers = InTechNet.DataAccessLayer.Entities.Users;
@@ -145,6 +147,14 @@ namespace InTechNet.UnitTests.Services.Hub
                 .x(() =>
                 {
                     var attendeeService = new Mock<IAttendeeService>();
+
+                    attendeeService.Setup(_ => _.RemoveAttendance(It.IsAny<AttendeeDto>()))
+                        .Callback<AttendeeDto>(entity =>
+                        {
+                            var hub = _hubs.Single(_ => _.Id == entity.IdHub);
+                            hub.Attendees = hub.Attendees.Where(_ => _.Id != entity.Id);
+                        });
+
                     _hubService = new HubService(_context.Object, attendeeService.Object);
                 });
         }
@@ -829,7 +839,10 @@ namespace InTechNet.UnitTests.Services.Hub
                 {
                     var hubs = _fixture.Build<InTechNetHubs.Hub>()
                         .Without(_ => _.Attendees)
-                        .With(_ => _.Moderator, _moderators.Single(_ => _.Id == moderator.Id))
+                        .With(_ 
+                            => _.Moderator, 
+                            _moderators.Single(_ 
+                                => _.Id == moderator.Id))
                         .CreateMany();
 
                     foreach (var hub in hubs)
@@ -864,38 +877,96 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when retrieving a specific hub belonging to a pupil
         /// </summary>
         [Scenario]
-        public void GetPupilHub()
+        public void GetPupilHub(PupilDto pupil, HubDto originalHub, HubDto retrivedHub)
         {
-            "Given a hub"
-                .x(() => { });
+            "Given a pupil"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
-            "And a pupil attending this hub"
-                .x(() => { });
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id,
+                        Nickname = pickedPupil.PupilNickname
+                    };
+                });
+
+            "And a hub it is attending"
+                .x(() =>
+                {
+                    var attendee = _fixture.Build<Attendee>()
+                        .With(_ => _.Pupil, _pupils.Single(_
+                            => _.Id == pupil.Id))
+                        .Without(_ => _.CurrentModules)
+                        .Without(_ => _.States)
+                        .Create();
+
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>
+                        {
+                            attendee
+                        })
+                        .Create();
+                    _hubs.Add(hub);
+
+                    attendee.Hub = hub;
+                    _attendees.Add(attendee);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = hub.Moderator.Id,
+                        Name = hub.HubName,
+                        Attendees = new List<LightweightPupilDto>
+                        {
+                          new LightweightPupilDto
+                          {
+                              Id = pupil.Id,
+                              Nickname = pupil.Nickname
+                          }
+                        },
+                        Description = hub.HubDescription,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When the pupil request this hub"
-                .x(() => { });
+                .x(() 
+                    => retrivedHub = _hubService.GetPupilHub(pupil, originalHub.Id));
 
             "Then it should receive its information"
-                .x(() => { });
+                .x(() =>
+                    retrivedHub.Should()
+                        .BeEquivalentTo(originalHub));
         }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
         /// </summary>
         [Scenario]
-        public void GetPupilHubByUnknownPupil()
+        public void GetPupilHubByUnknownPupil(PupilDto unknownPupil, Action requestHubWithUnknownPupil)
         {
-            "Given a hub"
-                .x(() => { });
+            "Given an unknown pupil"
+                .x(() =>
+                {
+                    const int unknownPupilId = -1;
 
-            "And a pupil attending this hub"
-                .x(() => { });
+                    unknownPupil = new PupilDto
+                    {
+                        Id = unknownPupilId
+                    };
+                });
 
-            "When an unknown pupil requests this hub"
-                .x(() => { });
+            "When an unknown pupil requests any hub"
+                .x(()
+                    => requestHubWithUnknownPupil = ()
+                        => _hubService.GetPupilHub(unknownPupil, _fixture.Create<int>()));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => requestHubWithUnknownPupil.Should()
+                        .Throw<UnknownUserException>());
         }
 
         /// <summary>
@@ -903,74 +974,301 @@ namespace InTechNet.UnitTests.Services.Hub
         /// when the pupil is not attending this hub
         /// </summary>
         [Scenario]
-        public void GetPupilHubWhenNotAttended()
+        public void GetPupilHubWhenNotAttended(InTechNetHubs.Hub hub, PupilDto pupil,
+            Action requestHubNotAttended)
         {
             "Given a hub"
-                .x(() => { });
+                .x(() =>
+                {
+                    hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>())
+                        .Create();
+
+                    _hubs.Add(hub);
+                });
 
             "And a pupil not attending this hub"
-                .x(() => { });
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id,
+                        Nickname = pickedPupil.PupilNickname
+                    };
+                });
 
             "When the pupil requests this hub"
-                .x(() => { });
+                .x(() 
+                    => requestHubNotAttended = ()
+                        => _hubService.GetPupilHub(pupil, hub.Id));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => requestHubNotAttended.Should()
+                        .Throw<UnknownHubException>());
         }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs belonging to a pupil
         /// </summary>
         [Scenario]
-        public void GetPupilHubs()
+        public void GetPupilHubs(PupilDto pupil, List<PupilHubDto> originalHubs,
+            IEnumerable<PupilHubDto> hubs)
         {
             "Given a pupil"
-                .x(() => { });
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id,
+                        Nickname = pickedPupil.PupilNickname,
+                    };
+                });
 
             "And several hubs it is attending"
-                .x(() => { });
+                .x(() =>
+                {
+                    // Create several attendance for this pupil
+                    var attendees = _fixture.Build<Attendee>()
+                        .With(_ => _.Pupil, _pupils.Single(_
+                            => _.Id == pupil.Id))
+                        .Without(_ => _.CurrentModules)
+                        .Without(_ => _.States)
+                        .CreateMany();
+
+                    originalHubs = new List<PupilHubDto>();
+                    foreach (var attendee in attendees)
+                    {
+                        // Create the hub attended
+                        var hub = _fixture.Build<InTechNetHubs.Hub>()
+                            .With(_ => _.Attendees, new List<Attendee>
+                            {
+                                attendee
+                            })
+                            .Create();
+                        _hubs.Add(hub);
+
+                        // Associate it to the attendee
+                        attendee.Hub = hub;
+                        _attendees.Add(attendee);
+
+                        // Add its description
+                        originalHubs.Add(new PupilHubDto
+                        {
+                            Id = hub.Id,
+                            Name = hub.HubName,
+                            Description = hub.HubDescription,
+                            ModeratorNickname = hub.Moderator.ModeratorNickname
+                        });
+                    }
+                });
 
             "When the pupil requests its hubs"
-                .x(() => { });
+                .x(() 
+                    => hubs = _hubService.GetPupilHubs(pupil));
 
             "Then it should receive their information"
-                .x(() => { });
+                .x(() =>
+                {
+                    hubs.Should()
+                        .HaveSameCount(originalHubs)
+                        .And
+                        .OnlyHaveUniqueItems();
+
+                    foreach (var hub in hubs)
+                    {
+                        originalHubs.Should()
+                            .ContainEquivalentOf(hub);
+                    }
+                });
         }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
         /// </summary>
         [Scenario]
-        public void GetPupilHubsByUnknownPupil()
+        public void GetPupilHubsByUnknownPupil(PupilDto unknownPupil, Action retrievingAllHubsOfUnknownPupil)
         {
             "Given an unknown pupil"
-                .x(() => { });
+                .x(() =>
+                {
+                    const int unknownPupilId = -1;
+
+                    unknownPupil = new PupilDto
+                    {
+                        Id = unknownPupilId
+                    };
+                });
 
             "When it attempt to retrieve all its hubs"
-                .x(() => { });
+                .x(()
+                    => retrievingAllHubsOfUnknownPupil = ()
+                        => _hubService.GetPupilHubs(unknownPupil));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => retrievingAllHubsOfUnknownPupil.Should()
+                        .Throw<UnknownUserException>());
         }
 
         /// <summary>
         /// Check the behavior of the hub service when removing the attendance of a pupil
-        /// to a hub
+        /// to a hub from a pupil
         /// </summary>
         [Scenario]
-        public void RemoveAttendance()
+        public void RemoveAttendanceFromModerator(ModeratorDto moderator, AttendeeDto attendee, HubDto originalHub)
         {
-            "Given a hub"
-                .x(() => { });
+            "Given a Moderator"
+                .x(() =>
+                {
+                    var pickedModeratorIndex = new Random().Next(0, _moderators.Count);
+                    var pickedModerator = _pupils.ToList()[pickedModeratorIndex];
 
-            "And a pupil attending this hub"
-                .x(() => { });
+                    moderator = new ModeratorDto
+                    {
+                        Id = pickedModerator.Id,
+                    };
+                });
+
+            "And a hub it owns with an attendee"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    var originalAttendee = _fixture.Build<Attendee>()
+                        .With(_ => _.Pupil, _pupils.Single(_
+                            => _.Id == pickedPupil.Id))
+                        .Without(_ => _.CurrentModules)
+                        .Without(_ => _.States)
+                        .Create();
+
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>
+                        {
+                            originalAttendee
+                        })
+                        .Create();
+                    _hubs.Add(hub);
+
+                    originalAttendee.Hub = hub;
+                    _attendees.Add(originalAttendee);
+
+                    attendee = new AttendeeDto
+                    {
+                        IdHub = hub.Id,
+                        IdPupil = pickedPupil.Id,
+                        Id = originalAttendee.Id
+                    };
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = hub.Moderator.Id,
+                        Name = hub.HubName,
+                        Attendees = new List<LightweightPupilDto>
+                        {
+                            new LightweightPupilDto
+                            {
+                                Id = pickedPupil.Id,
+                                Nickname = pickedPupil.PupilNickname
+                            }
+                        },
+                        Description = hub.HubDescription,
+                        Link = hub.HubLink
+                    };
+                });
+
+            "When the moderator remove an attendee from its hub"
+                .x(()
+                    => _hubService.RemoveAttendance(moderator, attendee));
+
+            "Then it should no longer appear as an attendee of this hub"
+                .x(() 
+                    => _hubs.Should()
+                        .NotContain(_ => _.Id == attendee.Id));
+        }
+
+        /// <summary>
+        /// Check the behavior of the hub service when removing the attendance of a pupil
+        /// to a hub from a pupil
+        /// </summary>
+        [Scenario]
+        public void RemoveAttendanceFromPupil(PupilDto pupil, AttendeeDto attendee, HubDto originalHub)
+        {
+            "Given a pupil"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
+
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id,
+                        Nickname = pickedPupil.PupilNickname
+                    };
+                });
+
+            "And a hub it is attending"
+                .x(() =>
+                {
+                    var originalAttendee = _fixture.Build<Attendee>()
+                        .With(_ => _.Pupil, _pupils.Single(_
+                            => _.Id == pupil.Id))
+                        .Without(_ => _.CurrentModules)
+                        .Without(_ => _.States)
+                        .Create();
+
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>
+                        {
+                            originalAttendee
+                        })
+                        .Create();
+                    _hubs.Add(hub);
+
+                    originalAttendee.Hub = hub;
+                    _attendees.Add(originalAttendee);
+
+                    attendee = new AttendeeDto
+                    {
+                        IdHub = hub.Id,
+                        IdPupil = pupil.Id,
+                        Id = originalAttendee.Id
+                    };
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = hub.Moderator.Id,
+                        Name = hub.HubName,
+                        Attendees = new List<LightweightPupilDto>
+                        {
+                            new LightweightPupilDto
+                            {
+                                Id = pupil.Id,
+                                Nickname = pupil.Nickname
+                            }
+                        },
+                        Description = hub.HubDescription,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When the pupil remove its attendance from this hub"
-                .x(() => { });
+                .x(() 
+                    => _hubService.RemoveAttendance(pupil, attendee));
 
             "Then it should no longer be an attendee of this hub"
-                .x(() => { });
+                .x(()
+                    => _hubs.Should()
+                        .NotContain(_ => _.Id == attendee.Id));
         }
 
         /// <summary>
@@ -978,19 +1276,49 @@ namespace InTechNet.UnitTests.Services.Hub
         /// from an unknown pupil
         /// </summary>
         [Scenario]
-        public void RemoveAttendanceByUnknownPupil()
+        public void RemoveAttendanceByUnknownAttendee(PupilDto pupil, InTechNetHubs.Hub hub,
+            AttendeeDto attendee, Action removeAttendanceOfUnknownAttendee)
         {
-            "Given a hub"
-                .x(() => { });
+            "Given a pupil"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
-            "And an unknown pupil"
-                .x(() => { });
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id
+                    };
+                });
+
+            "And an existing hub"
+                .x(() =>
+                {
+                    hub = _fixture.Create<InTechNetHubs.Hub>();
+                    _hubs.Add(hub);
+                });
+
+            "And an unknown attendee"
+                .x(() =>
+                {
+                    const int unknownAttendeeId = -1;
+                    attendee = new AttendeeDto
+                    {
+                        Id = unknownAttendeeId,
+                        IdPupil = pupil.Id,
+                        IdHub = hub.Id
+                    };
+                });
 
             "When it attempts to remove its attendance from this hub"
-                .x(() => { });
+                .x(() 
+                    => removeAttendanceOfUnknownAttendee = ()
+                        => _hubService.RemoveAttendance(pupil, attendee));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => removeAttendanceOfUnknownAttendee.Should()
+                        .Throw<UnknownAttendeeException>());
         }
 
         /// <summary>
@@ -998,29 +1326,96 @@ namespace InTechNet.UnitTests.Services.Hub
         /// from another pupil
         /// </summary>
         [Scenario]
-        public void RemoveAttendanceOfAnotherPupil()
+        public void RemoveAttendanceOfAnotherPupil(PupilDto pupil, PupilDto otherPupil, AttendeeDto attendee,
+            HubDto originalHub, Action removingOtherPupilAttendance)
         {
-            "Given a hub"
-                .x(() => { });
+            "Given a pupil"
+                .x(() =>
+                {
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
+                    var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
-            "And a pupil attending this hub"
-                .x(() => { });
+                    pupil = new PupilDto
+                    {
+                        Id = pickedPupil.Id,
+                        Nickname = pickedPupil.PupilNickname
+                    };
+                });
+
+            "And a hub it is attending"
+                .x(() =>
+                {
+                    var originalAttendee = _fixture.Build<Attendee>()
+                        .With(_ => _.Pupil, _pupils.Single(_
+                            => _.Id == pupil.Id))
+                        .Without(_ => _.CurrentModules)
+                        .Without(_ => _.States)
+                        .Create();
+
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>
+                        {
+                            originalAttendee
+                        })
+                        .Create();
+                    _hubs.Add(hub);
+
+                    originalAttendee.Hub = hub;
+                    _attendees.Add(originalAttendee);
+
+                    attendee = new AttendeeDto
+                    {
+                        IdHub = hub.Id,
+                        IdPupil = pupil.Id,
+                        Id = originalAttendee.Id
+                    };
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = hub.Moderator.Id,
+                        Name = hub.HubName,
+                        Attendees = new List<LightweightPupilDto>
+                        {
+                            new LightweightPupilDto
+                            {
+                                Id = pupil.Id,
+                                Nickname = pupil.Nickname
+                            }
+                        },
+                        Description = hub.HubDescription,
+                        Link = hub.HubLink
+                    };
+                });
 
             "And another pupil not attending this hub"
-                .x(() => { });
+                .x(() =>
+                {
+                    var otherRegisteredPupil = _fixture.Create<InTechNetUsers.Pupil>();
+                    _pupils.Add(otherRegisteredPupil);
+
+                    otherPupil = new PupilDto
+                    {
+                        Id = otherRegisteredPupil.Id
+                    };
+                });
 
             "When it attempt to remove its attendance"
-                .x(() => { });
+                .x(() 
+                    => removingOtherPupilAttendance = ()
+                        => _hubService.RemoveAttendance(otherPupil, attendee));
 
             "Then the system should raise an exception"
-                .x(() => { });
+                .x(() 
+                    => removingOtherPupilAttendance.Should()
+                        .Throw<UnknownAttendeeException>());
         }
 
         /// <summary>
         /// Check the behavior of the hub service when updating the hub's data
         /// </summary>
         [Scenario]
-        public void UpdateHub(ModeratorDto moderator, HubDto originalHub)
+        public void UpdateHub(ModeratorDto moderator, HubDto originalHub, HubUpdateDto hubUpdate)
         {
             "Given a moderator"
                 .x(() =>
@@ -1039,7 +1434,9 @@ namespace InTechNet.UnitTests.Services.Hub
                 {
                     var hub = _fixture.Build<InTechNetHubs.Hub>()
                         .Without(_ => _.Attendees)
-                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .With(_ 
+                            => _.Moderator, 
+                            _moderators.First(_ => _.Id == moderator.Id))
                         .Create();
 
                     _hubs.Add(hub);
@@ -1055,11 +1452,30 @@ namespace InTechNet.UnitTests.Services.Hub
                     };
                 });
 
+            "And new information for this hub"
+                .x(()
+                    => hubUpdate = _fixture.Create<HubUpdateDto>());
+
             "When it changes the hub's information"
-                .x(() => { });
+                .x(() 
+                    =>
+                {
+                    // _hubService.UpdateHub(moderator, originalHub.Id, hubUpdate);
+                });
 
             "Then the hub's information should have changed"
-                .x(() => { });
+                .x(() =>
+                {
+                    // _context.Verify(_ => _.SaveChanges(), Times.Once);
+
+                    // var hub = _hubs.First(_ => _.Id == originalHub.Id);
+
+                    // hub.HubDescription.Should()
+                    //     .Be(hubUpdate.Description);
+
+                    // hub.HubName.Should()
+                    //     .Be(hubUpdate.Name);
+                });
         }
 
         /// <summary>

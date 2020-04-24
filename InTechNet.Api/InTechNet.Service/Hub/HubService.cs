@@ -182,54 +182,58 @@ namespace InTechNet.Services.Hub
 
         /// <inheritdoc cref="IHubService.GetPupilHub" />
         public HubDto GetPupilHub(PupilDto currentPupil, int hubId)
-        {
-            try
-            {
-                // Retrieve the requested hub
-                var hub = _context.Hubs
-                    .Include(_ => _.Moderator)
-                    .Include(_ => _.Attendees)
-                        .ThenInclude(_ => _.Pupil)
-                    .Single(_ =>
-                        _.Id == hubId
-                        && _.Attendees.Any(_ => 
-                            _.Hub.Id == hubId 
-                            && _.Pupil.Id == currentPupil.Id));
+        {    
+            // Retrieve the associated pupil
+            var associatedPupil = _context.Pupils.FirstOrDefault(_ =>
+                                _.Id == currentPupil.Id)
+                            ?? throw new UnknownUserException();
 
-                // Retrieve the attending pupils from the junction table `Attendee`
-                var hubAttendees = hub.Attendees?.Join(
-                    _context.Pupils,
-                    attendee => attendee.Pupil.Id,
-                    pupil => pupil.Id,
-                    (_, pupil) => new LightweightPupilDto
-                    {
-                        Nickname = pupil.PupilNickname,
-                        Id = pupil.Id
-                    }).ToList() ?? new List<LightweightPupilDto>();
+            // Retrieve the requested hub
+            var hub = _context.Hubs
+                .Include(_ => _.Moderator)
+                .Include(_ => _.Attendees)
+                    .ThenInclude(_ => _.Pupil)
+                .SingleOrDefault(_ =>
+                    _.Id == hubId
+                    && _.Attendees.Any(_ => 
+                        _.Hub.Id == hubId 
+                        && _.Pupil.Id == associatedPupil.Id))
+                ?? throw new UnknownHubException();
 
-                // Return the agglomerated data
-                return new HubDto
+            // Retrieve the attending pupils from the junction table `Attendee`
+            var hubAttendees = hub.Attendees?.Join(
+                _context.Pupils,
+                attendee => attendee.Pupil.Id,
+                pupil => pupil.Id,
+                (_, pupil) => new LightweightPupilDto
                 {
-                    IdModerator = hub.Moderator.Id,
-                    Attendees = hubAttendees,
-                    Description = hub.HubDescription,
-                    Id = hub.Id,
-                    Name = hub.HubName,
-                    Link = hub.HubLink,
-                };
-            }
-            catch (InvalidOperationException ex)
+                    Nickname = pupil.PupilNickname,
+                    Id = pupil.Id
+                }).ToList() ?? new List<LightweightPupilDto>();
+
+            // Return the agglomerated data
+            return new HubDto
             {
-                throw new UnknownHubException(ex);
-            }
+                IdModerator = hub.Moderator.Id,
+                Attendees = hubAttendees,
+                Description = hub.HubDescription,
+                Id = hub.Id,
+                Name = hub.HubName,
+                Link = hub.HubLink,
+            };
         }
 
         /// <inheritdoc cref="IHubService.GetPupilHubs" />
         public IEnumerable<PupilHubDto> GetPupilHubs(PupilDto currentPupil)
         {
+            // Retrieve the associated pupil
+            var pupil = _context.Pupils.FirstOrDefault(_ =>
+                            _.Id == currentPupil.Id)
+                        ?? throw new UnknownUserException();
+
             var pupilsAttendance = _context.Attendees.Include(_ => _.Hub)
                 .Where(_ =>
-                    _.Pupil.Id == currentPupil.Id);
+                    _.Pupil.Id == pupil.Id);
 
             return pupilsAttendance.Select(_ => new PupilHubDto
             {
@@ -259,7 +263,9 @@ namespace InTechNet.Services.Hub
         {
             // Fetch the related hub attended by the current moderator
             var attendee = _context.Attendees.FirstOrDefault(_ =>
-                    _.Hub.Id == attendeeDto.IdHub && _.Pupil.Id == attendeeDto.IdPupil)
+                    _.Hub.Id == attendeeDto.IdHub 
+                    && _.Pupil.Id == attendeeDto.IdPupil
+                    && _.Pupil.Id == currentPupil.Id)
                 ?? throw new UnknownAttendeeException();
 
             attendeeDto.Id = attendee.Id;
