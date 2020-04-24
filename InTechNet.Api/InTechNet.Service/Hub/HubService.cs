@@ -116,6 +116,10 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.GetModeratorHub" />
         public HubDto GetModeratorHub(ModeratorDto moderatorDto, int hubId)
         {
+            // Retrieve the associated moderator to `moderatorDto`
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                                _.Id == moderatorDto.Id)
+                            ?? throw new UnknownUserException();
             try
             {
                 // Retrieve the requested hub
@@ -125,7 +129,7 @@ namespace InTechNet.Services.Hub
                         .ThenInclude(_ => _.Pupil)
                     .Single(_ =>
                         _.Id == hubId 
-                        && _.Moderator.Id == moderatorDto.Id);
+                        && _.Moderator.Id == moderator.Id);
 
                 // Retrieve the attending pupils from the junction table `Attendee`
                 var hubAttendees = hub.Attendees?.Join(
@@ -158,8 +162,13 @@ namespace InTechNet.Services.Hub
         /// <inheritdoc cref="IHubService.GetModeratorHubs" />
         public IEnumerable<LightweightHubDto> GetModeratorHubs(ModeratorDto moderatorDto)
         {
+            // Retrieve the associated moderator to `moderatorDto`
+            var moderator = _context.Moderators.FirstOrDefault(_ =>
+                                _.Id == moderatorDto.Id)
+                            ?? throw new UnknownUserException();
+                            
             var moderatorsHubs = _context.Hubs.Where(_ =>
-                    _.Moderator.Id == moderatorDto.Id);
+                    _.Moderator.Id == moderator.Id);
 
             return moderatorsHubs.Select(_ => new LightweightHubDto
             {

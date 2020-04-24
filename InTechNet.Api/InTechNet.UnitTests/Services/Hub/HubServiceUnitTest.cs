@@ -1,19 +1,20 @@
-﻿using System;
-using AutoFixture;
+﻿using AutoFixture;
+using FluentAssertions;
+using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User.Moderator;
+using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer.Context;
 using InTechNet.DataAccessLayer.Entities.Hubs;
+using InTechNet.Exception.Authentication;
+using InTechNet.Exception.Hub;
+using InTechNet.Exception.Registration;
 using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Hub;
 using InTechNet.UnitTests.Extensions;
 using Moq;
+using System;
 using System.Collections.Generic;
 using System.Linq;
-using FluentAssertions;
-using InTechNet.Common.Dto.Hub;
-using InTechNet.Common.Dto.User.Moderator;
-using InTechNet.Exception.Authentication;
-using InTechNet.Exception.Hub;
-using InTechNet.Exception.Registration;
 using Xbehave;
 using InTechNetHubs = InTechNet.DataAccessLayer.Entities.Hubs;
 using InTechNetUsers = InTechNet.DataAccessLayer.Entities.Users;
@@ -574,98 +575,289 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when retrieving a specific hub belonging to a moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHub()
+        public void GetModeratorHub(ModeratorDto moderator, HubDto originalHub, HubDto hub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When the moderator requests it"
-                .x(() => { });
+                .x(()
+                    => hub = _hubService.GetModeratorHub(moderator, originalHub.Id));
 
             "Then it should receive its information"
-                .x(() => { });
+                .x(() 
+                    => hub.Should().BeEquivalentTo(originalHub));
         }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve the hub of an unknown user
         /// </summary>
         [Scenario]
-        public void GetModeratorHubByUnknownModerator()
+        public void GetModeratorHubByUnknownModerator(ModeratorDto moderator, HubDto originalHub,
+            ModeratorDto unknownModerator, Action requestHubByUnknownModerator)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
+
+            "And an unknown moderator"
+                .x(() =>
+                {
+                    const int unknownModeratorId = -1;
+
+                    unknownModerator = new ModeratorDto
+                    {
+                        Id = unknownModeratorId
+                    };
+                });
 
             "When an unknown user requests it"
-                .x(() => { });
+                .x(() 
+                    => requestHubByUnknownModerator = () 
+                        => _hubService.GetModeratorHub(unknownModerator, originalHub.Id));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => requestHubByUnknownModerator.Should()
+                        .Throw<UnknownUserException>());
         }
 
         /// <summary>
         /// Check the behavior of the hub service when attempting to retrieve a hub of another moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHubOfAnotherModerator()
+        public void GetModeratorHubOfAnotherModerator(ModeratorDto moderator, HubDto originalHub,
+            ModeratorDto otherModerator, Action requestingTheHubOfAnotherModerator)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
 
-            "And hub that belongs to it"
-                .x(() => { });
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
+
+            "And a hub that belongs to it"
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "And another moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    otherModerator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "When the moderator request the hub of another one"
-                .x(() => { });
+                .x(() 
+                    => requestingTheHubOfAnotherModerator = ()
+                        => _hubService.GetModeratorHub(otherModerator, originalHub.Id));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => requestingTheHubOfAnotherModerator.Should()
+                        .Throw<UnknownHubException>());
         }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs belonging to a moderator
         /// </summary>
         [Scenario]
-        public void GetModeratorHubs()
+        public void GetModeratorHubs(ModeratorDto moderator, List<LightweightHubDto> originalHubs,
+            IEnumerable<LightweightHubDto> hubs)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And several hubs that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hubs = _fixture.Build<InTechNetHubs.Hub>()
+                        .With(_ => _.Attendees, new List<Attendee>())
+                        .With(_ => _.Moderator, _moderators.Single(_ => _.Id == moderator.Id))
+                        .CreateMany();
+
+                    originalHubs = new List<LightweightHubDto>();
+                    foreach (var hub in hubs)
+                    {
+                        _hubs.Add(hub);
+                        originalHubs.Add(new LightweightHubDto
+                        {
+                            Id = hub.Id,
+                            Name = hub.HubName,
+                            Description = hub.HubDescription,
+                            Link = hub.HubLink
+                        });
+                    }
+                });
 
             "When the moderator requests all its hubs"
-                .x(() => { });
+                .x(() 
+                    => hubs = _hubService.GetModeratorHubs(moderator));
 
             "Then it should receive them all"
-                .x(() => { });
+                .x(() =>
+                {
+                    hubs.Should()
+                        .HaveSameCount(originalHubs)
+                        .And
+                        .OnlyHaveUniqueItems();
+
+                    foreach (var hub in hubs)
+                    {
+                        originalHubs.Should()
+                            .ContainEquivalentOf(hub);
+                    }
+                });
         }
 
         /// <summary>
         /// Check the behavior of the hub service when retrieving all hubs using an unknown user 
         /// </summary>
         [Scenario]
-        public void GetModeratorHubsByUnknownModerator()
+        public void GetModeratorHubsByUnknownModerator(ModeratorDto moderator, ModeratorDto unknownModerator,
+            Action getModeratorHubsFromUnknownModerator)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And several hubs that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hubs = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.Single(_ => _.Id == moderator.Id))
+                        .CreateMany();
+
+                    foreach (var hub in hubs)
+                    {
+                        _hubs.Add(hub);
+                    }
+                });
+
+            "And an unknown moderator"
+                .x(() =>
+                {
+                    const int unknownModeratorId = -1;
+
+                    unknownModerator = new ModeratorDto
+                    {
+                        Id = unknownModeratorId
+                    };
+                });
 
             "When an unknown moderator request all its hubs"
-                .x(() => { });
+                .x(() 
+                    => getModeratorHubsFromUnknownModerator = ()
+                        => _hubService.GetModeratorHubs(unknownModerator));
 
             "Then the system should throw an exception"
-                .x(() => { });
+                .x(() 
+                    => getModeratorHubsFromUnknownModerator.Should()
+                        .Throw<UnknownUserException>());
         }
 
         /// <summary>
@@ -828,13 +1020,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when updating the hub's data
         /// </summary>
         [Scenario]
-        public void UpdateHub()
+        public void UpdateHub(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When it changes the hub's information"
                 .x(() => { });
@@ -847,13 +1066,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when updating the hub's description
         /// </summary>
         [Scenario]
-        public void UpdateHubDescription()
+        public void UpdateHubDescription(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When it changes the hub's description"
                 .x(() => { });
@@ -869,13 +1115,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when updating the hub's name
         /// </summary>
         [Scenario]
-        public void UpdateHubName()
+        public void UpdateHubName(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "When it changes the hub's name"
                 .x(() => { });
@@ -892,13 +1165,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// an unknown moderator
         /// </summary>
         [Scenario]
-        public void UpdateHubByUnknownModerator()
+        public void UpdateHubByUnknownModerator(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "And an unknown moderator"
                 .x(() => { });
@@ -918,13 +1218,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// another moderator
         /// </summary>
         [Scenario]
-        public void UpdateHubOfAnotherModerator()
+        public void UpdateHubOfAnotherModerator(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "And another moderator"
                 .x(() => { });
@@ -943,10 +1270,19 @@ namespace InTechNet.UnitTests.Services.Hub
         /// Check the behavior of the hub service when attempting to update un unknown hub
         /// </summary>
         [Scenario]
-        public void UpdateHubOfUnknownHub()
+        public void UpdateHubOfUnknownHub(ModeratorDto moderator)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And an unknown hub"
                 .x(() => { });
@@ -963,10 +1299,19 @@ namespace InTechNet.UnitTests.Services.Hub
         /// name for the current moderator hubs
         /// </summary>
         [Scenario]
-        public void UpdateHubWithDuplicatedNames()
+        public void UpdateHubWithDuplicatedNames(ModeratorDto moderator)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And two hubs it owns with different names"
                 .x(() => { });
@@ -986,13 +1331,40 @@ namespace InTechNet.UnitTests.Services.Hub
         /// name for other moderators hubs
         /// </summary>
         [Scenario]
-        public void UpdateHubWithDuplicatedNamesForOthers()
+        public void UpdateHubWithDuplicatedNamesForOthers(ModeratorDto moderator, HubDto originalHub)
         {
             "Given a moderator"
-                .x(() => { });
+                .x(() =>
+                {
+                    var registeredModerator = _fixture.Create<InTechNetUsers.Moderator>();
+                    _moderators.Add(registeredModerator);
+
+                    moderator = new ModeratorDto
+                    {
+                        Id = registeredModerator.Id
+                    };
+                });
 
             "And a hub that belongs to it"
-                .x(() => { });
+                .x(() =>
+                {
+                    var hub = _fixture.Build<InTechNetHubs.Hub>()
+                        .Without(_ => _.Attendees)
+                        .With(_ => _.Moderator, _moderators.First(_ => _.Id == moderator.Id))
+                        .Create();
+
+                    _hubs.Add(hub);
+
+                    originalHub = new HubDto
+                    {
+                        Id = hub.Id,
+                        IdModerator = moderator.Id,
+                        Attendees = new List<LightweightPupilDto>(),
+                        Description = hub.HubDescription,
+                        Name = hub.HubName,
+                        Link = hub.HubLink
+                    };
+                });
 
             "And a hub it does not own"
                 .x(() => { });
