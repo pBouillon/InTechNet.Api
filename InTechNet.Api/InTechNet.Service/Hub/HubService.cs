@@ -278,14 +278,16 @@ namespace InTechNet.Services.Hub
         public void UpdateHub(ModeratorDto moderatorDto, int hubId, HubUpdateDto hubUpdateDto)
         {
             // Retrieve the associated moderator to `moderatorDto`
-            var moderator = _context.Moderators.FirstOrDefault(_ =>
-                                _.Id == moderatorDto.Id)
+            var moderator = _context.Moderators
+                                .Include(_ => _.Hubs)
+                                .FirstOrDefault(_ 
+                                    => _.Id == moderatorDto.Id)
                             ?? throw new UnknownUserException();
 
             // Retrieve the current hub
-            var hub = _context.Hubs.FirstOrDefault(_ =>
-                          _.Id == hubId)
-                      ?? throw new UnknownHubException();
+            var hubs = moderator.Hubs.ToList();
+            var hub = moderator.Hubs.SingleOrDefault(_ => _.Id == hubId)
+                ?? throw new UnknownHubException();
 
             // Assert that the moderator is allowed to update this hub
             if (moderator.Id != hub.Moderator.Id)
@@ -294,11 +296,9 @@ namespace InTechNet.Services.Hub
             }
 
             // Assert that the name is unique
-            var moderatorHubs = GetModeratorHubs(moderatorDto);
-
-            if (moderatorHubs.Any(_ => 
-                _.Name == hubUpdateDto.Name
-                && _.Id != hubId))
+            if (moderator.Hubs.Any(_ 
+                => _.HubName == hubUpdateDto.Name
+                    && _.Id != hubId))
             {
                 throw new DuplicatedHubNameException();
             }
@@ -307,9 +307,8 @@ namespace InTechNet.Services.Hub
             hub.HubDescription = hubUpdateDto.Description;
             hub.HubName = hubUpdateDto.Name;
 
-            // Deleting the hub
+            // Update the hub
             _context.Hubs.Update(hub);
-
             _context.SaveChanges();
         }
     }
