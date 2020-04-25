@@ -147,11 +147,6 @@ namespace InTechNet.Api
                         Name = _metadata.Contact.Name,
                         Email = _metadata.Contact.Email,
                         Url = new Uri(_metadata.Contact.Url)
-                    },
-                    License = new OpenApiLicense
-                    {
-                        Name = _metadata.License.Name,
-                        Url = new Uri(_metadata.License.Url)
                     }
                 });
 

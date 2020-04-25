@@ -1,7 +1,7 @@
 ﻿using InTechNet.Common.Dto.Modules;
 using InTechNet.Common.Dto.Resource;
 using InTechNet.Common.Dto.Topic;
-using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Context;
 using InTechNet.DataAccessLayer.Entities.Modules;
 using InTechNet.DataAccessLayer.Entities.Resources;
 using InTechNet.Exception.Attendee;
@@ -22,13 +22,13 @@ namespace InTechNet.Services.Module
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly InTechNetContext _context;
+        private readonly IInTechNetContext _context;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public ModuleService(InTechNetContext context)
+        public ModuleService(IInTechNetContext context)
             => _context = context;
 
         /// <inheritdoc cref="IModuleService.FinishModule"/>

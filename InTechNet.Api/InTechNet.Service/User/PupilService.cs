@@ -1,11 +1,8 @@
-﻿using System.Collections.Generic;
-using System.Linq;
-using InTechNet.Common.Dto.Hub;
+﻿using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
-using InTechNet.DataAccessLayer;
-using InTechNet.DataAccessLayer.Entities;
+using InTechNet.DataAccessLayer.Context;
 using InTechNet.DataAccessLayer.Entities.Users;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
@@ -13,6 +10,8 @@ using InTechNet.Exception.Registration;
 using InTechNet.Services.User.Helpers;
 using InTechNet.Services.User.Interfaces;
 using Microsoft.EntityFrameworkCore;
+using System.Collections.Generic;
+using System.Linq;
 
 namespace InTechNet.Services.User
 {
@@ -22,13 +21,13 @@ namespace InTechNet.Services.User
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly InTechNetContext _context;
+        private readonly IInTechNetContext _context;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public PupilService(InTechNetContext context)
+        public PupilService(IInTechNetContext context)
             => _context = context;
 
         /// <inheritdoc cref="IPupilService.AuthenticatePupil" />
@@ -49,9 +48,12 @@ namespace InTechNet.Services.User
             var hashedPassword = password.HashedWith(pupil.PupilSalt);
 
             // Assert that the provided password matches the stored one
-            if (hashedPassword != pupil.PupilPassword) throw new InvalidCredentialsException();
+            if (hashedPassword != pupil.PupilPassword)
+            {
+                throw new InvalidCredentialsException();
+            }
 
-            // Return the DTO associated to the moderator
+            // Return the DTO associated to the pupil
             return new PupilDto
             {
                 Id = pupil.Id,
@@ -149,15 +151,15 @@ namespace InTechNet.Services.User
         /// <inheritdoc cref="IPupilService.IsEmailAlreadyInUse" />
         public bool IsEmailAlreadyInUse(string email)
         {
-            return _context.Pupils.Any(_ =>
-                    _.PupilEmail == email);
+            return _context.Pupils.Any(_ 
+                =>  _.PupilEmail == email);
         }
 
         /// <inheritdoc cref="IPupilService.IsNicknameAlreadyInUse" />
         public bool IsNicknameAlreadyInUse(string nickname)
         {
-            return _context.Pupils.Any(_ =>
-                    _.PupilNickname == nickname);
+            return _context.Pupils.Any(_ 
+                => _.PupilNickname == nickname);
         }
     }
 }

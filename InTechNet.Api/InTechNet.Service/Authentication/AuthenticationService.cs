@@ -38,10 +38,12 @@ namespace InTechNet.Services.Authentication
         /// <summary>
         /// Default AuthenticationService constructor
         /// </summary>
-        /// <param name="userService">The <see cref="IUserService" /> to be used for authentication checks and data retrieval</param>
+        /// <param name="moderatorService">The <see cref="IModeratorService" /> to be used for moderator authentication checks and data retrieval</param>
+        /// <param name="pupilService">The <see cref="IPupilService" /> to be used for pupil authentication checks and data retrieval</param>
         /// <param name="jwtService">The <see cref="IJwtService" /> to be used for the generation</param>
         /// <param name="httpContextAccessor">The current HTTP context accessor</param>
-        public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService, IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
+        public AuthenticationService(IModeratorService moderatorService, IPupilService pupilService,
+                IJwtService jwtService, IHttpContextAccessor httpContextAccessor)
             => (_moderatorService, _pupilService, _jwtService, _httpContextAccessor) = (moderatorService, pupilService, jwtService, httpContextAccessor);
 
         /// <inheritdoc cref="IAuthenticationService.AreCredentialsAlreadyInUse" />
@@ -76,9 +78,9 @@ namespace InTechNet.Services.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetCurrentModerator" />
         public ModeratorDto GetCurrentModerator()
         {
-            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
-                _.Type == ClaimTypes.Role 
-                && _.Value != InTechNetRoles.Moderator))
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_
+                => _.Type == ClaimTypes.Role 
+                    && _.Value != InTechNetRoles.Moderator))
             {
                 throw new IllegalRoleException();
             }
@@ -93,9 +95,9 @@ namespace InTechNet.Services.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetCurrentPupil" />
         public PupilDto GetCurrentPupil()
         {
-            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
-                _.Type == ClaimTypes.Role
-                && _.Value != InTechNetRoles.Pupil))
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_ 
+                => _.Type == ClaimTypes.Role
+                    && _.Value != InTechNetRoles.Pupil))
             {
                 throw new IllegalRoleException();
             }

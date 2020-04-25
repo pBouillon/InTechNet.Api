@@ -1,5 +1,6 @@
 ﻿using InTechNet.Common.Utils.Authentication.Jwt;
 using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Context;
 using InTechNet.Services.Attendee;
 using InTechNet.Services.Attendee.Interfaces;
 using InTechNet.Services.Authentication;
@@ -98,6 +99,10 @@ namespace InTechNet.Api.Helpers
             // InTechNet database registration
             _services.AddDbContext<InTechNetContext>(options =>
                 options.UseNpgsql(_configuration.GetConnectionString("InTechNetDatabase")));
+
+            // Register its interface
+            _services.AddScoped<IInTechNetContext, InTechNetContext>(_ 
+                => _.GetService<InTechNetContext>());
         }
     }
 }
