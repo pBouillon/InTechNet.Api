@@ -78,9 +78,9 @@ namespace InTechNet.Services.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetCurrentModerator" />
         public ModeratorDto GetCurrentModerator()
         {
-            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
-                _.Type == ClaimTypes.Role 
-                && _.Value != InTechNetRoles.Moderator))
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_
+                => _.Type == ClaimTypes.Role 
+                    && _.Value != InTechNetRoles.Moderator))
             {
                 throw new IllegalRoleException();
             }
@@ -95,9 +95,9 @@ namespace InTechNet.Services.Authentication
         /// <inheritdoc cref="IAuthenticationService.GetCurrentPupil" />
         public PupilDto GetCurrentPupil()
         {
-            if (_httpContextAccessor.HttpContext.User.HasClaim(_ =>
-                _.Type == ClaimTypes.Role
-                && _.Value != InTechNetRoles.Pupil))
+            if (_httpContextAccessor.HttpContext.User.HasClaim(_ 
+                => _.Type == ClaimTypes.Role
+                    && _.Value != InTechNetRoles.Pupil))
             {
                 throw new IllegalRoleException();
             }
