@@ -1,10 +1,12 @@
 ﻿using AutoFixture;
 using FluentAssertions;
 using InTechNet.Common.Dto.Hub;
+using InTechNet.Common.Dto.User.Attendee;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.DataAccessLayer.Context;
 using InTechNet.DataAccessLayer.Entities.Hubs;
+using InTechNet.Exception.Attendee;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Hub;
 using InTechNet.Exception.Registration;
@@ -15,8 +17,6 @@ using Moq;
 using System;
 using System.Collections.Generic;
 using System.Linq;
-using InTechNet.Common.Dto.User.Attendee;
-using InTechNet.Exception.Attendee;
 using Xbehave;
 using InTechNetHubs = InTechNet.DataAccessLayer.Entities.Hubs;
 using InTechNetUsers = InTechNet.DataAccessLayer.Entities.Users;
@@ -24,7 +24,7 @@ using InTechNetUsers = InTechNet.DataAccessLayer.Entities.Users;
 namespace InTechNet.UnitTests.Services.Hub
 {
     /// <summary>
-    /// HubServiceUnit testing methods
+    /// HubService testing methods
     /// </summary>
     public class HubServiceUnitTest
     {
