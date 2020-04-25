@@ -1,7 +1,7 @@
 ﻿namespace InTechNet.Exception.Hub
 {
     /// <summary>
-    /// Exception to be thrown when moderator as create as many hubs
+    /// Exception to be thrown when moderator has created as many hubs
     /// as it is allowed to
     /// </summary>
     public class HubMaxCountReachedException : BaseException
