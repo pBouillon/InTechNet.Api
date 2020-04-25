@@ -284,16 +284,9 @@ namespace InTechNet.Services.Hub
                                     => _.Id == moderatorDto.Id)
                             ?? throw new UnknownUserException();
 
-            // Retrieve the current hub
-            var hubs = moderator.Hubs.ToList();
+            // Retrieve the current hub from the moderator's hubs
             var hub = moderator.Hubs.SingleOrDefault(_ => _.Id == hubId)
                 ?? throw new UnknownHubException();
-
-            // Assert that the moderator is allowed to update this hub
-            if (moderator.Id != hub.Moderator.Id)
-            {
-                throw new IllegalHubOperationException();
-            }
 
             // Assert that the name is unique
             if (moderator.Hubs.Any(_ 
