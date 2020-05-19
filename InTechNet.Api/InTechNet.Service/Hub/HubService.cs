@@ -62,11 +62,7 @@ namespace InTechNet.Services.Hub
             }
 
             // Assert that the moderator does not exceed its allowed hub count
-            var ownedHubsCount = _context.Hubs.Select(_ 
-                    => _.Moderator.Id == moderator.Id)
-                .Count();
-
-            if (ownedHubsCount + 1 >= moderatorSubscription.MaxHubPerModeratorAccount)
+            if (moderatorDto.NumberOfHub + 1 > moderatorSubscription.MaxHubPerModeratorAccount)
             {
                 throw new HubMaxCountReachedException();
             }
