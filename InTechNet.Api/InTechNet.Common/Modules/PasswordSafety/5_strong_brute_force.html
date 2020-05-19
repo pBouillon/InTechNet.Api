@@ -1,0 +1,346 @@
+<!-- Title -->
+<h5 class="text-center mb-2">
+    Le bon mot de passe
+</h5>
+<!-- /Title -->
+
+<!-- Game presentation -->
+<div class="row">
+
+    <div class="col-md-8 mx-auto">
+
+        <p class="text-justify mt-3">
+            De retour sur notre petite activité ! Cette fois-ci, pour mettre à mal l'ordinateur !
+        </p>
+
+        <p class="text-justify mt-3">
+            On va utiliser notre petit jeu de tout à l'heure pour voir comment réagi il réagit face à différents types
+            de mots de passe. On va essayer d'appliquer ce que l'on vient de voir, observer les changements avec
+            des caractères différents, des mots de passes plus ou moins longs, etc
+        </p>
+
+        <p class="text-justify mt-3">
+            Ici, l'ordinateur n'est pas très très fort et ne peut chercher que jusqu'à trois caractères, <mark>
+            fais très attention, ceux sur internet sont bien plus puissants !</mark> On va se servir de celui-ci
+            pour voir les écarts entre un mot de passe très très simple et un un peu plus complexe sur seulement
+            quelques caractères.
+        </p>
+
+        <p class="text-justify mt-3">
+            Regardons la différence de robustesse de différents mots de passe (attention à n'utiliser que des lettres et
+            des chiffres). Tu peux bien sûr essayer toi même d'écrire ton mot de passe, sinon voici quelques idées:
+        </p>
+
+        <ul class="list-unstyled mt-3">
+            <li class="pl-3 mb-1">
+                ✔️ Essayer <kbd>1</kbd> et ensuite <kbd>12</kbd> et comparer le nombre d'essais
+            </li>
+            <li class="pl-3 mb-1">
+                ✔️ Comparer les essais entre <kbd>aaa</kbd> et <kbd>aAa</kbd> et <kbd>aA1</kbd>
+            </li>
+        </ul>
+
+    </div>
+
+</div>
+<!-- /Game presentation -->
+
+<!-- Game -->
+<div class="row my-5">
+
+    <!-- Computer password -->
+    <div class="col-md-4 offset-md-2">
+
+        <label for="computer-pwd">L'ordinateur :</label>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Mot de passe</span>
+            </div>
+            <input id="computer-pwd" type="text" class="form-control" disabled>
+        </div>
+
+        <small id="computer-tries" class="form-text text-muted">Nombre d'essais: 0</small>
+
+    </div>
+    <!-- /Computer password -->
+
+    <!-- User input -->
+    <div class="col-md-4 border-left">
+
+        <div>
+            <div class="form-group m-0">
+                <label for="user-pwd">À toi de jouer !</label>
+                <input type="text" id="user-pwd" class="form-control" placeholder="Ton mot de passe" maxlength="3" minlength="1" autocomplete="off">
+                <small class="form-text text-muted mb-2">Saisis un nombre et clique sur "Faire deviner" !</small>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button id="btn-pwd-check" class="btn btn-outline-secondary">Faire deviner</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- /User input -->
+
+</div>
+<!-- /Game -->
+
+<!-- Game conclusion -->
+<div class="row">
+
+    <div class="col-md-8 mx-auto">
+
+        <p class="text-justify mt-3">
+            Comme tu peux le voir, <mark>plus le mot de passe est long et plus il est
+            composé de différentes choses, plus il est difficile pour l'ordinateur
+            de le trouver</mark>; et pourtant tu peux voir à quel point il va vite !
+        </p>
+
+        <p class="text-justify mt-3">
+            Maintenant que tu sais comment faire un bon mot de passe, il ne reste qu'à
+            savoir comment bien l'utiliser, on y va ?
+        </p>
+
+    </div>
+
+</div>
+<!-- /Game conclusion -->
+
+<!-- Module button -->
+<div class="row my-5">
+
+    <button id="btn-next" class="col-md-3 offset-md-7 btn btn-success">
+        En avant !
+    </button>
+
+</div>
+<!-- /Module button -->
+
+
+
+<!-- Logic -->
+<script>
+    $(document).ready(() => {
+        // LocalStorage keys
+        const isUpdateInProgressKey = "isUpdating";
+        const isPasswordGuessedKey = "isGuessed";
+        const isPasswordGuessInProgressKey = "isGuessing";
+
+        $(function () {
+            localStorage.removeItem(isUpdateInProgressKey);
+            localStorage.removeItem(isPasswordGuessedKey);
+            localStorage.removeItem(isPasswordGuessInProgressKey);
+        });
+
+        // Brute force
+        const lowerCases = [..."abcdefghijklmnopqrstuvwxyz"];
+        const numbers = [..."0123456789"];
+        const upperCases = [..."ABCDEFGHIJKLMNOPQRSTUVWXYZ"];
+        const forbiddenChars = [..." !\"#$%&'()*+,-./:;<=>?@[\]^_`{|}~"];
+        const maxTries = 100_000;
+
+        /**
+         * @summary naive brute forcing of a string from an alphabet
+         * @param {string} toGuess string to be guessed
+         * @param {*} alphabet alphabet from which each char of the `toGuess` string is made
+         * @param {*} maximumTries number of tries before exiting if no match is found
+         * @returns the number of tries performed for this brute force
+         */
+        async function bruteForceUserPassword(toGuess, alphabet, maximumTries = 1_000) {
+            // Initialization
+            let tries = 0;
+
+            // UI elements
+            const pwdField = document.getElementById("computer-pwd");
+            const triesField = document.getElementById("computer-tries");
+
+            // Brute force    
+            let current = alphabet[0];
+
+            // Display initial state
+            pwdField.value = current;
+
+            while (current !== toGuess
+                && tries < maximumTries) {
+                // Increment the overall tries
+                ++tries;
+
+                // Go to next 
+                current = getNextGuess(current, alphabet);
+
+                // Display updated values
+                pwdField.value = current;
+                triesField.innerHTML = "Nombre d'essais: " + tries;
+
+                await sleep(.01);
+            }
+
+            return tries;
+        }
+
+        /**
+         * @summary get the next guess given that this guess follows the provided alphabet
+         * @param {string} guess current guess from which evaluate the next state
+         * @param {array} alphabet string array containing all chars from which iterate
+         * @returns the next guess
+         */
+        function getNextGuess(guess, alphabet) {
+
+            /**
+            * @summary recursively increment the current guess in a given alphabet
+            * @param {string} guess current guess to expand
+            * @param {array} alphabet string array containing all chars from which iterate
+            * @param {number} rank offset of the char to increment
+            * @returns the incremented guess
+            */
+            function incrementGuess(guess, alphabet, rank = guess.length - 1) {
+                // Fetching current position in the alphabet
+                const currentIndex = alphabet.indexOf(guess[rank]);
+
+                // Getting whether the current char is the last of the provided alphabet
+                const isCurrentLastChar = currentIndex === alphabet.length - 1;
+
+                // Only the first char to handle
+                if (rank === 0) {
+                    return isCurrentLastChar
+                        ? alphabet[0]
+                        : alphabet[currentIndex + 1];
+                }
+
+                return isCurrentLastChar
+                    // If the last char is reset, increment the previous column
+                    ? incrementGuess(guess, alphabet, rank - 1) + alphabet[0]
+                    // Else, return the current string with the updated last char
+                    : guess.slice(0, rank) + alphabet[currentIndex + 1]
+            }
+
+            const newGuess = incrementGuess(guess, alphabet);
+
+            return [...newGuess].every(char => char === alphabet[0])
+                ? newGuess + alphabet[0]
+                : newGuess
+        }
+
+        function getUsedAlphabet(password) {
+            let usedAlphabet = [];
+
+            if (isLowerCaseUsed(password)) {
+                usedAlphabet.push.apply(usedAlphabet, lowerCases);
+            }
+
+            if (isNumberUsed(password)) {
+                usedAlphabet.push.apply(usedAlphabet, numbers);
+            }
+
+            if (isUpperCaseUsed(password)) {
+                usedAlphabet.push.apply(usedAlphabet, upperCases);
+            }
+
+            return usedAlphabet;
+        }
+
+        function isLowerCaseUsed(value) {
+            return [...value].some(char => lowerCases.indexOf(char) >= 0);
+        }
+
+        function isNumberUsed(value) {
+            return [...value].some(char => numbers.indexOf(char) >= 0);
+        }
+
+        function isUpperCaseUsed(value) {
+            return [...value].some(char => upperCases.indexOf(char) >= 0);
+        }
+
+        /**
+         * @summary remove forbidden char of a string
+         * @param {string} toSanitize the string to sanitize
+         * @param {array} forbidden an array of all forbidden chars
+         * @return the `toSanitize` string with all chars belonging to `forbidden` deleted
+         */
+        function sanitize(toSanitize, forbidden) {
+            return [...toSanitize].filter(char => 
+                forbidden.indexOf(char) === -1)
+                .join("");
+        }
+
+        // from: https://stackoverflow.com/a/39914235
+        function sleep(ms) {
+            return new Promise(_ => setTimeout(_, ms));
+        }
+
+        // Password guessing ---
+        $("#btn-pwd-check").click(() => {
+            guessUserPassword();
+        });
+
+        async function guessUserPassword() {
+            if (localStorage.getItem(isPasswordGuessInProgressKey)) {
+                return;
+            }
+
+            localStorage.setItem(isPasswordGuessInProgressKey, true);
+
+            // Disable user inputs
+            document.getElementById("btn-pwd-check").disabled = true;
+            document.getElementById("user-pwd").disabled = true;
+
+            // Retrieve user data and normalize if needed
+            let userValue = document.getElementById("user-pwd").value;
+            userValue = sanitize(userValue, forbiddenChars);
+            document.getElementById("user-pwd").value = userValue;
+
+            let charPool = getUsedAlphabet(userValue);
+
+            // Launch "brute force"
+            await bruteForceUserPassword(userValue, charPool, maxTries);
+
+            // Enable inputs
+            document.getElementById("btn-pwd-check").disabled = false;
+            document.getElementById("user-pwd").disabled = false;
+
+            // Mark the password as guessed
+            localStorage.setItem(isPasswordGuessedKey, true);
+
+            localStorage.removeItem(isPasswordGuessInProgressKey);
+        }
+
+        // Next resource ---
+        const hubId = location.href.split("/")[4];
+
+        const apiUrl = "http://localhost:8080/api/v1";
+        const nextResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/Resources/current";
+        const validateResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/States/current";
+
+        const token = JSON.parse(localStorage.currentPupil).token;
+
+        function loadNextResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", nextResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+
+            const resource = JSON.parse(xmlHttp.responseText);
+            document.getElementById("resource-content").innerHTML = resource.content;
+        }
+
+        function validateResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("PUT", validateResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+        }
+
+        $("#btn-next").click(() => {
+            if (localStorage.getItem(isUpdateInProgressKey)) {
+                return;
+            }
+
+            localStorage.setItem(isUpdateInProgressKey, true);
+
+            validateResource();
+            loadNextResource();
+        });
+
+    });
+</script>
+<!-- /Logic -->

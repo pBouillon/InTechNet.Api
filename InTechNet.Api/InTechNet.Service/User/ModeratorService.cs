@@ -1,9 +1,12 @@
-﻿using InTechNet.Common.Dto.Subscription;
+﻿using System.Collections.Generic;
+using System.Linq;
+using InTechNet.Common.Dto.Subscription;
 using InTechNet.Common.Dto.User.Moderator;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
 using InTechNet.Common.Utils.SubscriptionPlan;
-using InTechNet.DataAccessLayer.Context;
+using InTechNet.DataAccessLayer;
+using InTechNet.DataAccessLayer.Entities;
 using InTechNet.DataAccessLayer.Entities.Users;
 using InTechNet.Exception.Authentication;
 using InTechNet.Exception.Registration;
@@ -11,8 +14,6 @@ using InTechNet.Services.Hub.Interfaces;
 using InTechNet.Services.User.Helpers;
 using InTechNet.Services.User.Interfaces;
 using Microsoft.EntityFrameworkCore;
-using System.Collections.Generic;
-using System.Linq;
 
 namespace InTechNet.Services.User
 {
@@ -22,7 +23,7 @@ namespace InTechNet.Services.User
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly IInTechNetContext _context;
+        private readonly InTechNetContext _context;
 
         /// <summary>
         /// Hub service for hub related operations
@@ -34,7 +35,7 @@ namespace InTechNet.Services.User
         /// </summary>
         /// <param name="context">Database context</param>
         /// <param name="hubService">Service for hub's operations</param>
-        public ModeratorService(IInTechNetContext context, IHubService hubService)
+        public ModeratorService(InTechNetContext context, IHubService hubService)
             => (_context, _hubService) = (context, hubService);
 
         /// <inheritdoc cref="IModeratorService.AuthenticateModerator" />

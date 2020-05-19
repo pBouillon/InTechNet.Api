@@ -41,7 +41,7 @@ namespace InTechNet.Api.Controllers.Subscription
         {
             try
             {
-                var subscriptionPlans = _subscriptionPlanService.GetAllSubscriptionPlans();
+                var subscriptionPlans = _subscriptionPlanService.GetAllSubscriptions();
 
                 return Ok(subscriptionPlans);
             }

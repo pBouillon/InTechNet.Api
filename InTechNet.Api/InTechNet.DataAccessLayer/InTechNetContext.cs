@@ -5,54 +5,79 @@ using InTechNet.DataAccessLayer.Entities.Resources;
 using InTechNet.DataAccessLayer.Entities.Users;
 using Microsoft.EntityFrameworkCore;
 using System.Collections.Generic;
-using InTechNet.DataAccessLayer.Context;
 
 namespace InTechNet.DataAccessLayer
 {
-    public class InTechNetContext : DbContext, IInTechNetContext
+    public class InTechNetContext : DbContext
     {
-        /// <inheritdoc cref="IInTechNetContext.Moderators"/>
-        public DbSet<Moderator> Moderators { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Pupils"/>
-        public DbSet<Pupil> Pupils { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Hubs"/>
-        public DbSet<Hub> Hubs { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Attendees"/>
-        public DbSet<Attendee> Attendees { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.SubscriptionPlans"/>
-        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Modules"/>
-        public DbSet<Module> Modules { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.AvailableModules"/>
-        public DbSet<AvailableModule> AvailableModules { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Tags"/>
-        public DbSet<Tag> Tags { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Topics"/>
-        public DbSet<Topic> Topics { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.Resources"/>
-        public DbSet<Resource> Resources { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.States"/>
-        public DbSet<State> States { get; set; }
-
-        /// <inheritdoc cref="IInTechNetContext.CurrentModules"/>
-        public DbSet<CurrentModule> CurrentModules { get; set; }
-
         /// <summary>
         /// Basic constructor for InTechNetContext
         /// </summary>
         // ReSharper disable once SuggestBaseTypeForParameter
         public InTechNetContext(DbContextOptions<InTechNetContext> options)
-            : base(options) { }
+            : base(options)
+        {
+        }
+
+        /// <summary>
+        /// DbSet for the Moderator Entity
+        /// </summary>
+        public DbSet<Moderator> Moderators { get; set; }
+
+        /// <summary>
+        /// DbSet for the Pupil Entity
+        /// </summary>
+        public DbSet<Pupil> Pupils { get; set; }
+
+        /// <summary>
+        /// DbSet for the Hub Entity
+        /// </summary>
+        public DbSet<Hub> Hubs { get; set; }
+
+        /// <summary>
+        /// DbSet for the Attendee Entity
+        /// </summary>
+        public DbSet<Attendee> Attendees { get; set; }
+
+        /// <summary>
+        /// DbSet for the Subscription Entity
+        /// </summary>
+        public DbSet<SubscriptionPlan> SubscriptionPlans { get; set; }
+
+        /// <summary>
+        /// DbSet for the Module Entity
+        /// </summary>
+        public DbSet<Module> Modules { get; set; }
+
+        /// <summary>
+        /// DbSet for the AvailableModule Entity
+        /// </summary>
+        public DbSet<AvailableModule> AvailableModules { get; set; }
+
+        /// <summary>
+        /// DbSet for the Tag Entity
+        /// </summary>
+        public DbSet<Tag> Tags{ get; set; }
+
+        /// <summary>
+        /// DbSet for the Topic Entity
+        /// </summary>
+        public DbSet<Topic> Topics{ get; set; }
+
+        /// <summary>
+        /// DbSet for the Resource Entity
+        /// </summary>
+        public DbSet<Resource> Resources{ get; set; }
+
+        /// <summary>
+        /// DbSet for the State Entity
+        /// </summary>
+        public DbSet<State> States{ get; set; }
+
+        /// <summary>
+        /// DbSet for the CurrentModule Entity
+        /// </summary>
+        public DbSet<CurrentModule> CurrentModules { get; set; }
 
         /// <summary>
         /// Build the model

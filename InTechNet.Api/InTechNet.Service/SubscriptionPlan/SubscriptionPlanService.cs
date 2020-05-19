@@ -1,8 +1,8 @@
-﻿using InTechNet.Common.Dto.Subscription;
-using InTechNet.DataAccessLayer.Context;
-using InTechNet.Services.SubscriptionPlan.Interfaces;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.Linq;
+using InTechNet.Common.Dto.Subscription;
+using InTechNet.DataAccessLayer;
+using InTechNet.Services.SubscriptionPlan.Interfaces;
 
 namespace InTechNet.Services.SubscriptionPlan
 {
@@ -12,17 +12,17 @@ namespace InTechNet.Services.SubscriptionPlan
         /// <summary>
         /// Database context
         /// </summary>
-        private readonly IInTechNetContext _context;
+        private readonly InTechNetContext _context;
 
         /// <summary>
         /// Default constructor
         /// </summary>
         /// <param name="context">Database context</param>
-        public SubscriptionPlanService(IInTechNetContext context)
+        public SubscriptionPlanService(InTechNetContext context)
             => _context = context;
 
-        /// <inheritdoc cref="ISubscriptionPlanService.GetAllSubscriptionPlans" />
-        public IEnumerable<SubscriptionPlanDto> GetAllSubscriptionPlans()
+        /// <inheritdoc cref="ISubscriptionPlanService.GetAllSubscriptions" />
+        public IEnumerable<SubscriptionPlanDto> GetAllSubscriptions()
         {
             return _context.SubscriptionPlans.Select( _ => new SubscriptionPlanDto
             {

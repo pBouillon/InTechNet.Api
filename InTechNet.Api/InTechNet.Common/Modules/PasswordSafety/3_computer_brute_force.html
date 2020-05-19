@@ -1,0 +1,235 @@
+<!-- Title -->
+<h5 class="text-center mb-2">
+    Le mauvais mot de passe
+</h5>
+<!-- /Title -->
+
+<!-- Game presentation -->
+<div class="row">
+
+    <div class="col-md-8 mx-auto">
+
+        <p class="text-justify mt-3">
+            Comme on vient de le voir, <mark>un mot de passe simple se devine
+            en quelques minutes seulement</mark> par un autre être humain.
+        </p>
+
+        <p class="text-justify mt-3">
+            Le problème est que sur internet, c'est rarement les humains qui essaient
+            de trouver les mots de passe. Il existe de nombreux programmes mal
+            intentionnés qui cherchent à trouver les mots de passe pour ensuite avoir
+            accès à tes données; et le soucis c'est que <mark>les ordinateurs sont
+            bien plus rapides que nous</mark> quand il s'agit de calculer quelque chose.
+        </p>
+
+        <p class="text-justify mt-3">
+            Reprenons le petit jeu d'avant, mais cette fois-ci, tu seras aux commandes !
+        </p>
+
+        <p class="text-justify mt-3">
+            Tu devras écrire un mot de passe respectant les mêmes conditions qu'avant
+            (un nombre entre 0 et 999), et l'ordinateur essaiera de le deviner sous tes
+            yeux. Voyons comment il s'en sort !
+        </p>
+
+    </div>
+
+</div>
+<!-- /Game presentation -->
+
+<!-- Game -->
+<div class="row mt-5">
+
+    <!-- Computer password -->
+    <div class="col-md-4 offset-md-2">
+
+        <label for="pwd-to-guess">L'ordinateur :</label>
+
+        <div class="input-group mb-3">
+            <div class="input-group-prepend">
+                <span class="input-group-text" id="inputGroup-sizing-default">Mot de passe</span>
+            </div>
+            <input type="text" id="pwd-to-guess" class="form-control" value="000" disabled>
+        </div>
+
+    </div>
+    <!-- /Computer password -->
+
+    <!-- User input -->
+    <div class="col-md-4 border-left">
+
+        <div>
+            <div class="form-group m-0">
+                <label for="user-pwd">À toi de jouer !</label>
+                <input type="number" id="user-pwd" class="form-control" min="0" max="999" value="000" maxlength="3" minlength="1" autocomplete="off">
+                <small class="form-text text-muted mb-2">Saisis un nombre et clique sur "Faire deviner" !</small>
+            </div>
+            <div class="d-flex justify-content-end">
+                <button id="btn-pwd-check" class="btn btn-outline-secondary">Faire deviner</button>
+            </div>
+        </div>
+
+    </div>
+    <!-- /User input -->
+
+</div>
+<!-- /Game -->
+
+<!-- Conclusion -->
+<div id="conclusion" class="row my-3">
+
+    <div class="col-md-8 mx-auto">
+
+        <p class="text-center mt-3">
+            Trouvé ! 🏆
+        </p>
+
+        <p class="text-justify mt-3">
+            Pas mal non ? Tu as vu à quel point c'était plus rapide pour l'ordinateur
+            que pour nous ?
+        </p>
+
+        <p class="text-justify mt-3">
+            Ici le mot de passe est très simpliste et peu compliqué: il n'est composé que de trois
+            caractères et que de chiffres, c'est pourquoi on dit qu'<mark>il n'est pas robuste, parce qu'il
+            est facile à deviner par un humain, et encore plus par une machine</mark>.
+        </p>
+
+    </div>
+
+</div>
+<!-- /Conclusion -->
+
+<!-- Module button -->
+<div class="row my-5">
+
+    <button id="btn-next" class="col-md-3 offset-md-7 btn btn-success">
+        Mais alors, comment faire ?
+    </button>
+
+</div>
+<!-- /Module button -->
+
+
+
+<!-- Logic -->
+<script>
+    $(document).ready(() => {
+        // LocalStorage keys
+        const isUpdateInProgressKey = "isUpdating";
+        const isPasswordGuessedKey = "isGuessed";
+
+        $(function () {
+            localStorage.removeItem(isUpdateInProgressKey);
+            setSuccessSectionVisibility();
+        });
+
+        // Password guessing ---
+        const lowerBound = 0;
+        const upperBound = 999;
+
+        $("#btn-pwd-check").click(() => {
+            guessUserPassword();
+        });
+
+        async function guessUserPassword() {
+            const holdDuration = 1;
+
+            // Disable user inputs
+            document.getElementById("btn-pwd-check").disabled = true;
+            document.getElementById("user-pwd").disabled = true;
+
+            // Retrieve user data and normalize if needed
+            let userValue = +document.getElementById("user-pwd").value;
+
+            if (userValue < lowerBound) {
+                userValue = lowerBound;
+                document.getElementById("user-pwd").value = lowerBound;
+            }
+
+            if (userValue > upperBound) {
+                userValue = upperBound;
+                document.getElementById("user-pwd").value = upperBound;
+            }
+            
+            // Launch "brute force"
+            let paddedValue;
+            for (let guess = lowerBound; guess < upperBound + 1; ++guess) {
+                paddedValue = ("000" + guess).slice(-3)
+                document.getElementById("pwd-to-guess").value = paddedValue;
+
+                if (guess === userValue) {
+                    break;
+                }
+
+                await sleep(holdDuration);
+            }
+
+            // Enable inputs
+            document.getElementById("btn-pwd-check").disabled = false;
+            document.getElementById("user-pwd").disabled = false;
+
+            // Mark the password as guessed
+            localStorage.setItem(isPasswordGuessedKey, true);
+            setSuccessSectionVisibility();
+        }
+
+        // from: https://stackoverflow.com/a/39914235
+        function sleep(ms) {
+            return new Promise(_ => setTimeout(_, ms));
+        }
+
+
+        // Next resource ---
+        const hubId = location.href.split("/")[4];
+
+        const apiUrl = "http://localhost:8080/api/v1";
+        const nextResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/Resources/current";
+        const validateResourceUrl = apiUrl + "/Pupils/me/Hubs/" + hubId + "/Modules/current/States/current";
+
+        const token = JSON.parse(localStorage.currentPupil).token;
+
+        function loadNextResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("GET", nextResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+
+            const resource = JSON.parse(xmlHttp.responseText);
+            document.getElementById("resource-content").innerHTML = resource.content;
+        }
+
+        function setSuccessSectionVisibility() {
+            if (!localStorage.getItem(isPasswordGuessedKey)) {
+                document.getElementById("conclusion").style.visibility = "hidden";
+                document.getElementById("btn-next").style.visibility = "hidden";
+                return;
+            }
+
+            document.getElementById("conclusion").style.visibility = "visible";
+            document.getElementById("btn-next").style.visibility = "visible";
+        }
+
+        function validateResource() {
+            const xmlHttp = new XMLHttpRequest();
+            xmlHttp.open("PUT", validateResourceUrl, false);
+            xmlHttp.setRequestHeader("Authorization", "Bearer " + token);
+            xmlHttp.send(null);
+        }
+
+        $("#btn-next").click(() => {
+            if (localStorage.getItem(isUpdateInProgressKey)) {
+                return;
+            }
+
+            localStorage.setItem(isUpdateInProgressKey, true);
+
+            validateResource();
+            loadNextResource();
+
+            clearLocalStorage();
+        });
+
+    });
+</script>
+<!-- /Logic -->

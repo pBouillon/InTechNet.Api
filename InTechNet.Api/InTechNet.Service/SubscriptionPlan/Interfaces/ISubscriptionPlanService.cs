@@ -12,6 +12,6 @@ namespace InTechNet.Services.SubscriptionPlan.Interfaces
         /// Get all the subscription existing
         /// </summary>
         /// <returns>A list of <see cref="SubscriptionPlanDto" /> of all the subscriptions</returns>
-        IEnumerable<SubscriptionPlanDto> GetAllSubscriptionPlans(); 
+        IEnumerable<SubscriptionPlanDto> GetAllSubscriptions(); 
     }
 }
