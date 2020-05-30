@@ -130,6 +130,17 @@ namespace InTechNet.Services.User
         /// <inheritdoc cref="IModeratorService.RegisterModerator" />
         public void RegisterModerator(ModeratorRegistrationDto newModeratorData)
         {
+            // Assert that the provided password is safe enough
+            var password = newModeratorData.Password;
+            if (password.Length < 8
+                || password.Length > 64
+                || !password.Any(char.IsUpper)
+                || !password.Any(char.IsLower)
+                || !password.Any(char.IsDigit))
+            {
+                throw new InvalidCredentialsException();
+            }
+
             // Assert that its nickname or email is unique in InTechNet database
             if (IsEmailAlreadyInUse(newModeratorData.Email))
             {

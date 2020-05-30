@@ -1,4 +1,5 @@
-﻿using InTechNet.Common.Dto.Hub;
+﻿using System;
+using InTechNet.Common.Dto.Hub;
 using InTechNet.Common.Dto.User.Pupil;
 using InTechNet.Common.Utils.Authentication;
 using InTechNet.Common.Utils.Security;
@@ -112,6 +113,17 @@ namespace InTechNet.Services.User
         /// <inheritdoc cref="IPupilService.RegisterPupil" />
         public void RegisterPupil(PupilRegistrationDto newPupilData)
         {
+            // Assert that the provided password is safe enough
+            var password = newPupilData.Password;
+            if (password.Length < 8
+                || password.Length > 64
+                || !password.Any(char.IsUpper)
+                || !password.Any(char.IsLower)
+                || !password.Any(char.IsDigit))
+            {
+                throw new InvalidCredentialsException();
+            }
+
             // Assert that its nickname or email is unique in InTechNet database
             var isEmailDuplicated = _context.Pupils.Any(_ =>
                 _.PupilEmail == newPupilData.Email);
