@@ -34,11 +34,11 @@ namespace InTechNet.Services.User.Helpers
         /// <returns>True if the password is considered secure enough; false otherwise</returns>
         public static bool IsStrongEnough(string password)
         {
-            return password.Length < 8
-                   || password.Length > 64
-                   || !password.Any(char.IsUpper)
-                   || !password.Any(char.IsLower)
-                   || !password.Any(char.IsDigit);
+            return password.Length >= 8
+                   && password.Length <= 64
+                   && password.Any(char.IsUpper)
+                   && password.Any(char.IsLower)
+                   && password.Any(char.IsDigit);
         }
     }
 }
