@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 
@@ -24,6 +25,20 @@ namespace InTechNet.Services.User.Helpers
             return BitConverter
                 .ToString(sha512Managed.ComputeHash(toHash))
                 .Replace("-", string.Empty);
+        }
+
+        /// <summary>
+        /// Assert that the password is strong enough based on a set of specifications
+        /// </summary>
+        /// <param name="password">The password to be checked</param>
+        /// <returns>True if the password is considered secure enough; false otherwise</returns>
+        public static bool IsStrongEnough(string password)
+        {
+            return password.Length < 8
+                   || password.Length > 64
+                   || !password.Any(char.IsUpper)
+                   || !password.Any(char.IsLower)
+                   || !password.Any(char.IsDigit);
         }
     }
 }
