@@ -114,8 +114,7 @@ namespace InTechNet.Services.User
         public void RegisterPupil(PupilRegistrationDto newPupilData)
         {
             // Assert that the provided password is safe enough
-            var password = newPupilData.Password;
-            if (PasswordHelper.IsStrongEnough(password))
+            if (!PasswordHelper.IsStrongEnough(newPupilData.Password))
             {
                 throw new InvalidCredentialsException();
             }
