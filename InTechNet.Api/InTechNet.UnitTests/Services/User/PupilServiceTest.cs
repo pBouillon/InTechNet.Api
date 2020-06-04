@@ -47,7 +47,7 @@ namespace InTechNet.UnitTests.Services.User
         /// Dummy secure password
         /// </summary>
         /// <see cref="PasswordHelper"/>
-        private const string _securedPasswordSample = "123456789InTechNet";
+        private const string _securedPasswordSample = "123456789;InTechNet";
 
         /// <summary>
         /// Default constructor to setup AutoFixture behavior
@@ -579,6 +579,7 @@ namespace InTechNet.UnitTests.Services.User
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Password = _securedPasswordSample;
                     pupilRegistration.Email = pickedPupil.PupilEmail;
                 });
 
@@ -612,6 +613,7 @@ namespace InTechNet.UnitTests.Services.User
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Password = _securedPasswordSample;
                     pupilRegistration.Nickname = pickedPupil.PupilNickname;
                 });
 
