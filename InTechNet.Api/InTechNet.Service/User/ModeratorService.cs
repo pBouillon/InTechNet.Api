@@ -132,7 +132,7 @@ namespace InTechNet.Services.User
         {
             // Assert that the provided password is safe enough
             var password = newModeratorData.Password;
-            if (PasswordHelper.IsStrongEnough(password))
+            if (!PasswordHelper.IsStrongEnough(password))
             {
                 throw new InvalidCredentialsException();
             }
