@@ -44,6 +44,12 @@ namespace InTechNet.UnitTests.Services.User
         private PupilService _pupilService;
 
         /// <summary>
+        /// Dummy secure password
+        /// </summary>
+        /// <see cref="PasswordHelper"/>
+        private const string _securedPasswordSample = "123456789;InTechNet";
+
+        /// <summary>
         /// Default constructor to setup AutoFixture behavior
         /// </summary>
         public PupilServiceTest()
@@ -310,7 +316,7 @@ namespace InTechNet.UnitTests.Services.User
             "When I pick a pupil from the recorded ones"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     pickedPupil = _pupils.ToList()[pickedPupilIndex];
                 });
 
@@ -379,7 +385,7 @@ namespace InTechNet.UnitTests.Services.User
             "When I pick a pupil from the recorded ones"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     pickedPupil = _pupils.ToList()[pickedPupilIndex];
                 });
 
@@ -456,7 +462,7 @@ namespace InTechNet.UnitTests.Services.User
             "Given an email in use"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     email = pickedPupil.PupilEmail;
@@ -501,7 +507,7 @@ namespace InTechNet.UnitTests.Services.User
             "Given an email in use"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     nickname = pickedPupil.PupilNickname;
@@ -525,8 +531,11 @@ namespace InTechNet.UnitTests.Services.User
         public void RegisterPupil(PupilRegistrationDto pupilRegistration)
         {
             "Given a new pupil"
-                .x(() 
-                    => pupilRegistration = _fixture.Create<PupilRegistrationDto>());
+                .x(() =>
+                {
+                    pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Password = _securedPasswordSample;
+                });
             
             "When it registers"
                 .x(() 
@@ -566,10 +575,11 @@ namespace InTechNet.UnitTests.Services.User
             "Given a new pupil using an existing email"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Password = _securedPasswordSample;
                     pupilRegistration.Email = pickedPupil.PupilEmail;
                 });
 
@@ -599,10 +609,11 @@ namespace InTechNet.UnitTests.Services.User
             "Given a new pupil using an existing email"
                 .x(() =>
                 {
-                    var pickedPupilIndex = new Random().Next(0, _pupils.Count());
+                    var pickedPupilIndex = new Random().Next(0, _pupils.Count);
                     var pickedPupil = _pupils.ToList()[pickedPupilIndex];
 
                     pupilRegistration = _fixture.Create<PupilRegistrationDto>();
+                    pupilRegistration.Password = _securedPasswordSample;
                     pupilRegistration.Nickname = pickedPupil.PupilNickname;
                 });
 
